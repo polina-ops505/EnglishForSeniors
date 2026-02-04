@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс среднего уровня - EnglishForSeniors</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Стили для шторки навигации */
+        .burger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .burger-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+            transition: all 0.3s;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .burger-icon.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .burger-icon.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-icon.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .burger-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            z-index: 999;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            padding: 100px 40px 40px;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            right: 0;
+        }
+
+        .nav-overlay:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            z-index: -1;
+        }
+
+        .nav-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-header h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-header p {
+            color: #bbdefb;
+            font-size: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-menu a i {
+            width: 25px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .intermediate-badge-nav {
+            background: linear-gradient(45deg, #2196F3, #03A9F4);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .user-level {
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-btn.login {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .nav-btn.register {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .nav-btn.logout {
+            background: linear-gradient(135deg, #f44336, #e91e63);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        /* Основные стили курса */
+        .course-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .course-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.2);
+        }
+        
+        .course-progress {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .lesson-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .lesson-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: #2196F3;
+        }
+        
+        .lesson-header {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+            padding: 25px 20px;
+            position: relative;
+        }
+        
+        .lesson-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        
+        .lesson-content {
+            padding: 25px;
+        }
+        
+        .lesson-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .lesson-desc {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        
+        .lesson-features {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        
+        .lesson-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .lesson-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2196F3;
+            font-weight: bold;
+        }
+        
+        .lesson-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .status-locked {
+            background: #ffeb3b;
+            color: #333;
+        }
+        
+        .status-available {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .status-completed {
+            background: #9C27B0;
+            color: white;
+        }
+        
+        .theory-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .exercise-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .exercise {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .exercise h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .option-btn {
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .option-btn:hover {
+            border-color: #2196F3;
+            background: #f0f7ff;
+        }
+        
+        .option-btn.selected {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+        
+        .vocabulary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .vocabulary-table th, .vocabulary-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .vocabulary-table th {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+        
+        .btn-small {
+            padding: 8px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .btn-start-lesson {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .btn-start-lesson:hover {
+            background: linear-gradient(135deg, #1976D2, #0288D1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .btn-start-lesson:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .lesson-preview {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .motivation-quote {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #FF9800;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-overlay {
+                max-width: 100%;
+                padding: 100px 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шторка навигации -->
+    <div class="burger-menu" onclick="toggleNav()">
+        <div class="burger-icon" id="burgerIcon">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </div>
+
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-header">
+            <h3><i class="fas fa-tree"></i> EnglishForSeniors</h3>
+            <p>Продолжаем изучать английский!</p>
+        </div>
+
+        <div id="userSection">
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="index.html" onclick="setActive(this)"><i class="fas fa-home"></i> Главная</a></li>
+            <li><a href="courses.html" onclick="setActive(this)"><i class="fas fa-graduation-cap"></i> Курсы</a></li>
+            <li><a href="beginner-course.html" onclick="setActive(this)"><i class="fas fa-seedling"></i> Для начинающих</a></li>
+            <li><a href="elementary-course.html" class="active" onclick="setActive(this)"><i class="fas fa-tree"></i> Средний уровень <span class="intermediate-badge-nav">СРЕДНИЙ</span></a></li>
+            <li><a href="advanced-course.html" onclick="setActive(this)"><i class="fas fa-crown"></i> ВИП-курс</a></li>
+            <li><a href="test.html" onclick="setActive(this)"><i class="fas fa-clipboard-check"></i> Тест уровня</a></li>
+            <li><a href="dictionary.html" onclick="setActive(this)"><i class="fas fa-book"></i> Словарь</a></li>
+            <li><a href="progress.html" onclick="setActive(this)"><i class="fas fa-chart-line"></i> Мой прогресс</a></li>
+            <li><a href="club.html" onclick="setActive(this)"><i class="fas fa-users"></i> Клуб общения</a></li>
+            <li><a href="materials.html" onclick="setActive(this)"><i class="fas fa-book"></i> Материалы</a></li>
+            <li><a href="about.html" onclick="setActive(this)"><i class="fas fa-info-circle"></i> О проекте</a></li>
+            <li><a href="help.html" onclick="setActive(this)"><i class="fas fa-question-circle"></i> Помощь</a></li>
+        </ul>
+
+        <div class="nav-buttons" id="authButtons">
+        </div>
+
+        <div class="nav-footer">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p>"Повторение - мать учения!"</p>
+            <p>Проект разработан Толстенёвой Полиной</p>
+
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-tree"></i> EnglishForSeniors</h1>
+                <p class="motto">Курс среднего уровня. "Повторение - мать учения!"</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="course-container">
+        <div class="course-header">
+            <h1><i class="fas fa-tree"></i> Курс среднего уровня (Elementary/Intermediate)</h1>
+            <p class="joke">"Тише едешь - дальше будешь" - продолжаем совершенствоваться!</p>
+            <div class="course-stats">
+                <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap;">
+                    <div class="stat">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">уроков</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">150+</div>
+                        <div class="stat-label">заданий</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">практических теста</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">400+</div>
+                        <div class="stat-label">слов и выражений</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="motivation-quote">
+            <p>"Средний уровень - это когда вы уже можете выражать свои мысли, но хотите делать это более точно и свободно. Как говорится, 'лучшее - враг хорошего', но мы поможем вам стать еще лучше!"</p>
+        </div>
+        
+        <div class="course-progress">
+            <h3><i class="fas fa-chart-line"></i> Ваш прогресс</h3>
+            <div class="progress-bar" style="height: 20px; margin: 15px 0; background: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                <div class="progress-fill" id="course-progress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2196F3, #03A9F4); transition: width 0.5s;"></div>
+            </div>
+            <p id="progress-text" style="font-weight: bold; color: #2196F3;">Начните курс, чтобы увидеть прогресс</p>
+        </div>
+        
+        <div class="theory-section">
+            <h2><i class="fas fa-graduation-cap"></i> Что вы изучите в этом курсе:</h2>
+            <div class="course-objectives">
+                <div class="objective" style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                    <h3><i class="fas fa-comments"></i> Разговорная практика и диалоги</h3>
+                    <ul>
+                        <li>Сложные диалоги на различные темы</li>
+                        <li>Обсуждение планов, намерений и будущих событий</li>
+                        <li>Выражение мнений, предпочтений и согласия/несогласия</li>
+                        <li>Описание событий, ситуаций и личного опыта</li>
+                        <li>Дискуссии и аргументация своей точки зрения</li>
+                    </ul>
+                </div>
+                <div class="objective" style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                    <h3><i class="fas fa-language"></i> Сложные времена и грамматика</h3>
+                    <ul>
+                        <li>Прошедшее простое время (Past Simple) с регулярными и неправильными глаголами</li>
+                        <li>Настоящее продолженное время (Present Continuous)</li>
+                        <li>Будущее время (Future Simple) и конструкция "going to"</li>
+                        <li>Настоящее совершенное время (Present Perfect)</li>
+                        <li>Сравнение времён и их правильное использование</li>
+                        <li>Модальные глаголы и их значения</li>
+                    </ul>
+                </div>
+                <div class="objective" style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                    <h3><i class="fas fa-tasks"></i> Практика и развитие навыков</h3>
+                    <ul>
+                        <li>10 уроков с 15+ разнообразными заданиями каждый</li>
+                        <li>3 практических теста для закрепления знаний</li>
+                        <li>Аудирование с нормальной скоростью речи</li>
+                        <li>Письменные задания: эссе, письма, описания</li>
+                        <li>Ситуационные диалоги и ролевые игры</li>
+                        <li>Чтение и анализ текстов средней сложности</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <h2 style="color: #2196F3; border-bottom: 3px solid #2196F3; padding-bottom: 10px;">
+            <i class="fas fa-list-ol"></i> Уроки курса
+        </h2>
+        <p class="joke" style="font-size: 1.2rem; margin-bottom: 30px;">
+            "Дело мастера боится" - осваиваем более сложные темы!
+        </p>
+        
+        <div class="lessons-grid" id="lessons-container">
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p>"Не имей сто рублей, а имей сто английских фраз!"</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const elementaryLessons = [
+            {
+                id: 1,
+                title: "Прошедшее простое время",
+                description: "Учимся рассказывать о событиях в прошлом, используя правильные формы глаголов",
+                duration: "55 минут",
+                exercises: 18,
+                status: "available",
+                completed: false,
+                topics: ["Past Simple", "Regular/irregular verbs", "Time expressions", "Negative and questions", "Story telling"],
+                theory: "Образование и использование Past Simple для описания завершенных действий в прошлом"
+            },
+            {
+                id: 2,
+                title: "Настоящее продолженное время",
+                description: "Говорим о действиях, происходящих в момент речи, и временных ситуациях",
+                duration: "50 минут",
+                exercises: 20,
+                status: "locked",
+                completed: false,
+                topics: ["Present Continuous", "Am/is/are + ing", "Now, at the moment", "Temporary actions", "Future arrangements"],
+                theory: "Present Continuous для текущих действий и будущих договоренностей"
+            },
+            {
+                id: 3,
+                title: "Будущее время: will и going to",
+                description: "Выражаем планы, намерения, предсказания и спонтанные решения",
+                duration: "60 минут",
+                exercises: 22,
+                status: "locked",
+                completed: false,
+                topics: ["Future Simple (will)", "Going to for plans", "Predictions", "Spontaneous decisions", "Time clauses"],
+                theory: "Различные способы выражения будущего времени в английском"
+            },
+            {
+                id: 4,
+                title: "Present Perfect: опыт и результат",
+                description: "Связываем прошлое с настоящим, говорим о опыте и недавних событиях",
+                duration: "65 минут",
+                exercises: 25,
+                status: "locked",
+                completed: false,
+                topics: ["Have/has + past participle", "Ever/never/just/yet/already", "Life experience", "Recent events", "For/since"],
+                theory: "Настоящее совершенное время для выражения опыта и недавних событий"
+            },
+            {
+                id: 5,
+                title: "Практический тест 1: Времена",
+                description: "Комплексная проверка знаний всех изученных времен английского языка",
+                duration: "70 минут",
+                exercises: 30,
+                status: "locked",
+                completed: false,
+                topics: ["All tenses review", "Mixed exercises", "Listening comprehension", "Writing task", "Speaking practice"],
+                theory: "Проверка знания и умения использовать различные времена английского языка"
+            },
+            {
+                id: 6,
+                title: "Сравнительные конструкции",
+                description: "Сравниваем людей, предметы, ситуации и выражаем предпочтения",
+                duration: "55 минут",
+                exercises: 20,
+                status: "locked",
+                completed: false,
+                topics: ["Comparatives (-er/more)", "Superlatives (-est/most)", "As...as comparisons", "Much/far/a lot + comparative", "Preferences"],
+                theory: "Степени сравнения прилагательных и наречий"
+            },
+            {
+                id: 7,
+                title: "Модальные глаголы",
+                description: "Выражаем возможность, необходимость, запрет, совет и вероятность",
+                duration: "60 минут",
+                exercises: 22,
+                status: "locked",
+                completed: false,
+                topics: ["Can/could for ability", "Must/have to for obligation", "Should for advice", "May/might for possibility", "Permission and requests"],
+                theory: "Модальные глаголы и их значения в различных контекстах"
+            },
+            {
+                id: 8,
+                title: "Косвенная речь и вопросы",
+                description: "Правильно пересказываем чужие слова и задаем вопросы о прошедших событиях",
+                duration: "65 минут",
+                exercises: 24,
+                status: "locked",
+                completed: false,
+                topics: ["Reported speech", "Say/tell differences", "Tense changes", "Questions in reported speech", "Reporting verbs"],
+                theory: "Правила преобразования прямой речи в косвенную"
+            },
+            {
+                id: 9,
+                title: "Условные предложения",
+                description: "Строим реальные и нереальные условия, выражаем сожаления и желания",
+                duration: "70 минут",
+                exercises: 25,
+                status: "locked",
+                completed: false,
+                topics: ["Zero conditional", "First conditional", "Second conditional", "Wishes and regrets", "If clauses"],
+                theory: "Типы условных предложений и их использование"
+            },
+            {
+                id: 10,
+                title: "Итоговый тест курса",
+                description: "Финальная комплексная проверка всех знаний и навыков, полученных в курсе",
+                duration: "90 минут",
+                exercises: 35,
+                status: "locked",
+                completed: false,
+                topics: ["Final exam", "All grammar topics", "Listening comprehension", "Reading comprehension", "Writing assessment", "Speaking evaluation"],
+                theory: "Итоговая аттестация по всему курсу среднего уровня"
+            }
+        ];
+        
+        // Массив заданий для каждого урока
+        const elementaryExercises = {
+            1: [
+                {
+                    type: "multiple_choice",
+                    question: "Как образуется Past Simple для правильных глаголов?",
+                    options: [
+                        "V + ed",
+                        "V + ing", 
+                        "Have + V3",
+                        "Will + V"
+                    ],
+                    correct: 0,
+                    explanation: "Правильно! Для правильных глаголов Past Simple образуется добавлением -ed к основе глагола."
+                },
+                {
+                    type: "fill_blank",
+                    question: "Заполните пропуск правильной формой глагола: 'Yesterday I _____ (go) to the cinema.'",
+                    correct: "went",
+                    explanation: "Правильно! 'Go' - неправильный глагол, его форма в Past Simple - 'went'."
+                },
+                {
+                    type: "multiple_choice", 
+                    question: "Какое время используется для описания завершенных действий в определенный момент в прошлом?",
+                    options: [
+                        "Past Simple",
+                        "Present Continuous",
+                        "Future Simple",
+                        "Present Perfect"
+                    ],
+                    correct: 0,
+                    explanation: "Правильно! Past Simple используется для завершенных действий в определенное время в прошлом."
+                },
+                {
+                    type: "match",
+                    question: "Сопоставьте временные выражения с их значениями:",
+                    pairs: [
+                        { expression: "Yesterday", meaning: "Вчера" },
+                        { expression: "Last week", meaning: "На прошлой неделе" },
+                        { expression: "Two years ago", meaning: "Два года назад" },
+                        { expression: "In 2020", meaning: "В 2020 году" }
+                    ]
+                },
+                {
+                    type: "translation",
+                    question: "Переведите на английский: 'Вчера я смотрел интересный фильм'",
+                    correct: "Yesterday I watched an interesting film",
+                    variants: ["watched", "saw", "looked at"],
+                    explanation: "Правильно! 'Смотреть фильм' обычно переводится как 'watch a film' или 'see a movie'."
+                },
+                {
+                    type: "true_false",
+                    question: "В Past Simple вспомогательный глагол 'did' используется в отрицаниях и вопросах.",
+                    correct: true,
+                    explanation: "Верно! Did используется для образования вопросов и отрицаний: Did you go? I didn't go."
+                },
+                {
+                    type: "multiple_choice",
+                    question: "Выберите правильный вариант: 'She _____ to London last summer.'",
+                    options: [
+                        "traveled",
+                        "travels", 
+                        "is traveling",
+                        "will travel"
+                    ],
+                    correct: 0,
+                    explanation: "Правильно! 'Last summer' указывает на прошлое время, поэтому нужен Past Simple."
+                },
+                {
+                    type: "fill_blank",
+                    question: "Поставьте глагол в правильную форму: 'They _____ (not/eat) breakfast this morning.'",
+                    correct: "didn't eat",
+                    explanation: "Правильно! Отрицание в Past Simple: didn't + основа глагола."
+                }
+            ],
+            2: [
+                {
+                    type: "multiple_choice",
+                    question: "Как образуется Present Continuous?",
+                    options: [
+                        "am/is/are + Ving",
+                        "have/has + V3", 
+                        "V + ed",
+                        "will + V"
+                    ],
+                    correct: 0,
+                    explanation: "Правильно! Present Continuous образуется с помощью am/is/are + глагол с окончанием -ing."
+                },
+                {
+                    type: "fill_blank",
+                    question: "Заполните пропуск: 'Right now, I _____ (study) English.'",
+                    correct: "am studying",
+                    explanation: "Правильно! 'Right now' указывает на действие в момент речи, нужен Present Continuous."
+                },
+                {
+                    type: "multiple_choice",
+                    question: "Какое время используется для временных ситуаций и изменяющихся состояний?",
+                    options: [
+                        "Present Continuous",
+                        "Past Simple",
+                        "Future Simple", 
+                        "Present Perfect"
+                    ],
+                    correct: 0,
+                    explanation: "Правильно! Present Continuous часто используется для временных ситуаций."
+                }
+            ],
+            3: [
+                {
+                    type: "multiple_choice",
+                    question: "Когда используется 'going to' для выражения будущего?",
+                    options: [
+                        "Для планов и намерений",
+                        "Для спонтанных решений",
+                        "Для предсказаний без доказательств",
+                        "Для обещаний"
+                    ],
+                    correct: 0,
+                    explanation: "Правильно! 'Going to' используется для планов и намерений."
+                },
+                {
+                    type: "fill_blank",
+                    question: "Заполните: 'I think it _____ (rain) tomorrow.'",
+                    correct: "will rain",
+                    explanation: "Правильно! Для предсказаний без явных доказательств используется 'will'."
+                }
+            ]
+        };
+        
+        // Текущий урок и прогресс упражнений
+        let currentLessonId = null;
+        let currentExerciseIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+        
+        // Функции для управления шторкой
+        function toggleNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            overlay.classList.toggle('active');
+            burger.classList.toggle('active');
+            
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            overlay.classList.remove('active');
+            burger.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function setActive(element) {
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            element.classList.add('active');
+            closeNav();
+        }
+
+        // Обновление информации о пользователе в шторке
+        function updateNavUserInfo() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userSection = document.getElementById('userSection');
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ${user.username ? user.username.charAt(0).toUpperCase() : 'С'}
+                        </div>
+                        <div class="user-name">${user.username || 'Средний ученик'}</div>
+                        <div class="user-level">Уровень: ${user.level ? user.level.toUpperCase() : 'СРЕДНИЙ'}</div>
+                        ${user.progress && user.progress.elementary ? 
+                            `<div style="margin-top: 10px; color: #2196F3;">
+                                <i class="fas fa-star"></i> Завершено уроков: ${user.progress.elementary.completedLessons || 0}/10
+                            </div>` : ''}
+                    </div>
+                `;
+                
+                authButtons.innerHTML = `
+                    <button class="nav-btn logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                `;
+            } else {
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ?
+                        </div>
+                        <div class="user-name">Гость</div>
+                        <div class="user-level">Для доступа к курсу войдите в систему</div>
+                    </div>
+                `;
+                
+                authButtons.innerHTML = `
+                    <a href="login.html" class="nav-btn login" onclick="closeNav()">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </a>
+                    <a href="register.html" class="nav-btn register" onclick="closeNav()">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </a>
+                `;
+            }
+        }
+
+        // Выход из системы
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('currentUser');
+                updateNavUserInfo();
+                closeNav();
+                window.location.reload();
+            }
+        }
+        
+        // Инициализация курса
+        function initCourse() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const lessonsContainer = document.getElementById('lessons-container');
+            
+            if (!user) {
+                alert('Пожалуйста, войдите в систему для доступа к курсу');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Проверяем уровень пользователя
+            const allowedLevels = ['elementary', 'intermediate', 'upper-intermediate', 'advanced'];
+            if (user.level && !allowedLevels.includes(user.level)) {
+                alert('Этот курс предназначен для среднего уровня. Ваш текущий уровень: ' + user.level);
+                window.location.href = 'courses.html';
+                return;
+            }
+            
+            // Загружаем прогресс пользователя
+            let completedLessons = 0;
+            if (user.progress && user.progress.elementary) {
+                completedLessons = user.progress.elementary.completedLessons || 0;
+            }
+            
+            // Обновляем прогресс
+            const progressPercent = (completedLessons / elementaryLessons.length) * 100;
+            const progressBar = document.getElementById('course-progress');
+            const progressText = document.getElementById('progress-text');
+            
+            if (progressBar) {
+                progressBar.style.width = `${progressPercent}%`;
+            }
+            
+            if (progressText) {
+                progressText.textContent = 
+                    `Вы завершили ${completedLessons} из ${elementaryLessons.length} уроков (${Math.round(progressPercent)}%)`;
+            }
+            
+            // Отображаем уроки
+            if (lessonsContainer) {
+                lessonsContainer.innerHTML = '';
+                
+                elementaryLessons.forEach((lesson, index) => {
+                    // Определяем статус урока
+                    let status = "locked";
+                    let statusText = "Заблокирован";
+                    let statusClass = "status-locked";
+                    
+                    if (index === 0) {
+                        status = "available";
+                        statusText = "Доступен";
+                        statusClass = "status-available";
+                    } else if (index <= completedLessons) {
+                        status = "completed";
+                        statusText = "Завершен";
+                        statusClass = "status-completed";
+                    } else if (index === completedLessons + 1) {
+                        status = "available";
+                        statusText = "Доступен";
+                        statusClass = "status-available";
+                    }
+                    
+                    const lessonHTML = `
+                        <div class="lesson-card">
+                            <div class="lesson-header">
+                                <h3>Урок ${lesson.id}: ${lesson.title}</h3>
+                                <span class="lesson-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="lesson-content">
+                                <div class="lesson-stats">
+                                    <span><i class="fas fa-clock"></i> ${lesson.duration}</span>
+                                    <span><i class="fas fa-tasks"></i> ${lesson.exercises} заданий</span>
+                                </div>
+                                <p class="lesson-desc">${lesson.description}</p>
+                                
+                                <h4><i class="fas fa-star"></i> Ключевые темы:</h4>
+                                <ul class="lesson-features">
+                                    ${lesson.topics.map(topic => `<li>${topic}</li>`).join('')}
+                                </ul>
+                                
+                                <p><strong><i class="fas fa-book-open"></i> Теория:</strong> ${lesson.theory}</p>
+                                
+                                <button class="btn-start-lesson" 
+                                        onclick="startLesson(${lesson.id})"
+                                        ${status === 'locked' ? 'disabled' : ''}>
+                                    ${index < completedLessons ? 
+                                        '<i class="fas fa-redo"></i> Повторить урок' : 
+                                        status === 'completed' ? 
+                                        '<i class="fas fa-check"></i> Завершено' : 
+                                        '<i class="fas fa-play"></i> Начать урок'}
+                                </button>
+                                
+                                ${index < completedLessons ? `
+                                    <div class="lesson-preview">
+                                        <p><i class="fas fa-star"></i> Вы успешно завершили этот урок!</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    lessonsContainer.innerHTML += lessonHTML;
+                });
+            }
+            
+            // Обновляем информацию в навигации
+            updateNavUserInfo();
+        }
+        
+        // Начать урок
+        function startLesson(lessonId) {
+            const lesson = elementaryLessons.find(l => l.id === lessonId);
+            currentLessonId = lessonId;
+            currentExerciseIndex = 0;
+            userAnswers = [];
+            score = 0;
+            
+            // Закрываем шторку если открыта
+            closeNav();
+            
+            // Создаем модальное окно с уроком
+            const modalHTML = `
+                <div id="lesson-modal" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.8);
+                    z-index: 2000;
+                    overflow-y: auto;
+                    padding: 20px;
+                ">
+                    <div style="
+                        background: white;
+                        max-width: 800px;
+                        margin: 40px auto;
+                        border-radius: 15px;
+                        padding: 30px;
+                        position: relative;
+                        box-shadow: 0 20px 50px rgba(33, 150, 243, 0.2);
+                    ">
+                        <button onclick="closeLessonModal()" style="
+                            position: absolute;
+                            top: 15px;
+                            right: 15px;
+                            background: #2196F3;
+                            color: white;
+                            border: none;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            font-size: 1.5rem;
+                            cursor: pointer;
+                            z-index: 100;
+                        ">×</button>
+                        
+                        <div style="background: linear-gradient(135deg, #2196F3, #03A9F4); color: white; padding: 20px; border-radius: 10px; margin: -30px -30px 30px -30px;">
+                            <h2>Урок ${lesson.id}: ${lesson.title}</h2>
+                            <p class="joke" style="color: rgba(255,255,255,0.9);">"Век живи - век учись!" - продолжаем совершенствоваться.</p>
+                            <div id="lesson-progress" style="margin-top: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <span>Задание 1 из ${lesson.exercises}</span>
+                                    <span id="score-display">Счет: 0/${lesson.exercises}</span>
+                                </div>
+                                <div style="height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px; overflow: hidden;">
+                                    <div id="progress-bar" style="width: ${(1/lesson.exercises)*100}%; height: 100%; background: white; transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="theory-section" style="background: #e3f2fd; border-left: 4px solid #2196F3; margin-bottom: 25px;">
+                            <h3><i class="fas fa-book"></i> Теория: ${lesson.theory}</h3>
+                            
+                            <div style="margin: 20px 0; padding: 20px; background: white; border-radius: 10px; border: 2px solid #bbdefb;">
+                                <h4><i class="fas fa-lightbulb"></i> Ключевые понятия:</h4>
+                                ${lesson.topics.map(topic => `<p style="margin: 8px 0; padding-left: 20px; position: relative;">
+                                    <span style="position: absolute; left: 0; color: #2196F3;">•</span> ${topic}
+                                </p>`).join('')}
+                            </div>
+                            
+                            ${lesson.id === 1 ? `
+                                <div style="margin: 20px 0; padding: 20px; background: white; border-radius: 10px; border: 2px solid #bbdefb;">
+                                    <h4><i class="fas fa-language"></i> Примеры Past Simple:</h4>
+                                    <table class="vocabulary-table" style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                                        <tr>
+                                            <th style="background: #2196F3; color: white; padding: 10px;">Тип предложения</th>
+                                            <th style="background: #2196F3; color: white; padding: 10px;">Пример</th>
+                                            <th style="background: #2196F3; color: white; padding: 10px;">Перевод</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Утверждение</td>
+                                            <td>I worked yesterday.</td>
+                                            <td>Я работал вчера.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Отрицание</td>
+                                            <td>She didn't go to school.</td>
+                                            <td>Она не ходила в школу.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Вопрос</td>
+                                            <td>Did you call him?</td>
+                                            <td>Ты звонил ему?</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Вопрос с вопр. словом</td>
+                                            <td>What did you do?</td>
+                                            <td>Что ты делал?</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div id="exercise-container">
+                            <!-- Упражнения будут загружены здесь -->
+                        </div>
+                        
+                        <div class="motivation-quote" style="margin: 25px 0; display: none;" id="completion-message">
+                            <p><i class="fas fa-quote-left"></i> Поздравляем! Вы успешно завершили все задания этого урока. 
+                            Помните: "Повторение - мать учения!" - грамматика требует практики и повторения. <i class="fas fa-quote-right"></i></p>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee;">
+                            <button id="prev-btn" class="btn-secondary" onclick="previousExercise()" style="
+                                padding: 12px 25px;
+                                background: #f5f5f5;
+                                border: 2px solid #ddd;
+                                border-radius: 8px;
+                                font-weight: bold;
+                                cursor: pointer;
+                                display: none;
+                            ">
+                                <i class="fas fa-arrow-left"></i> Назад
+                            </button>
+                            <button id="next-btn" class="btn-primary" onclick="nextExercise()" style="
+                                padding: 12px 25px;
+                                background: linear-gradient(135deg, #2196F3, #03A9F4);
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                font-weight: bold;
+                                cursor: pointer;
+                            ">
+                                Следующее задание <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            loadExercise(currentExerciseIndex);
+        }
+        
+        // Загрузить упражнение
+        function loadExercise(exerciseIndex) {
+            const exercises = elementaryExercises[currentLessonId];
+            if (!exercises || exerciseIndex >= exercises.length) {
+                showCompletion();
+                return;
+            }
+            
+            const exercise = exercises[exerciseIndex];
+            const container = document.getElementById('exercise-container');
+            const progressBar = document.getElementById('progress-bar');
+            const scoreDisplay = document.getElementById('score-display');
+            const lessonProgress = document.getElementById('lesson-progress');
+            const lesson = elementaryLessons.find(l => l.id === currentLessonId);
+            
+            // Обновляем прогресс
+            if (progressBar) {
+                progressBar.style.width = `${((exerciseIndex + 1) / lesson.exercises) * 100}%`;
+            }
+            
+            if (scoreDisplay) {
+                scoreDisplay.textContent = `Счет: ${score}/${lesson.exercises}`;
+            }
+            
+            if (lessonProgress) {
+                lessonProgress.querySelector('span').textContent = `Задание ${exerciseIndex + 1} из ${lesson.exercises}`;
+            }
+            
+            // Обновляем кнопки
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (prevBtn) {
+                prevBtn.style.display = exerciseIndex > 0 ? 'block' : 'none';
+            }
+            
+            if (nextBtn) {
+                nextBtn.textContent = exerciseIndex < exercises.length - 1 ? 'Следующее задание' : 'Завершить урок';
+                nextBtn.innerHTML = exerciseIndex < exercises.length - 1 ? 
+                    'Следующее задание <i class="fas fa-arrow-right"></i>' : 
+                    '<i class="fas fa-check"></i> Завершить урок';
+            }
+            
+            // Создаем упражнение в зависимости от типа
+            let exerciseHTML = `
+                <div class="exercise-section" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2); padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #FF9800;">
+                    <h3 style="color: #E65100;"><i class="fas fa-pencil-alt"></i> Задание ${exerciseIndex + 1}/${exercises.length}</h3>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="margin-bottom: 20px; font-size: 1.2rem;">${exercise.question}</h4>
+            `;
+            
+            if (exercise.type === "multiple_choice") {
+                exerciseHTML += `
+                    <div id="options-container" style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                        ${exercise.options.map((option, index) => `
+                            <div class="option-btn" data-index="${index}" onclick="selectAnswer(this, ${index})" style="
+                                padding: 15px;
+                                background: white;
+                                border: 2px solid #ddd;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.3s;
+                                font-size: 1.1rem;
+                            ">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (exercise.type === "fill_blank") {
+                exerciseHTML += `
+                    <div style="margin: 20px 0;">
+                        <input type="text" id="answer-input" style="
+                            width: 100%;
+                            padding: 15px;
+                            border: 2px solid #ddd;
+                            border-radius: 8px;
+                            font-size: 1.1rem;
+                            margin-bottom: 15px;
+                        " placeholder="Введите ответ здесь...">
+                        <button onclick="checkFillBlank()" style="
+                            padding: 12px 25px;
+                            background: #2196F3;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-weight: bold;
+                            cursor: pointer;
+                        ">
+                            <i class="fas fa-check"></i> Проверить
+                        </button>
+                    </div>
+                `;
+            } else if (exercise.type === "match") {
+                exerciseHTML += `
+                    <div id="match-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div id="expressions-list" style="display: flex; flex-direction: column; gap: 10px;">
+                            ${exercise.pairs.map((pair, index) => `
+                                <div class="expression-item" data-id="${index}" draggable="true" ondragstart="dragStart(event)" style="
+                                    padding: 15px;
+                                    background: #f5f5f5;
+                                    border: 2px dashed #ddd;
+                                    border-radius: 8px;
+                                    cursor: move;
+                                    font-weight: bold;
+                                ">
+                                    ${pair.expression}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div id="meanings-list" style="display: flex; flex-direction: column; gap: 10px;">
+                            ${shuffleArray([...exercise.pairs]).map((pair, index) => `
+                                <div class="meaning-item" data-id="${pair.expression}" ondragover="dragOver(event)" ondrop="drop(event)" style="
+                                    padding: 15px;
+                                    background: #e3f2fd;
+                                    border: 2px dashed #2196F3;
+                                    border-radius: 8px;
+                                    min-height: 60px;
+                                ">
+                                    ${pair.meaning}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button onclick="checkMatching()" style="
+                            padding: 12px 25px;
+                            background: #2196F3;
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-weight: bold;
+                            cursor: pointer;
+                        ">
+                            <i class="fas fa-check"></i> Проверить соответствия
+                        </button>
+                    </div>
+                `;
+            } else if (exercise.type === "translation") {
+                exerciseHTML += `
+                    <div style="margin: 20px 0;">
+                        <textarea id="translation-input" style="
+                            width: 100%;
+                            height: 100px;
+                            padding: 15px;
+                            border: 2px solid #ddd;
+                            border-radius: 8px;
+                            font-size: 1.1rem;
+                            margin-bottom: 15px;
+                            resize: vertical;
+                        " placeholder="Введите перевод здесь..."></textarea>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="checkTranslation()" style="
+                                padding: 12px 25px;
+                                background: #2196F3;
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                font-weight: bold;
+                                cursor: pointer;
+                                flex: 1;
+                            ">
+                                <i class="fas fa-check"></i> Проверить
+                            </button>
+                            <button onclick="showTranslationHint()" style="
+                                padding: 12px 25px;
+                                background: #4CAF50;
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                font-weight: bold;
+                                cursor: pointer;
+                                flex: 1;
+                            ">
+                                <i class="fas fa-lightbulb"></i> Подсказка
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (exercise.type === "true_false") {
+                exerciseHTML += `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                        <button onclick="selectTrueFalse(true)" style="
+                            padding: 20px;
+                            background: white;
+                            border: 2px solid #4CAF50;
+                            border-radius: 8px;
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                            cursor: pointer;
+                            color: #4CAF50;
+                        ">
+                            <i class="fas fa-check-circle"></i> Верно
+                        </button>
+                        <button onclick="selectTrueFalse(false)" style="
+                            padding: 20px;
+                            background: white;
+                            border: 2px solid #f44336;
+                            border-radius: 8px;
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                            cursor: pointer;
+                            color: #f44336;
+                        ">
+                            <i class="fas fa-times-circle"></i> Неверно
+                        </button>
+                    </div>
+                `;
+            }
+            
+            exerciseHTML += `
+                        <div id="exercise-feedback" style="margin-top: 20px; display: none;">
+                            <!-- Feedback will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = exerciseHTML;
+            
+            // Восстанавливаем предыдущий ответ, если он есть
+            if (userAnswers[exerciseIndex] !== undefined) {
+                restoreAnswer(exerciseIndex);
+            }
+        }
+        
+        // Перемешать массив
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        // Восстановить предыдущий ответ
+        function restoreAnswer(exerciseIndex) {
+            const answer = userAnswers[exerciseIndex];
+            const exercise = elementaryExercises[currentLessonId][exerciseIndex];
+            
+            if (exercise.type === "multiple_choice") {
+                const optionBtn = document.querySelector(`.option-btn[data-index="${answer}"]`);
+                if (optionBtn) {
+                    optionBtn.style.background = '#2196F3';
+                    optionBtn.style.color = 'white';
+                }
+            } else if (exercise.type === "fill_blank") {
+                const input = document.getElementById('answer-input');
+                if (input) input.value = answer;
+            } else if (exercise.type === "translation") {
+                const input = document.getElementById('translation-input');
+                if (input) input.value = answer;
+            } else if (exercise.type === "true_false") {
+                // Кнопки уже показывают выбор
+            }
+        }
+        
+        // Выбор ответа для multiple choice
+        function selectAnswer(button, index) {
+            const buttons = button.parentElement.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.style.background = 'white';
+                btn.style.color = '';
+            });
+            button.style.background = '#2196F3';
+            button.style.color = 'white';
+            
+            userAnswers[currentExerciseIndex] = index;
+        }
+        
+        // Проверка fill blank
+        function checkFillBlank() {
+            const input = document.getElementById('answer-input');
+            const answer = input.value.trim().toLowerCase();
+            const exercise = elementaryExercises[currentLessonId][currentExerciseIndex];
+            
+            userAnswers[currentExerciseIndex] = answer;
+            
+            const feedback = document.getElementById('exercise-feedback');
+            if (answer === exercise.correct.toLowerCase()) {
+                score++;
+                feedback.innerHTML = `
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                        <p style="color: #2E7D32; font-weight: bold;">
+                            <i class="fas fa-check-circle"></i> Правильно! ${exercise.explanation}
+                        </p>
+                    </div>
+                `;
+                feedback.style.display = 'block';
+            } else {
+                feedback.innerHTML = `
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <p style="color: #c62828; font-weight: bold;">
+                            <i class="fas fa-times-circle"></i> Не совсем верно. Правильный ответ: "${exercise.correct}"
+                        </p>
+                        <p style="margin-top: 10px;">${exercise.explanation}</p>
+                    </div>
+                `;
+                feedback.style.display = 'block';
+            }
+            
+            updateScoreDisplay();
+        }
+        
+        // Drag and drop для matching
+        let draggedItem = null;
+        
+        function dragStart(event) {
+            draggedItem = event.target;
+            event.dataTransfer.setData('text/plain', event.target.dataset.id);
+        }
+        
+        function dragOver(event) {
+            event.preventDefault();
+        }
+        
+        function drop(event) {
+            event.preventDefault();
+            const meaningItem = event.target;
+            const expressionId = event.dataTransfer.getData('text/plain');
+            
+            // Сохраняем соответствие
+            const matches = userAnswers[currentExerciseIndex] || {};
+            matches[meaningItem.dataset.id] = expressionId;
+            userAnswers[currentExerciseIndex] = matches;
+            
+            // Визуально показываем соответствие
+            meaningItem.style.background = '#bbdefb';
+            meaningItem.innerHTML = `${meaningItem.textContent} <br><small style="color: #1565c0;">← ${draggedItem.textContent}</small>`;
+        }
+        
+        function checkMatching() {
+            const exercise = elementaryExercises[currentLessonId][currentExerciseIndex];
+            const matches = userAnswers[currentExerciseIndex] || {};
+            let correctCount = 0;
+            
+            exercise.pairs.forEach((pair, index) => {
+                if (matches[pair.expression] === index.toString()) {
+                    correctCount++;
+                }
+            });
+            
+            const feedback = document.getElementById('exercise-feedback');
+            if (correctCount === exercise.pairs.length) {
+                score++;
+                feedback.innerHTML = `
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                        <p style="color: #2E7D32; font-weight: bold;">
+                            <i class="fas fa-check-circle"></i> Отлично! Все соответствия верны!
+                        </p>
+                        <p style="margin-top: 10px;">${exercise.explanation || 'Вы правильно сопоставили все выражения с их значениями.'}</p>
+                    </div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <p style="color: #c62828; font-weight: bold;">
+                            <i class="fas fa-times-circle"></i> Вы правильно сопоставили ${correctCount} из ${exercise.pairs.length}
+                        </p>
+                        <p style="margin-top: 10px;">Правильные соответствия:</p>
+                        ${exercise.pairs.map(pair => `
+                            <p style="margin: 5px 0; padding-left: 20px;">
+                                <strong>${pair.expression}</strong> → ${pair.meaning}
+                            </p>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            feedback.style.display = 'block';
+            updateScoreDisplay();
+        }
+        
+        // Проверка перевода
+        function checkTranslation() {
+            const input = document.getElementById('translation-input');
+            const answer = input.value.trim().toLowerCase();
+            const exercise = elementaryExercises[currentLessonId][currentExerciseIndex];
+            
+            userAnswers[currentExerciseIndex] = answer;
+            
+            // Проверяем наличие ключевых слов
+            let isCorrect = false;
+            if (exercise.variants) {
+                isCorrect = exercise.variants.some(variant => 
+                    answer.includes(variant.toLowerCase())
+                );
+            } else {
+                isCorrect = answer.includes(exercise.correct.toLowerCase());
+            }
+            
+            const feedback = document.getElementById('exercise-feedback');
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = `
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                        <p style="color: #2E7D32; font-weight: bold;">
+                            <i class="fas fa-check-circle"></i> Отлично! Ваш перевод правильный.
+                        </p>
+                        <p style="margin-top: 10px;">Правильный вариант: "${exercise.correct}"</p>
+                        <p style="margin-top: 10px;">${exercise.explanation}</p>
+                    </div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <p style="color: #c62828; font-weight: bold;">
+                            <i class="fas fa-times-circle"></i> Можно перевести лучше.
+                        </p>
+                        <p style="margin-top: 10px;">Правильный вариант: "${exercise.correct}"</p>
+                        <p style="margin-top: 10px;">${exercise.explanation}</p>
+                    </div>
+                `;
+            }
+            feedback.style.display = 'block';
+            updateScoreDisplay();
+        }
+        
+        function showTranslationHint() {
+            const exercise = elementaryExercises[currentLessonId][currentExerciseIndex];
+            const feedback = document.getElementById('exercise-feedback');
+            
+            feedback.innerHTML = `
+                <div style="background: #fff3e0; padding: 15px; border-radius: 8px; border-left: 4px solid #FF9800;">
+                    <p style="color: #E65100; font-weight: bold;">
+                        <i class="fas fa-lightbulb"></i> Подсказка:
+                    </p>
+                    <p>Используйте конструкцию "${exercise.variants ? exercise.variants[0] : exercise.correct.split(' ')[0]}"</p>
+                    <p style="margin-top: 10px; font-style: italic;">Пример: ${exercise.correct}</p>
+                </div>
+            `;
+            feedback.style.display = 'block';
+        }
+        
+        // True/False выбор
+        function selectTrueFalse(value) {
+            userAnswers[currentExerciseIndex] = value;
+            
+            const exercise = elementaryExercises[currentLessonId][currentExerciseIndex];
+            const feedback = document.getElementById('exercise-feedback');
+            
+            if (value === exercise.correct) {
+                score++;
+                feedback.innerHTML = `
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                        <p style="color: #2E7D32; font-weight: bold;">
+                            <i class="fas fa-check-circle"></i> Правильно!
+                        </p>
+                        <p style="margin-top: 10px;">${exercise.explanation}</p>
+                    </div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <p style="color: #c62828; font-weight: bold;">
+                            <i class="fas fa-times-circle"></i> Неверно.
+                        </p>
+                        <p style="margin-top: 10px;">${exercise.explanation}</p>
+                    </div>
+                `;
+            }
+            feedback.style.display = 'block';
+            updateScoreDisplay();
+        }
+        
+        // Обновить отображение счета
+        function updateScoreDisplay() {
+            const scoreDisplay = document.getElementById('score-display');
+            const lesson = elementaryLessons.find(l => l.id === currentLessonId);
+            if (scoreDisplay && lesson) {
+                scoreDisplay.textContent = `Счет: ${score}/${lesson.exercises}`;
+            }
+        }
+        
+        // Следующее задание
+        function nextExercise() {
+            const exercises = elementaryExercises[currentLessonId];
+            
+            // Проверяем, был ли дан ответ на текущее задание
+            if (userAnswers[currentExerciseIndex] === undefined) {
+                alert('Пожалуйста, выполните задание перед переходом к следующему.');
+                return;
+            }
+            
+            if (currentExerciseIndex < exercises.length - 1) {
+                currentExerciseIndex++;
+                loadExercise(currentExerciseIndex);
+            } else {
+                // Все задания выполнены
+                showCompletion();
+            }
+        }
+        
+        // Предыдущее задание
+        function previousExercise() {
+            if (currentExerciseIndex > 0) {
+                currentExerciseIndex--;
+                loadExercise(currentExerciseIndex);
+            }
+        }
+        
+        // Показать завершение урока
+        function showCompletion() {
+            const container = document.getElementById('exercise-container');
+            const completionMessage = document.getElementById('completion-message');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            
+            if (container) {
+                container.style.display = 'none';
+            }
+            
+            if (completionMessage) {
+                completionMessage.style.display = 'block';
+            }
+            
+            if (nextBtn) {
+                nextBtn.textContent = 'Завершить урок';
+                nextBtn.onclick = () => completeLesson(currentLessonId);
+            }
+            
+            if (prevBtn) {
+                prevBtn.style.display = 'none';
+            }
+        }
+        
+        // Закрыть модальное окно урока
+        function closeLessonModal() {
+            const modal = document.getElementById('lesson-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        // Завершить урок
+        function completeLesson(lessonId) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!user.progress) user.progress = {};
+            if (!user.progress.elementary) user.progress.elementary = { completedLessons: 0, scores: {} };
+            
+            // Сохраняем счет
+            user.progress.elementary.scores = user.progress.elementary.scores || {};
+            user.progress.elementary.scores[lessonId] = score;
+            
+            // Отмечаем урок как завершенный
+            if (lessonId > user.progress.elementary.completedLessons) {
+                user.progress.elementary.completedLessons = lessonId;
+                
+                // Сохраняем изменения
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // Обновляем в массиве пользователей
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const index = users.findIndex(u => u.id === user.id);
+                if (index !== -1) {
+                    users[index] = user;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                
+                alert(`🎉 Урок ${lessonId} успешно завершен! Ваш результат: ${score}/${elementaryExercises[lessonId].length} баллов. Отличная работа!`);
+                closeLessonModal();
+                initCourse(); // Перезагружаем курс
+            } else {
+                alert('Этот урок уже был завершен ранее.');
+                closeLessonModal();
+            }
+        }
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            initCourse();
+            
+            // Закрытие шторки при клике вне ее области
+            document.addEventListener('click', function(event) {
+                const overlay = document.getElementById('navOverlay');
+                const burger = document.querySelector('.burger-menu');
+                
+                if (overlay.classList.contains('active') && 
+                    !overlay.contains(event.target) && 
+                    !burger.contains(event.target)) {
+                    closeNav();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс английского - EnglishForSeniors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf5);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .course-header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .header-beginner { background: linear-gradient(135deg, #4CAF50, #8BC34A); }
+        .header-elementary { background: linear-gradient(135deg, #2196F3, #03A9F4); }
+        .header-advanced { background: linear-gradient(135deg, #9C27B0, #673AB7); }
+        
+        .course-title {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-prompt {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .btn-login, .btn-register {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-register {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-login:hover, .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .course-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .lesson-card {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            transition: transform 0.3s;
+        }
+        
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .lesson-card h3 {
+            color: #1a237e;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .lesson-card.beginner { border-left-color: #4CAF50; }
+        .lesson-card.elementary { border-left-color: #2196F3; }
+        .lesson-card.advanced { border-left-color: #9C27B0; }
+        
+        .theory-section {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .theory-section h4 {
+            margin-top: 0;
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tasks-list {
+            margin-top: 20px;
+        }
+        
+        .task-item {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .task-item:hover {
+            background: rgba(33, 150, 243, 0.1);
+            transform: translateX(5px);
+            border-color: #2196F3;
+        }
+        
+        .task-item i {
+            color: #4CAF50;
+        }
+        
+        .btn-start-lesson {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .btn-start-lesson:hover {
+            background: linear-gradient(135deg, #45a049, #7cb342);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .lesson-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .badge-new {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .badge-popular {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .badge-theory {
+            background: #9C27B0;
+            color: white;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 10px 0 5px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .completed-task {
+            background: #e8f5e9 !important;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .task-check {
+            color: #4CAF50;
+            margin-left: auto;
+            font-size: 0.9rem;
+        }
+        
+        .task-difficulty {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+        
+        .easy { background: #c8e6c9; color: #2e7d32; }
+        .medium { background: #fff9c4; color: #f57f17; }
+        .hard { background: #ffccbc; color: #d84315; }
+        
+        .vocabulary-list {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .vocabulary-list strong {
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="courseContainer">
+    </div>
+
+    <script>
+        // Данные курсов с теорией и простыми заданиями
+        const assignmentsData = {
+            beginner: {
+                title: "Курс для начинающих",
+                description: "Начните изучать английский с самых основ. Простые уроки, понятные объяснения.",
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Алфавит и звуки",
+                        duration: "25 минут",
+                        tasks: 5,
+                        badge: 'theory',
+                        description: "Изучаем английский алфавит и произношение букв",
+                        theory: {
+                            title: "Основная теория:",
+                            content: `
+                                <p><strong>Английский алфавит состоит из 26 букв:</strong></p>
+                                <div class="vocabulary-list">
+                                    A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br>
+                                    [ei] [bi:] [si:] [di:] [i:] [ef] [dʒi:] [eɪtʃ] [aɪ] [dʒeɪ] [keɪ] [el] [em] [en] [əʊ] [pi:] [kju:] [ɑː] [es] [ti:] [ju:] [vi:] ['dʌblju:] [eks] [waɪ] [zed]
+                                </div>
+                                <p><strong>Важные отличия от русского:</strong></p>
+                                <ul>
+                                    <li>Буква <strong>A</strong> читается как [ei]</li>
+                                    <li>Буква <strong>E</strong> читается как [i:]</li>
+                                    <li>Буква <strong>I</strong> читается как [aɪ]</li>
+                                    <li>Буква <strong>J</strong> читается как [dʒeɪ]</li>
+                                    <li>Буква <strong>Q</strong> всегда идет с буквой U: qu [kw]</li>
+                                </ul>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-font',
+                                text: 'Напишите буквы A-G',
+                                difficulty: 'easy',
+                                description: 'Напишите первые 7 букв английского алфавита'
+                            },
+                            {
+                                icon: 'fas fa-volume-up',
+                                text: 'Повторите звуки H-N',
+                                difficulty: 'easy',
+                                description: 'Прослушайте и повторите произношение букв'
+                            },
+                            {
+                                icon: 'fas fa-spell-check',
+                                text: 'Найди букву',
+                                difficulty: 'medium',
+                                description: 'Найдите указанные буквы среди других'
+                            },
+                            {
+                                icon: 'fas fa-headphones',
+                                text: 'Аудирование: буквы',
+                                difficulty: 'medium',
+                                description: 'Прослушайте и выберите правильную букву'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра с алфавитом',
+                                difficulty: 'easy',
+                                description: 'Соберите алфавит по порядку'
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "Приветствия и прощания",
+                        duration: "30 минут",
+                        tasks: 5,
+                        description: "Учимся здороваться и прощаться по-английски",
+                        theory: {
+                            title: "Основные фразы приветствия:",
+                            content: `
+                                <p><strong>Основные приветствия:</strong></p>
+                                <div class="vocabulary-list">
+                                    Hello! - Здравствуйте! (универсально)<br>
+                                    Hi! - Привет! (неформально)<br>
+                                    Good morning! - Доброе утро! (до 12:00)<br>
+                                    Good afternoon! - Добрый день! (12:00-18:00)<br>
+                                    Good evening! - Добрый вечер! (после 18:00)
+                                </div>
+                                <p><strong>Как ответить на приветствие:</strong></p>
+                                <div class="vocabulary-list">
+                                    Hello! / Hi! - так же можно ответить<br>
+                                    Good morning/afternoon/evening! - ответить тем же<br>
+                                    How are you? - Как дела?<br>
+                                    I'm fine, thank you! - Спасибо, хорошо!<br>
+                                    And you? - А ты?
+                                </div>
+                                <p><strong>Прощания:</strong></p>
+                                <div class="vocabulary-list">
+                                    Goodbye! - До свидания!<br>
+                                    Bye! / Bye-bye! - Пока!<br>
+                                    See you! / See you later! - Увидимся!<br>
+                                    Have a nice day! - Хорошего дня!
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-microphone',
+                                text: 'Повторите фразы приветствия',
+                                difficulty: 'easy',
+                                description: 'Прослушайте и повторите: Hello, Hi, Good morning'
+                            },
+                            {
+                                icon: 'fas fa-keyboard',
+                                text: 'Напишите "Как дела?"',
+                                difficulty: 'easy',
+                                description: 'Напишите фразу "How are you?" по-английски'
+                            },
+                            {
+                                icon: 'fas fa-headphones',
+                                text: 'Диалог: знакомство',
+                                difficulty: 'medium',
+                                description: 'Прослушайте и ответьте на вопросы'
+                            },
+                            {
+                                icon: 'fas fa-comments',
+                                text: 'Выбери правильный ответ',
+                                difficulty: 'medium',
+                                description: 'Выберите подходящее приветствие для ситуации'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Найди пару"',
+                                difficulty: 'easy',
+                                description: 'Сопоставьте русские и английские приветствия'
+                            }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: "Моя семья",
+                        duration: "35 минут",
+                        tasks: 5,
+                        description: "Учим названия членов семьи и простые предложения",
+                        theory: {
+                            title: "Слова по теме \"Семья\":",
+                            content: `
+                                <p><strong>Основные члены семьи:</strong></p>
+                                <div class="vocabulary-list">
+                                    mother / mom - мама<br>
+                                    father / dad - папа<br>
+                                    parents - родители<br>
+                                    brother - брат<br>
+                                    sister - сестра<br>
+                                    son - сын<br>
+                                    daughter - дочь<br>
+                                    grandmother / grandma - бабушка<br>
+                                    grandfather / grandpa - дедушка<br>
+                                    grandchildren - внуки
+                                </div>
+                                <p><strong>Простая грамматика:</strong></p>
+                                <ul>
+                                    <li>Это моя мама - <strong>This is my mother</strong></li>
+                                    <li>Его зовут Джон - <strong>His name is John</strong></li>
+                                    <li>У меня есть брат - <strong>I have a brother</strong></li>
+                                    <li>Он учится в школе - <strong>He goes to school</strong></li>
+                                </ul>
+                                <p><strong>Вопросительные слова:</strong></p>
+                                <div class="vocabulary-list">
+                                    What? - Что? Какой?<br>
+                                    Who? - Кто?<br>
+                                    How many? - Сколько?<br>
+                                    How old? - Сколько лет?
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-users',
+                                text: 'Назови членов семьи',
+                                difficulty: 'easy',
+                                description: 'Напишите названия 5 членов семьи'
+                            },
+                            {
+                                icon: 'fas fa-heart',
+                                text: 'Моя семья',
+                                difficulty: 'medium',
+                                description: 'Напишите о своей семье (3-4 предложения)'
+                            },
+                            {
+                                icon: 'fas fa-portrait',
+                                text: 'Составь семейное дерево',
+                                difficulty: 'medium',
+                                description: 'Нарисуйте и подпишите ваше семейное дерево'
+                            },
+                            {
+                                icon: 'fas fa-question-circle',
+                                text: 'Ответь на вопросы',
+                                difficulty: 'medium',
+                                description: 'Ответьте на вопросы о семье'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Семейные отношения"',
+                                difficulty: 'easy',
+                                description: 'Сопоставьте названия родственников'
+                            }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: "Цвета",
+                        duration: "25 минут",
+                        tasks: 5,
+                        badge: 'new',
+                        description: "Учим названия цветов и их использование",
+                        theory: {
+                            title: "Основные цвета:",
+                            content: `
+                                <p><strong>Базовые цвета:</strong></p>
+                                <div class="vocabulary-list">
+                                    red - красный<br>
+                                    blue - синий<br>
+                                    green - зеленый<br>
+                                    yellow - желтый<br>
+                                    orange - оранжевый<br>
+                                    purple - фиолетовый<br>
+                                    black - черный<br>
+                                    white - белый<br>
+                                    brown - коричневый<br>
+                                    pink - розовый<br>
+                                    gray / grey - серый
+                                </div>
+                                <p><strong>Как использовать цвета:</strong></p>
+                                <ul>
+                                    <li>Цвет + существительное: <strong>a red apple</strong> - красное яблоко</li>
+                                    <li>Порядок слов: цвет стоит перед предметом</li>
+                                    <li>Вопрос: <strong>What color is it?</strong> - Какого это цвета?</li>
+                                    <li>Ответ: <strong>It's blue.</strong> - Это синее.</li>
+                                </ul>
+                                <p><strong>Примеры предложений:</strong></p>
+                                <div class="vocabulary-list">
+                                    The sky is blue. - Небо синее.<br>
+                                    Grass is green. - Трава зеленая.<br>
+                                    Snow is white. - Снег белый.<br>
+                                    I like red flowers. - Мне нравятся красные цветы.
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-palette',
+                                text: 'Назови цвета',
+                                difficulty: 'easy',
+                                description: 'Напишите 5 основных цветов по-английски'
+                            },
+                            {
+                                icon: 'fas fa-fill-drip',
+                                text: 'Раскрась предметы',
+                                difficulty: 'easy',
+                                description: 'Раскрасьте предметы в нужные цвета'
+                            },
+                            {
+                                icon: 'fas fa-eye-dropper',
+                                text: 'Найди цвет',
+                                difficulty: 'medium',
+                                description: 'Найдите предметы указанного цвета'
+                            },
+                            {
+                                icon: 'fas fa-question',
+                                text: 'Ответь: "Какого цвета?"',
+                                difficulty: 'medium',
+                                description: 'Ответьте на вопросы о цветах'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра с цветами',
+                                difficulty: 'easy',
+                                description: 'Сопоставьте цвета с их названиями'
+                            }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        title: "Числа 1-10",
+                        duration: "30 минут",
+                        tasks: 5,
+                        description: "Учимся считать от 1 до 10",
+                        theory: {
+                            title: "Числа от 1 до 10:",
+                            content: `
+                                <p><strong>Основные числа:</strong></p>
+                                <div class="vocabulary-list">
+                                    1 - one [wʌn]<br>
+                                    2 - two [tuː]<br>
+                                    3 - three [θriː]<br>
+                                    4 - four [fɔːr]<br>
+                                    5 - five [faɪv]<br>
+                                    6 - six [sɪks]<br>
+                                    7 - seven [ˈsev.ən]<br>
+                                    8 - eight [eɪt]<br>
+                                    9 - nine [naɪn]<br>
+                                    10 - ten [ten]
+                                </div>
+                                <p><strong>Как использовать числа:</strong></p>
+                                <ul>
+                                    <li>Считать предметы: <strong>two apples</strong> - два яблока</li>
+                                    <li>Говорить о возрасте: <strong>I am five</strong> - Мне пять лет</li>
+                                    <li>Указывать количество: <strong>three books</strong> - три книги</li>
+                                    <li>Вопрос о количестве: <strong>How many?</strong> - Сколько?</li>
+                                </ul>
+                                <p><strong>Примеры предложений:</strong></p>
+                                <div class="vocabulary-list">
+                                    I have two cats. - У меня есть две кошки.<br>
+                                    She is eight years old. - Ей восемь лет.<br>
+                                    There are three books on the table. - На столе три книги.<br>
+                                    How many pens do you have? - Сколько у тебя ручек?
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-sort-numeric-up',
+                                text: 'Напиши числа 1-5',
+                                difficulty: 'easy',
+                                description: 'Напишите английские названия чисел от 1 до 5'
+                            },
+                            {
+                                icon: 'fas fa-calculator',
+                                text: 'Сосчитай предметы',
+                                difficulty: 'easy',
+                                description: 'Посчитайте предметы на картинке'
+                            },
+                            {
+                                icon: 'fas fa-birthday-cake',
+                                text: 'Сколько тебе лет?',
+                                difficulty: 'medium',
+                                description: 'Напишите ваш возраст по-английски'
+                            },
+                            {
+                                icon: 'fas fa-headphones',
+                                text: 'Аудирование: числа',
+                                difficulty: 'medium',
+                                description: 'Прослушайте и выберите услышанное число'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Найди число"',
+                                difficulty: 'easy',
+                                description: 'Найдите пары: цифра и слово'
+                            }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        title: "Животные",
+                        duration: "30 минут",
+                        tasks: 5,
+                        badge: 'popular',
+                        description: "Учим названия животных",
+                        theory: {
+                            title: "Популярные животные:",
+                            content: `
+                                <p><strong>Домашние животные:</strong></p>
+                                <div class="vocabulary-list">
+                                    cat - кот, кошка<br>
+                                    dog - собака<br>
+                                    bird - птица<br>
+                                    fish - рыба<br>
+                                    rabbit - кролик<br>
+                                    hamster - хомяк<br>
+                                    parrot - попугай
+                                </div>
+                                <p><strong>Дикие животные:</strong></p>
+                                <div class="vocabulary-list">
+                                    lion - лев<br>
+                                    tiger - тигр<br>
+                                    elephant - слон<br>
+                                    monkey - обезьяна<br>
+                                    bear - медведь<br>
+                                    wolf - волк<br>
+                                    fox - лиса
+                                </div>
+                                <p><strong>Как говорить о животных:</strong></p>
+                                <ul>
+                                    <li>У меня есть... - <strong>I have a...</strong></li>
+                                    <li>Мне нравится... - <strong>I like...</strong></li>
+                                    <li>Я вижу... - <strong>I see a...</strong></li>
+                                    <li>Вопрос: <strong>Do you have a pet?</strong> - У тебя есть домашнее животное?</li>
+                                </ul>
+                                <p><strong>Примеры предложений:</strong></p>
+                                <div class="vocabulary-list">
+                                    I have a cat. - У меня есть кот.<br>
+                                    The lion is big. - Лев большой.<br>
+                                    I like dogs. - Мне нравятся собаки.<br>
+                                    Do you have a pet? - Yes, I have a dog. - У тебя есть питомец? - Да, у меня есть собака.
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-paw',
+                                text: 'Назови 5 животных',
+                                difficulty: 'easy',
+                                description: 'Напишите названия 5 животных по-английски'
+                            },
+                            {
+                                icon: 'fas fa-dog',
+                                text: 'Мой питомец',
+                                difficulty: 'medium',
+                                description: 'Напишите о вашем домашнем животном'
+                            },
+                            {
+                                icon: 'fas fa-volume-up',
+                                text: 'Звуки животных',
+                                difficulty: 'easy',
+                                description: 'Послушайте и угадайте животное'
+                            },
+                            {
+                                icon: 'fas fa-question',
+                                text: 'Где живут животные?',
+                                difficulty: 'medium',
+                                description: 'Сопоставьте животных с местами обитания'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Угадай животное"',
+                                difficulty: 'easy',
+                                description: 'Угадайте животное по описанию'
+                            }
+                        ]
+                    },
+                    {
+                        id: 7,
+                        title: "Еда и напитки",
+                        duration: "35 минут",
+                        tasks: 5,
+                        description: "Учим названия продуктов и напитков",
+                        theory: {
+                            title: "Основная еда и напитки:",
+                            content: `
+                                <p><strong>Фрукты и овощи:</strong></p>
+                                <div class="vocabulary-list">
+                                    apple - яблоко<br>
+                                    banana - банан<br>
+                                    orange - апельсин<br>
+                                    tomato - помидор<br>
+                                    potato - картофель<br>
+                                    carrot - морковь<br>
+                                    bread - хлеб
+                                </div>
+                                <p><strong>Напитки:</strong></p>
+                                <div class="vocabulary-list">
+                                    water - вода<br>
+                                    tea - чай<br>
+                                    coffee - кофе<br>
+                                    milk - молоко<br>
+                                    juice - сок<br>
+                                    cola - кола
+                                </div>
+                                <p><strong>Полезные фразы:</strong></p>
+                                <ul>
+                                    <li>Я хочу... - <strong>I want...</strong></li>
+                                    <li>Мне нравится... - <strong>I like...</strong></li>
+                                    <li>Я не люблю... - <strong>I don't like...</strong></li>
+                                    <li>Вопрос: <strong>Do you like...?</strong> - Тебе нравится...?</li>
+                                </ul>
+                                <p><strong>Примеры диалогов:</strong></p>
+                                <div class="vocabulary-list">
+                                    A: Do you like apples? - Тебе нравятся яблоки?<br>
+                                    B: Yes, I like apples. - Да, мне нравятся яблоки.<br>
+                                    A: What do you want to drink? - Что ты хочешь пить?<br>
+                                    B: I want water. - Я хочу воды.
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-apple-alt',
+                                text: 'Назови 5 продуктов',
+                                difficulty: 'easy',
+                                description: 'Напишите названия 5 продуктов питания'
+                            },
+                            {
+                                icon: 'fas fa-coffee',
+                                text: 'Что ты пьешь?',
+                                difficulty: 'medium',
+                                description: 'Напишите о ваших любимых напитках'
+                            },
+                            {
+                                icon: 'fas fa-utensils',
+                                text: 'Составь меню',
+                                difficulty: 'medium',
+                                description: 'Составьте простое меню на английском'
+                            },
+                            {
+                                icon: 'fas fa-shopping-cart',
+                                text: 'Список покупок',
+                                difficulty: 'medium',
+                                description: 'Напишите список покупок на английском'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Еда и напитки"',
+                                difficulty: 'easy',
+                                description: 'Сопоставьте картинки с названиями'
+                            }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        title: "Мой дом",
+                        duration: "30 минут",
+                        tasks: 5,
+                        description: "Учим названия комнат и предметов в доме",
+                        theory: {
+                            title: "Комнаты и предметы в доме:",
+                            content: `
+                                <p><strong>Комнаты:</strong></p>
+                                <div class="vocabulary-list">
+                                    kitchen - кухня<br>
+                                    living room - гостиная<br>
+                                    bedroom - спальня<br>
+                                    bathroom - ванная комната<br>
+                                    hall - прихожая<br>
+                                    toilet - туалет
+                                </div>
+                                <p><strong>Мебель:</strong></p>
+                                <div class="vocabulary-list">
+                                    table - стол<br>
+                                    chair - стул<br>
+                                    bed - кровать<br>
+                                    sofa - диван<br>
+                                    wardrobe - шкаф<br>
+                                    refrigerator / fridge - холодильник<br>
+                                    TV - телевизор
+                                </div>
+                                <p><strong>Как описывать дом:</strong></p>
+                                <ul>
+                                    <li>В доме есть... - <strong>There is...</strong> (один предмет)</li>
+                                    <li>В доме есть... - <strong>There are...</strong> (несколько предметов)</li>
+                                    <li>Моя комната... - <strong>My room is...</strong></li>
+                                    <li>Вопрос: <strong>Is there...?</strong> - Есть ли...?</li>
+                                </ul>
+                                <p><strong>Примеры предложений:</strong></p>
+                                <div class="vocabulary-list">
+                                    There is a table in the kitchen. - На кухне есть стол.<br>
+                                    There are two chairs. - Есть два стула.<br>
+                                    My bedroom is big. - Моя спальня большая.<br>
+                                    Is there a TV in the living room? - В гостиной есть телевизор?
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-home',
+                                text: 'Назови комнаты',
+                                difficulty: 'easy',
+                                description: 'Напишите названия 4 комнат в доме'
+                            },
+                            {
+                                icon: 'fas fa-couch',
+                                text: 'Мебель в доме',
+                                difficulty: 'easy',
+                                description: 'Напишите названия 5 предметов мебели'
+                            },
+                            {
+                                icon: 'fas fa-door-closed',
+                                text: 'Опиши свою комнату',
+                                difficulty: 'medium',
+                                description: 'Опишите вашу комнату на английском'
+                            },
+                            {
+                                icon: 'fas fa-question',
+                                text: 'Где это находится?',
+                                difficulty: 'medium',
+                                description: 'Ответьте на вопросы о расположении предметов'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Дом"',
+                                difficulty: 'easy',
+                                description: 'Расставьте мебель в комнатах'
+                            }
+                        ]
+                    },
+                    {
+                        id: 9,
+                        title: "Погода",
+                        duration: "25 минут",
+                        tasks: 5,
+                        description: "Учимся говорить о погоде",
+                        theory: {
+                            title: "Слова о погоде:",
+                            content: `
+                                <p><strong>Основные состояния погоды:</strong></p>
+                                <div class="vocabulary-list">
+                                    sunny - солнечно<br>
+                                    rainy - дождливо<br>
+                                    cloudy - облачно<br>
+                                    windy - ветрено<br>
+                                    snowy - снежно<br>
+                                    cold - холодно<br>
+                                    hot - жарко<br>
+                                    warm - тепло<br>
+                                    cool - прохладно
+                                </div>
+                                <p><strong>Времена года:</strong></p>
+                                <div class="vocabulary-list">
+                                    spring - весна<br>
+                                    summer - лето<br>
+                                    autumn / fall - осень<br>
+                                    winter - зима
+                                </div>
+                                <p><strong>Как говорить о погоде:</strong></p>
+                                <ul>
+                                    <li>Сегодня... - <strong>Today is...</strong> или <strong>It is...</strong></li>
+                                    <li>Завтра будет... - <strong>Tomorrow will be...</strong></li>
+                                    <li>Мне нравится... - <strong>I like...</strong></li>
+                                    <li>Вопрос: <strong>What's the weather like?</strong> - Какая погода?</li>
+                                </ul>
+                                <p><strong>Примеры предложений:</strong></p>
+                                <div class="vocabulary-list">
+                                    Today is sunny. - Сегодня солнечно.<br>
+                                    It is cold today. - Сегодня холодно.<br>
+                                    I like sunny weather. - Мне нравится солнечная погода.<br>
+                                    What's the weather like? - It's rainy. - Какая погода? - Дождливо.
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-sun',
+                                text: 'Назови состояния погоды',
+                                difficulty: 'easy',
+                                description: 'Напишите 5 слов о погоде'
+                            },
+                            {
+                                icon: 'fas fa-cloud',
+                                text: 'Опиши сегодняшнюю погоду',
+                                difficulty: 'medium',
+                                description: 'Опишите погоду за окном на английском'
+                            },
+                            {
+                                icon: 'fas fa-calendar',
+                                text: 'Любимое время года',
+                                difficulty: 'medium',
+                                description: 'Напишите о вашем любимом времени года'
+                            },
+                            {
+                                icon: 'fas fa-question',
+                                text: 'Какая будет погода?',
+                                difficulty: 'medium',
+                                description: 'Ответьте на вопросы о погоде'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Погода"',
+                                difficulty: 'easy',
+                                description: 'Сопоставьте картинки с описанием погоды'
+                            }
+                        ]
+                    },
+                    {
+                        id: 10,
+                        title: "Мой день",
+                        duration: "35 минут",
+                        tasks: 5,
+                        description: "Учимся говорить о повседневных делах",
+                        theory: {
+                            title: "Распорядок дня:",
+                            content: `
+                                <p><strong>Основные действия:</strong></p>
+                                <div class="vocabulary-list">
+                                    get up - вставать<br>
+                                    have breakfast - завтракать<br>
+                                    go to work / school - идти на работу / в школу<br>
+                                    have lunch - обедать<br>
+                                    come home - приходить домой<br>
+                                    have dinner - ужинать<br>
+                                    watch TV - смотреть телевизор<br>
+                                    go to bed - ложиться спать
+                                </div>
+                                <p><strong>Время:</strong></p>
+                                <div class="vocabulary-list">
+                                    morning - утро<br>
+                                    afternoon - день<br>
+                                    evening - вечер<br>
+                                    night - ночь<br>
+                                    o'clock - часов (для точного времени)<br>
+                                    at 7 o'clock - в 7 часов
+                                </div>
+                                <p><strong>Как описывать распорядок дня:</strong></p>
+                                <ul>
+                                    <li>Я встаю в... - <strong>I get up at...</strong></li>
+                                    <li>Я завтракаю... - <strong>I have breakfast...</strong></li>
+                                    <li>Обычно я... - <strong>Usually I...</strong></li>
+                                    <li>Потом... - <strong>Then...</strong></li>
+                                </ul>
+                                <p><strong>Пример распорядка дня:</strong></p>
+                                <div class="vocabulary-list">
+                                    I get up at 7 o'clock. - Я встаю в 7 часов.<br>
+                                    I have breakfast at 7:30. - Я завтракаю в 7:30.<br>
+                                    I go to work at 8 o'clock. - Я иду на работу в 8 часов.<br>
+                                    I come home at 6 o'clock. - Я прихожу домой в 6 часов.
+                                </div>
+                            `
+                        },
+                        assignments: [
+                            {
+                                icon: 'fas fa-clock',
+                                text: 'Напиши время',
+                                difficulty: 'easy',
+                                description: 'Напишите время на английском'
+                            },
+                            {
+                                icon: 'fas fa-calendar-day',
+                                text: 'Мое утро',
+                                difficulty: 'medium',
+                                description: 'Опишите ваше утро (3-4 предложения)'
+                            },
+                            {
+                                icon: 'fas fa-bed',
+                                text: 'Мой вечер',
+                                difficulty: 'medium',
+                                description: 'Опишите что вы делаете вечером'
+                            },
+                            {
+                                icon: 'fas fa-question',
+                                text: 'Когда ты...?',
+                                difficulty: 'medium',
+                                description: 'Ответьте на вопросы о вашем распорядке'
+                            },
+                            {
+                                icon: 'fas fa-gamepad',
+                                text: 'Игра "Распорядок дня"',
+                                difficulty: 'easy',
+                                description: 'Расставьте действия по порядку'
+                            }
+                        ]
+                    }
+                ]
+            },
+            elementary: {
+                title: "Курс среднего уровня",
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Прошедшее простое время",
+                        duration: "45 минут",
+                        tasks: 5,
+                        badge: 'new',
+                        description: "Учимся рассказывать о событиях в прошлом",
+                        assignments: [
+                            {icon: 'fas fa-history', text: 'Просклоняйте глаголы в Past Simple'},
+                            {icon: 'fas fa-calendar-day', text: 'Расскажите о вчерашнем дне'},
+                            {icon: 'fas fa-book', text: 'Прочитайте текст и ответьте на вопросы'},
+                            {icon: 'fas fa-pen', text: 'Напишите рассказ "Мое детство"'},
+                            {icon: 'fas fa-film', text: 'Посмотрите видео и опишите события'}
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "Настоящее продолженное время",
+                        duration: "40 минут",
+                        tasks: 5,
+                        badge: 'popular',
+                        description: "Говорим о действиях, происходящих сейчас",
+                        assignments: [
+                            {icon: 'fas fa-clock', text: 'Составьте предложения с now, at the moment'},
+                            {icon: 'fas fa-camera', text: 'Опишите что происходит на фото'},
+                            {icon: 'fas fa-video', text: 'Просмотрите видео в реальном времени'},
+                            {icon: 'fas fa-calendar-check', text: 'Запланируйте встречи на этой неделе'},
+                            {icon: 'fas fa-comments', text: 'Диалог "Что ты сейчас делаешь?"'}
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: "Модальные глаголы",
+                        duration: "50 минут",
+                        tasks: 5,
+                        description: "Учимся выражать возможность, необходимость, разрешение",
+                        assignments: [
+                            {icon: 'fas fa-check-circle', text: 'Упражнения на can/could'},
+                            {icon: 'fas fa-exclamation-circle', text: 'Задания на must/have to'},
+                            {icon: 'fas fa-lightbulb', text: 'Советы с should'},
+                            {icon: 'fas fa-balance-scale', text: 'Сравнение модальных глаголов'},
+                            {icon: 'fas fa-comment-dots', text: 'Составление диалогов'}
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: "Сравнительная степень",
+                        duration: "40 минут",
+                        tasks: 5,
+                        description: "Сравниваем предметы, людей и ситуации",
+                        assignments: [
+                            {icon: 'fas fa-balance-scale-left', text: 'Сравните два города'},
+                            {icon: 'fas fa-chart-line', text: 'Составьте сравнительную таблицу'},
+                            {icon: 'fas fa-users', text: 'Сравните членов семьи'},
+                            {icon: 'fas fa-gem', text: 'Найдите отличия на картинках'},
+                            {icon: 'fas fa-star', text: 'Опишите лучший/худший опыт'}
+                        ]
+                    },
+                    {
+                        id: 5,
+                        title: "Будущее время",
+                        duration: "45 минут",
+                        tasks: 5,
+                        description: "Говорим о планах, намерениях и предсказаниях",
+                        assignments: [
+                            {icon: 'fas fa-calendar-alt', text: 'Запланируйте отпуск'},
+                            {icon: 'fas fa-bullseye', text: 'Цели на следующий год'},
+                            {icon: 'fas fa-crystal-ball', text: 'Предсказания на будущее'},
+                            {icon: 'fas fa-plane', text: 'Планы путешествий'},
+                            {icon: 'fas fa-graduation-cap', text: 'Образовательные планы'}
+                        ]
+                    },
+                    {
+                        id: 6,
+                        title: "Предлоги места и времени",
+                        duration: "40 минут",
+                        tasks: 5,
+                        description: "Правильное использование предлогов",
+                        assignments: [
+                            {icon: 'fas fa-map-pin', text: 'Предлоги места: in, on, at'},
+                            {icon: 'fas fa-clock', text: 'Предлоги времени: at, in, on'},
+                            {icon: 'fas fa-directions', text: 'Описание маршрута'},
+                            {icon: 'fas fa-calendar', text: 'Расписание мероприятий'},
+                            {icon: 'fas fa-location-arrow', text: 'Игра с предлогами'}
+                        ]
+                    },
+                    {
+                        id: 7,
+                        title: "Исчисляемые и неисчисляемые существительные",
+                        duration: "35 минут",
+                        tasks: 5,
+                        description: "Различие в использовании much/many, some/any",
+                        assignments: [
+                            {icon: 'fas fa-apple-alt', text: 'Практика с much/many'},
+                            {icon: 'fas fa-water', text: 'Неисчисляемые существительные'},
+                            {icon: 'fas fa-shopping-cart', text: 'Покупки в магазине'},
+                            {icon: 'fas fa-utensils', text: 'Заказ в ресторане'},
+                            {icon: 'fas fa-balance-scale', text: 'Сравнение количеств'}
+                        ]
+                    },
+                    {
+                        id: 8,
+                        title: "Вопросы в разных временах",
+                        duration: "45 минут",
+                        tasks: 5,
+                        description: "Формирование вопросов в настоящем, прошлом и будущем",
+                        assignments: [
+                            {icon: 'fas fa-question-circle', text: 'Общие вопросы'},
+                            {icon: 'fas fa-question', text: 'Специальные вопросы'},
+                            {icon: 'fas fa-user-check', text: 'Вопросы к собеседованию'},
+                            {icon: 'fas fa-newspaper', text: 'Интервью'},
+                            {icon: 'fas fa-comments', text: 'Групповое обсуждение'}
+                        ]
+                    },
+                    {
+                        id: 9,
+                        title: "Косвенная речь (начальный уровень)",
+                        duration: "50 минут",
+                        tasks: 5,
+                        description: "Учимся передавать чужие слова",
+                        assignments: [
+                            {icon: 'fas fa-quote-right', text: 'Прямая речь в косвенную'},
+                            {icon: 'fas fa-microphone-alt', text: 'Интервью и его пересказ'},
+                            {icon: 'fas fa-gavel', text: 'Свидетельские показания'},
+                            {icon: 'fas fa-book-reader', text: 'Пересказ текста'},
+                            {icon: 'fas fa-film', text: 'Диалоги из фильмов'}
+                        ]
+                    },
+                    {
+                        id: 10,
+                        title: "Страдательный залог (начальный уровень)",
+                        duration: "50 минут",
+                        tasks: 5,
+                        description: "Основы использования пассивного залога",
+                        assignments: [
+                            {icon: 'fas fa-exchange-alt', text: 'Преобразование активного в пассивное'},
+                            {icon: 'fas fa-newspaper', text: 'Анализ новостных заголовков'},
+                            {icon: 'fas fa-flask', text: 'Научные описания'},
+                            {icon: 'fas fa-history', text: 'Исторические события'},
+                            {icon: 'fas fa-industry', text: 'Технические описания'}
+                        ]
+                    }
+                ]
+            },
+            advanced: {
+                title: "ВИП-курс",
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Английские идиомы",
+                        duration: "50 минут",
+                        tasks: 5,
+                        badge: 'new',
+                        description: "Изучаем популярные идиомы и их использование",
+                        assignments: [
+                            {icon: 'fas fa-lightbulb', text: 'Изучите 10 идиом о времени'},
+                            {icon: 'fas fa-paw', text: 'Объясните идиомы с животными'},
+                            {icon: 'fas fa-briefcase', text: 'Деловые идиомы в контексте'},
+                            {icon: 'fas fa-comment-alt', text: 'Составьте диалог с идиомами'},
+                            {icon: 'fas fa-book-open', text: 'Найдите идиомы в тексте'}
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "Деловая переписка",
+                        duration: "55 минут",
+                        tasks: 5,
+                        badge: 'popular',
+                        description: "Учимся писать профессиональные письма",
+                        assignments: [
+                            {icon: 'fas fa-envelope', text: 'Напишите формальное письмо'},
+                            {icon: 'fas fa-file-contract', text: 'Составьте коммерческое предложение'},
+                            {icon: 'fas fa-handshake', text: 'Письмо-благодарность партнеру'},
+                            {icon: 'fas fa-exclamation-triangle', text: 'Письмо-жалобу клиенту'},
+                            {icon: 'fas fa-calendar-plus', text: 'Приглашение на мероприятие'}
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: "Условные предложения",
+                        duration: "60 минут",
+                        tasks: 5,
+                        description: "Все типы условных предложений в английском",
+                        assignments: [
+                            {icon: 'fas fa-project-diagram', text: 'Сравнение всех типов условных'},
+                            {icon: 'fas fa-comment-medical', text: 'Медицинские советы с условиями'},
+                            {icon: 'fas fa-gavel', text: 'Юридические документы с условиями'},
+                            {icon: 'fas fa-heart', text: 'Личные планы с условиями'},
+                            {icon: 'fas fa-chart-pie', text: 'Статистический анализ'}
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: "Пассивный залог",
+                        duration: "50 минут",
+                        tasks: 5,
+                        description: "Учимся использовать пассивный залог правильно",
+                        assignments: [
+                            {icon: 'fas fa-exchange-alt', text: 'Преобразование активного в пассивное'},
+                            {icon: 'fas fa-newspaper', text: 'Анализ новостных заголовков'},
+                            {icon: 'fas fa-flask', text: 'Научные описания в пассивном залоге'},
+                            {icon: 'fas fa-history', text: 'Исторические события'},
+                            {icon: 'fas fa-industry', text: 'Технические описания'}
+                        ]
+                    },
+                    {
+                        id: 5,
+                        title: "Косвенная речь",
+                        duration: "55 минут",
+                        tasks: 5,
+                        description: "Передаем чужие слова и мысли",
+                        assignments: [
+                            {icon: 'fas fa-quote-right', text: 'Прямая речь в косвенную'},
+                            {icon: 'fas fa-microphone-alt', text: 'Интервью и его пересказ'},
+                            {icon: 'fas fa-gavel', text: 'Свидетельские показания'},
+                            {icon: 'fas fa-book-reader', text: 'Пересказ литературных произведений'},
+                            {icon: 'fas fa-film', text: 'Диалоги из фильмов'}
+                        ]
+                    },
+                    {
+                        id: 6,
+                        title: "Фразовые глаголы",
+                        duration: "60 минут",
+                        tasks: 5,
+                        description: "Изучаем сложные фразовые глаголы",
+                        assignments: [
+                            {icon: 'fas fa-language', text: 'Фразовые глаголы с get'},
+                            {icon: 'fas fa-arrow-up', text: 'Фразовые глаголы с up'},
+                            {icon: 'fas fa-arrow-down', text: 'Фразовые глаголы с down'},
+                            {icon: 'fas fa-random', text: 'Разные значения одного глагола'},
+                            {icon: 'fas fa-gamepad', text: 'Игра с фразовыми глаголами'}
+                        ]
+                    },
+                    {
+                        id: 7,
+                        title: "Деловые переговоры",
+                        duration: "65 минут",
+                        tasks: 5,
+                        description: "Язык и стратегии бизнес-переговоров",
+                        assignments: [
+                            {icon: 'fas fa-handshake', text: 'Начало переговоров'},
+                            {icon: 'fas fa-chart-line', text: 'Предложение условий'},
+                            {icon: 'fas fa-balance-scale', text: 'Компромиссы и уступки'},
+                            {icon: 'fas fa-file-signature', text: 'Заключение соглашения'},
+                            {icon: 'fas fa-users', text: 'Ролевая игра: переговоры'}
+                        ]
+                    },
+                    {
+                        id: 8,
+                        title: "Научный английский",
+                        duration: "60 минут",
+                        tasks: 5,
+                        description: "Язык научных статей и исследований",
+                        assignments: [
+                            {icon: 'fas fa-flask', text: 'Описание эксперимента'},
+                            {icon: 'fas fa-chart-bar', text: 'Интерпретация графиков'},
+                            {icon: 'fas fa-microscope', text: 'Научные термины'},
+                            {icon: 'fas fa-file-medical', text: 'Медицинские тексты'},
+                            {icon: 'fas fa-atom', text: 'Технические описания'}
+                        ]
+                    },
+                    {
+                        id: 9,
+                        title: "Литературный анализ",
+                        duration: "70 минут",
+                        tasks: 5,
+                        description: "Анализ английской литературы",
+                        assignments: [
+                            {icon: 'fas fa-book', text: 'Анализ стихотворения'},
+                            {icon: 'fas fa-theater-masks', text: 'Драматургия'},
+                            {icon: 'fas fa-quote-left', text: 'Цитаты и их интерпретация'},
+                            {icon: 'fas fa-pen-nib', text: 'Стилистические приемы'},
+                            {icon: 'fas fa-user-edit', text: 'Написание эссе'}
+                        ]
+                    },
+                    {
+                        id: 10,
+                        title: "Подготовка к международным экзаменам",
+                        duration: "75 минут",
+                        tasks: 5,
+                        description: "IELTS, TOEFL, CAE - стратегии и практика",
+                        assignments: [
+                            {icon: 'fas fa-edit', text: 'Эссе для IELTS'},
+                            {icon: 'fas fa-headphones', text: 'Аудирование TOEFL'},
+                            {icon: 'fas fa-comment', text: 'Устная часть CAE'},
+                            {icon: 'fas fa-file-alt', text: 'Чтение академических текстов'},
+                            {icon: 'fas fa-graduation-cap', text: 'Пробный экзамен'}
+                        ]
+                    }
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('courseContainer');
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseLevel = urlParams.get('level') || 'beginner';
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!user) {
+                showLoginForm(courseLevel);
+            } else {
+                showCourseContent(courseLevel, user);
+            }
+        });
+        
+        function showLoginForm(level) {
+            const courseTitles = {
+                'beginner': 'Курс для начинающих',
+                'elementary': 'Курс среднего уровня',
+                'advanced': 'ВИП-курс'
+            };
+            
+            const courseColors = {
+                'beginner': 'header-beginner',
+                'elementary': 'header-elementary',
+                'advanced': 'header-advanced'
+            };
+            
+            const title = courseTitles[level] || 'Курс английского';
+            
+            document.getElementById('courseContainer').innerHTML = `
+                <div class="course-header ${courseColors[level]}">
+                    <h1 class="course-title"><i class="${level === 'beginner' ? 'fas fa-seedling' : level === 'elementary' ? 'fas fa-tree' : 'fas fa-crown'}"></i> ${title}</h1>
+                    <p>Изучайте английский в комфортном темпе!</p>
+                </div>
+                
+                <div class="login-prompt">
+                    <h2><i class="fas fa-lock"></i> Требуется авторизация</h2>
+                    <p>Для доступа к этому курсу необходимо войти в систему.</p>
+                    <p>После входа вы получите полный доступ ко всем материалам.</p>
+                    
+                    <div style="margin-top: 30px;">
+                        <a href="login.html" class="btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                        <a href="register.html" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Зарегистрироваться
+                        </a>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <a href="courses.html" style="color: #666; text-decoration: none;">
+                            <i class="fas fa-arrow-left"></i> Вернуться к списку курсов
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showCourseContent(level, user) {
+            const courseData = assignmentsData[level] || assignmentsData.beginner;
+            
+            document.getElementById('courseContainer').innerHTML = `
+                <div class="course-header ${level === 'beginner' ? 'header-beginner' : level === 'elementary' ? 'header-elementary' : 'header-advanced'}">
+                    <h1 class="course-title"><i class="${level === 'beginner' ? 'fas fa-seedling' : level === 'elementary' ? 'fas fa-tree' : 'fas fa-crown'}"></i> ${courseData.title}</h1>
+                    <p>Добро пожаловать, ${user.username}! ${courseData.description || 'Изучайте английский в комфортном темпе!'}</p>
+                    <div style="margin-top: 20px; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px; display: inline-block;">
+                        <i class="fas fa-user-graduate"></i> Ваш уровень: <strong>${user.level ? user.level.toUpperCase() : 'НЕ ОПРЕДЕЛЕН'}</strong>
+                    </div>
+                </div>
+                
+                <div class="course-content">
+                    <h2><i class="fas fa-list-ol"></i> Уроки курса</h2>
+                    <p>Выберите урок для изучения. Каждый урок содержит теорию и практические задания:</p>
+                    
+                    <div class="lessons-grid">
+                        ${courseData.lessons.map((lesson, index) => {
+                            const completedTasks = getCompletedTasks(level, lesson.id);
+                            const totalTasks = lesson.tasks || 5;
+                            const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                            const progressColor = progressPercent === 100 ? '#4CAF50' : 
+                                                 progressPercent >= 50 ? '#2196F3' : 
+                                                 progressPercent > 0 ? '#FF9800' : '#9E9E9E';
+                            
+                            return `
+                                <div class="lesson-card ${level}">
+                                    <h3>
+                                        Урок ${lesson.id}: ${lesson.title}
+                                        ${lesson.badge ? `<span class="badge badge-${lesson.badge}">${lesson.badge === 'new' ? 'НОВЫЙ' : lesson.badge === 'popular' ? 'ПОПУЛЯРНЫЙ' : 'ТЕОРИЯ'}</span>` : ''}
+                                        ${completedTasks === totalTasks ? 
+                                            `<span class="badge" style="background: #4CAF50;">ЗАВЕРШЕНО</span>` : 
+                                            completedTasks > 0 ? 
+                                            `<span class="badge" style="background: #FF9800;">В ПРОЦЕССЕ</span>` : 
+                                            ''}
+                                    </h3>
+                                    <p><i class="fas fa-info-circle"></i> ${lesson.description}</p>
+                                    
+                                    <div class="lesson-stats">
+                                        <span><i class="fas fa-clock"></i> ${lesson.duration}</span>
+                                        <span><i class="fas fa-tasks"></i> ${totalTasks} заданий</span>
+                                        <span><i class="fas fa-check-circle" style="color: #4CAF50;"></i> ${completedTasks}/${totalTasks}</span>
+                                    </div>
+                                    
+                                    <!-- Прогресс-бар -->
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${progressPercent}%; background: ${progressColor};"></div>
+                                    </div>
+                                    <div style="margin-top: 5px; font-size: 0.9rem; color: #666;">
+                                        Прогресс: ${progressPercent}%
+                                    </div>
+                                    
+                                    <!-- Теория урока -->
+                                    ${lesson.theory ? `
+                                        <div class="theory-section">
+                                            <h4><i class="fas fa-book"></i> ${lesson.theory.title}</h4>
+                                            ${lesson.theory.content}
+                                        </div>
+                                    ` : ''}
+                                    
+                                    <!-- Задания урока (показываем для всех уроков) -->
+                                    ${lesson.assignments ? `
+                                        <div class="tasks-list">
+                                            <p style="margin-top: 15px; font-weight: bold; color: ${level === 'beginner' ? '#4CAF50' : level === 'elementary' ? '#2196F3' : '#9C27B0'};">
+                                                <i class="fas fa-clipboard-list"></i> Задания урока:
+                                            </p>
+                                            ${lesson.assignments.map((task, taskIndex) => {
+                                                const isCompleted = user && user.progress && 
+                                                                   user.progress[level] && 
+                                                                   user.progress[level][lesson.id] &&
+                                                                   user.progress[level][lesson.id].includes(taskIndex + 1);
+                                                
+                                                return `
+                                                    <div class="task-item ${isCompleted ? 'completed-task' : ''}" 
+                                                         onclick="startAssignment(${lesson.id}, '${level}', ${taskIndex + 1})">
+                                                        <i class="${task.icon}"></i>
+                                                        <span>
+                                                            ${task.text}
+                                                            ${task.difficulty ? `<span class="task-difficulty ${task.difficulty}">${task.difficulty.toUpperCase()}</span>` : ''}
+                                                        </span>
+                                                        ${isCompleted ? '<span class="task-check"><i class="fas fa-check"></i></span>' : 
+                                                          '<span class="task-check"><i class="fas fa-arrow-right"></i></span>'}
+                                                    </div>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                    ` : `
+                                        <p style="margin-top: 15px; color: #666; font-style: italic;">
+                                            <i class="fas fa-lock-open"></i> ${totalTasks} заданий ждут вас в этом уроке
+                                        </p>
+                                    `}
+                                    
+                                    <button onclick="startLesson(${lesson.id}, '${level}')" class="btn-start-lesson">
+                                        <i class="fas fa-play"></i> 
+                                        ${completedTasks === 0 ? (index === 0 ? 'Начать с первого урока' : 'Начать урок') : 
+                                          completedTasks === totalTasks ? 'Повторить урок' : 
+                                          `Продолжить (${completedTasks}/${totalTasks})`}
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                        <h3><i class="fas fa-lightbulb"></i> Советы по изучению:</h3>
+                        <ul>
+                            <li>Изучайте теорию перед выполнением заданий</li>
+                            <li>Выполняйте все задания по порядку</li>
+                            <li>Не торопитесь - повторяйте материал при необходимости</li>
+                            <li>Используйте словарик для новых слов</li>
+                            <li>Практикуйтесь ежедневно по 20-30 минут</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+                        <a href="courses.html" style="color: #2196F3; text-decoration: none; font-weight: bold;">
+                            <i class="fas fa-arrow-left"></i> Вернуться к списку курсов
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getCompletedTasks(courseLevel, lessonId) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user && user.progress && user.progress[courseLevel] && user.progress[courseLevel][lessonId]) {
+                return user.progress[courseLevel][lessonId].length;
+            }
+            return 0;
+        }
+        
+        function startAssignment(lessonNumber, courseLevel, assignmentNumber) {
+            // Сохраняем информацию о текущем задании
+            localStorage.setItem('currentLesson', lessonNumber);
+            localStorage.setItem('currentCourse', courseLevel);
+            localStorage.setItem('currentAssignment', assignmentNumber);
+            
+            // Переходим на страницу задания
+            window.location.href = `assignments.html?course=${courseLevel}&lesson=${lessonNumber}&task=${assignmentNumber}`;
+        }
+        
+        function startLesson(lessonNumber, courseLevel) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // Проверяем, с какого задания начать
+            let startTask = 1;
+            if (user && user.progress && user.progress[courseLevel] && user.progress[courseLevel][lessonNumber]) {
+                const completedTasks = user.progress[courseLevel][lessonNumber];
+                const totalTasks = assignmentsData[courseLevel].lessons.find(l => l.id === lessonNumber).tasks || 5;
+                
+                // Ищем первое незавершенное задание
+                for (let i = 1; i <= totalTasks; i++) {
+                    if (!completedTasks.includes(i)) {
+                        startTask = i;
+                        break;
+                    }
+                }
+                
+                // Если все задания завершены, начинаем с первого
+                if (completedTasks.length === totalTasks) {
+                    startTask = 1;
+                }
+            }
+            
+            // Переходим на страницу задания
+            window.location.href = `assignments.html?course=${courseLevel}&lesson=${lessonNumber}&task=${startTask}`;
+        }
+    </script>
+</body>
+</html>

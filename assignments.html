@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание - EnglishForSeniors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf5);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .header.beginner { background: linear-gradient(135deg, #4CAF50, #8BC34A); }
+        .header.elementary { background: linear-gradient(135deg, #2196F3, #03A9F4); }
+        .header.advanced { background: linear-gradient(135deg, #9C27B0, #673AB7); }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .assignment-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .theory-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .task-card {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .task-card h3 {
+            color: #1a237e;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .task-input, .task-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 15px 0;
+            font-family: inherit;
+        }
+        
+        .task-input:focus, .task-textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #45a049, #7cb342);
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .task-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #2196F3;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        .hint-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .multiple-choice {
+            margin: 20px 0;
+        }
+        
+        .choice-option {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .choice-option:hover {
+            border-color: #4CAF50;
+            background: #f8fff8;
+        }
+        
+        .choice-option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        
+        .correct {
+            background: #e8f5e9 !important;
+            border-color: #4CAF50 !important;
+            color: #2e7d32;
+        }
+        
+        .incorrect {
+            background: #ffebee !important;
+            border-color: #f44336 !important;
+            color: #c62828;
+        }
+        
+        .result-message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+        
+        .lesson-complete {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .lesson-complete i {
+            font-size: 60px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .matching-game {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .matching-column {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .matching-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: move;
+            text-align: center;
+        }
+        
+        .matching-item.dragging {
+            opacity: 0.5;
+        }
+        
+        .drop-zone {
+            min-height: 50px;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+        }
+        
+        .drop-zone.active {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        
+        .audio-player {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e3f2fd;
+        }
+        
+        .play-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .play-btn:hover {
+            background: #1976d2;
+            transform: scale(1.05);
+        }
+        
+        .answer-feedback {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .correct-answer {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="assignmentContainer">
+    </div>
+
+    <script>
+        // Данные заданий с проверкой ответов
+        const taskData = {
+            beginner: {
+                1: { // Урок 1: Алфавит и звуки
+                    1: {
+                        type: "text",
+                        title: "Напишите буквы A-G",
+                        description: "Напишите первые 7 букв английского алфавита через запятую",
+                        instruction: "Напишите буквы от A до G на английском, разделяя их запятыми:",
+                        hint: "Пример: A, B, C, D, E, F, G",
+                        correctAnswer: "A,B,C,D,E,F,G",
+                        checkFunction: "checkAlphabet"
+                    },
+                    2: {
+                        type: "audio",
+                        title: "Повторите звуки H-N",
+                        description: "Прослушайте и повторите произношение букв",
+                        instruction: "Прослушайте произношение букв H, I, J, K, L, M, N",
+                        audioText: "H [eɪtʃ], I [aɪ], J [dʒeɪ], K [keɪ], L [el], M [em], N [en]",
+                        question: "Как произносится буква J?",
+                        options: [
+                            {text: "[dʒeɪ]", correct: true},
+                            {text: "[dʒi:]", correct: false},
+                            {text: "[jeɪ]", correct: false},
+                            {text: "[dʒaɪ]", correct: false}
+                        ]
+                    },
+                    3: {
+                        type: "choice",
+                        title: "Найди букву",
+                        description: "Найдите указанные буквы среди других",
+                        instruction: "Найдите букву E среди следующих вариантов:",
+                        question: "Какая из этих букв - E?",
+                        options: [
+                            {text: "A", correct: false},
+                            {text: "E", correct: true},
+                            {text: "F", correct: false},
+                            {text: "B", correct: false}
+                        ]
+                    },
+                    4: {
+                        type: "matching",
+                        title: "Аудирование: буквы",
+                        description: "Прослушайте и выберите правильную букву",
+                        instruction: "Сопоставьте буквы с их произношением:",
+                        leftColumn: ["A", "B", "C", "D", "E"],
+                        rightColumn: ["[ei]", "[bi:]", "[si:]", "[di:]", "[i:]"],
+                        correctPairs: [0,1,2,3,4]
+                    },
+                    5: {
+                        type: "text",
+                        title: "Игра с алфавитом",
+                        description: "Напишите английский алфавит по порядку",
+                        instruction: "Напишите все буквы английского алфавита через запятую:",
+                        hint: "Начните с A и закончите Z",
+                        correctAnswer: "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z",
+                        checkFunction: "checkFullAlphabet"
+                    }
+                },
+                2: { // Урок 2: Приветствия и прощания
+                    1: {
+                        type: "choice",
+                        title: "Повторите фразы приветствия",
+                        description: "Выберите правильный перевод",
+                        instruction: "Как сказать 'Доброе утро' по-английски?",
+                        options: [
+                            {text: "Good morning!", correct: true},
+                            {text: "Good afternoon!", correct: false},
+                            {text: "Good evening!", correct: false},
+                            {text: "Good night!", correct: false}
+                        ]
+                    },
+                    2: {
+                        type: "text",
+                        title: "Напишите 'Как дела?'",
+                        description: "Напишите фразу 'How are you?' по-английски",
+                        instruction: "Напишите фразу 'Как дела?' на английском:",
+                        hint: "Фраза состоит из трех слов",
+                        correctAnswer: "How are you?",
+                        checkFunction: "checkSimplePhrase"
+                    },
+                    3: {
+                        type: "choice",
+                        title: "Диалог: знакомство",
+                        description: "Выберите правильный ответ в диалоге",
+                        instruction: "Выберите правильный ответ на вопрос: 'What's your name?'",
+                        options: [
+                            {text: "I'm fine, thank you.", correct: false},
+                            {text: "My name is Anna.", correct: true},
+                            {text: "I am 25 years old.", correct: false},
+                            {text: "Nice to meet you.", correct: false}
+                        ]
+                    },
+                    4: {
+                        type: "choice",
+                        title: "Выбери правильный ответ",
+                        description: "Выберите подходящее приветствие для ситуации",
+                        instruction: "Какое приветствие уместно сказать утром?",
+                        options: [
+                            {text: "Good morning!", correct: true},
+                            {text: "Good afternoon!", correct: false},
+                            {text: "Good evening!", correct: false},
+                            {text: "Good night!", correct: false}
+                        ]
+                    },
+                    5: {
+                        type: "matching",
+                        title: "Игра 'Найди пару'",
+                        description: "Сопоставьте русские и английские приветствия",
+                        instruction: "Сопоставьте фразы:",
+                        leftColumn: ["Привет!", "Доброе утро!", "Как дела?", "До свидания!", "Приятно познакомиться!"],
+                        rightColumn: ["Hello!", "Good morning!", "How are you?", "Goodbye!", "Nice to meet you!"],
+                        correctPairs: [0,1,2,3,4]
+                    }
+                },
+                3: { // Урок 3: Моя семья
+                    1: {
+                        type: "text",
+                        title: "Назови членов семьи",
+                        description: "Напишите названия 5 членов семьи",
+                        instruction: "Напишите 5 членов семьи на английском через запятую:",
+                        hint: "Пример: mother, father, brother, sister, grandmother",
+                        checkFunction: "checkFamilyWords"
+                    },
+                    2: {
+                        type: "text",
+                        title: "Моя семья",
+                        description: "Напишите о своей семье",
+                        instruction: "Напишите 2-3 предложения о вашей семье на английском:",
+                        example: "I have a mother and a father. My mother's name is Maria.",
+                        checkFunction: "checkFamilyDescription"
+                    },
+                    3: {
+                        type: "choice",
+                        title: "Составь семейное дерево",
+                        description: "Выберите правильные отношения",
+                        instruction: "Кто такой 'brother'?",
+                        options: [
+                            {text: "Брат", correct: true},
+                            {text: "Сестра", correct: false},
+                            {text: "Отец", correct: false},
+                            {text: "Мать", correct: false}
+                        ]
+                    },
+                    4: {
+                        type: "choice",
+                        title: "Ответь на вопросы",
+                        description: "Ответьте на вопросы о семье",
+                        instruction: "Как спросить 'Сколько у тебя братьев?'",
+                        options: [
+                            {text: "How many brothers do you have?", correct: true},
+                            {text: "What is your brother's name?", correct: false},
+                            {text: "Do you have a brother?", correct: false},
+                            {text: "Who is your brother?", correct: false}
+                        ]
+                    },
+                    5: {
+                        type: "matching",
+                        title: "Игра 'Семейные отношения'",
+                        description: "Сопоставьте названия родственников",
+                        instruction: "Сопоставьте английские слова с русскими:",
+                        leftColumn: ["mother", "father", "sister", "brother", "grandmother"],
+                        rightColumn: ["мама", "папа", "сестра", "брат", "бабушка"],
+                        correctPairs: [0,1,2,3,4]
+                    }
+                },
+                4: { // Урок 4: Цвета
+                    1: {
+                        type: "text",
+                        title: "Назови цвета",
+                        description: "Напишите 5 основных цветов по-английски",
+                        instruction: "Напишите 5 цветов на английском через запятую:",
+                        hint: "Пример: red, blue, green, yellow, black",
+                        checkFunction: "checkColors"
+                    },
+                    2: {
+                        type: "choice",
+                        title: "Раскрась предметы",
+                        description: "Выберите правильный цвет для предмета",
+                        instruction: "Какого цвета трава?",
+                        options: [
+                            {text: "green", correct: true},
+                            {text: "red", correct: false},
+                            {text: "blue", correct: false},
+                            {text: "yellow", correct: false}
+                        ]
+                    },
+                    3: {
+                        type: "choice",
+                        title: "Найди цвет",
+                        description: "Найдите предметы указанного цвета",
+                        instruction: "Какой из этих предметов обычно красный?",
+                        options: [
+                            {text: "apple", correct: true},
+                            {text: "sky", correct: false},
+                            {text: "grass", correct: false},
+                            {text: "banana", correct: false}
+                        ]
+                    },
+                    4: {
+                        type: "choice",
+                        title: "Ответь: 'Какого цвета?'",
+                        description: "Ответьте на вопросы о цветах",
+                        instruction: "Как спросить 'Какого это цвета?'",
+                        options: [
+                            {text: "What color is it?", correct: true},
+                            {text: "What is it?", correct: false},
+                            {text: "Is it colorful?", correct: false},
+                            {text: "Do you like this color?", correct: false}
+                        ]
+                    },
+                    5: {
+                        type: "matching",
+                        title: "Игра с цветами",
+                        description: "Сопоставьте цвета с их названиями",
+                        instruction: "Сопоставьте английские названия цветов с русскими:",
+                        leftColumn: ["red", "blue", "green", "yellow", "black"],
+                        rightColumn: ["красный", "синий", "зеленый", "желтый", "черный"],
+                        correctPairs: [0,1,2,3,4]
+                    }
+                },
+                5: { // Урок 5: Числа 1-10
+                    1: {
+                        type: "text",
+                        title: "Напиши числа 1-5",
+                        description: "Напишите английские названия чисел от 1 до 5",
+                        instruction: "Напишите числа от 1 до 5 на английском через запятую:",
+                        correctAnswer: "one,two,three,four,five",
+                        checkFunction: "checkNumbers1to5"
+                    },
+                    2: {
+                        type: "choice",
+                        title: "Сосчитай предметы",
+                        description: "Посчитайте предметы на картинке",
+                        instruction: "Сколько яблок на картинке? (3 яблока)",
+                        options: [
+                            {text: "three", correct: true},
+                            {text: "two", correct: false},
+                            {text: "four", correct: false},
+                            {text: "five", correct: false}
+                        ]
+                    },
+                    3: {
+                        type: "text",
+                        title: "Сколько тебе лет?",
+                        description: "Напишите ваш возраст по-английски",
+                        instruction: "Напишите 'Мне 10 лет' на английском:",
+                        hint: "Используйте: I am ... years old",
+                        checkFunction: "checkAge"
+                    },
+                    4: {
+                        type: "choice",
+                        title: "Аудирование: числа",
+                        description: "Прослушайте и выберите услышанное число",
+                        instruction: "Вы услышали число 'seven'. Выберите правильный вариант:",
+                        options: [
+                            {text: "7", correct: true},
+                            {text: "5", correct: false},
+                            {text: "9", correct: false},
+                            {text: "3", correct: false}
+                        ]
+                    },
+                    5: {
+                        type: "matching",
+                        title: "Игра 'Найди число'",
+                        description: "Найдите пары: цифра и слово",
+                        instruction: "Сопоставьте цифры с их названиями:",
+                        leftColumn: ["1", "2", "3", "4", "5"],
+                        rightColumn: ["one", "two", "three", "four", "five"],
+                        correctPairs: [0,1,2,3,4]
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const course = urlParams.get('course') || 'beginner';
+            const lesson = parseInt(urlParams.get('lesson')) || 1;
+            const task = parseInt(urlParams.get('task')) || 1;
+            
+            const user = JSON.parse(localStorage.getItem('currentUser')) || { username: 'Гость' };
+            
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            showAssignment(course, lesson, task);
+        });
+        
+        function showAssignment(course, lesson, task) {
+            const taskInfo = taskData[course]?.[lesson]?.[task];
+            
+            if (!taskInfo) {
+                document.getElementById('assignmentContainer').innerHTML = `
+                    <div class="header ${course}">
+                        <h1><i class="fas fa-exclamation-triangle"></i> Задание не найдено</h1>
+                    </div>
+                    <div class="assignment-content">
+                        <p>Извините, это задание еще не готово.</p>
+                        <a href="course.html?level=${course}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Вернуться к урокам
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Теория урока (упрощенная версия)
+            const theoryContent = getTheoryContent(course, lesson);
+            
+            document.getElementById('assignmentContainer').innerHTML = `
+                <div class="header ${course}">
+                    <h1><i class="${getTaskIcon(taskInfo.type)}"></i> ${taskInfo.title}</h1>
+                    <p>Урок ${lesson} • Задание ${task} • ${taskInfo.description}</p>
+                </div>
+                
+                <div class="assignment-content">
+                    <!-- Теория -->
+                    ${theoryContent ? `
+                        <div class="theory-box">
+                            <h3><i class="fas fa-book"></i> Повторите теорию:</h3>
+                            ${theoryContent}
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Задание -->
+                    <div class="task-card">
+                        <h3><i class="fas fa-tasks"></i> Ваше задание:</h3>
+                        <p>${taskInfo.instruction}</p>
+                        
+                        ${taskInfo.hint ? `
+                            <div class="hint-box">
+                                <i class="fas fa-lightbulb"></i> <strong>Подсказка:</strong> ${taskInfo.hint}
+                            </div>
+                        ` : ''}
+                        
+                        ${taskInfo.example ? `
+                            <div class="hint-box" style="background: #e3f2fd; border-color: #2196F3;">
+                                <i class="fas fa-eye"></i> <strong>Пример:</strong> ${taskInfo.example}
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Контент задания в зависимости от типа -->
+                        <div id="taskContent">
+                            ${generateTaskContent(taskInfo)}
+                        </div>
+                        
+                        <!-- Кнопка проверки -->
+                        <button id="checkButton" class="btn btn-primary" onclick="checkAnswer('${course}', ${lesson}, ${task})" style="margin-top: 20px;">
+                            <i class="fas fa-check-circle"></i> Проверить ответ
+                        </button>
+                        
+                        <!-- Результат проверки -->
+                        <div id="resultMessage" class="result-message"></div>
+                    </div>
+                    
+                    <!-- Навигация -->
+                    <div class="navigation">
+                        ${task > 1 ? `
+                            <button class="btn btn-secondary" onclick="navigateToTask(${lesson}, ${task - 1}, '${course}')">
+                                <i class="fas fa-arrow-left"></i> Предыдущее задание
+                            </button>
+                        ` : `
+                            <button class="btn btn-secondary" onclick="window.location.href='course.html?level=${course}'">
+                                <i class="fas fa-arrow-left"></i> Вернуться к урокам
+                            </button>
+                        `}
+                        
+                        ${task < 5 ? `
+                            <button id="nextButton" class="btn btn-primary" onclick="navigateToTask(${lesson}, ${task + 1}, '${course}')" style="display: none;">
+                                Следующее задание <i class="fas fa-arrow-right"></i>
+                            </button>
+                        ` : `
+                            <button id="completeButton" class="btn btn-primary" onclick="completeLesson('${course}', ${lesson})" style="display: none;">
+                                Завершить урок <i class="fas fa-check-circle"></i>
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            // Инициализация задания
+            initializeTask(taskInfo);
+        }
+        
+        function getTaskIcon(type) {
+            const icons = {
+                'text': 'fas fa-keyboard',
+                'choice': 'fas fa-question-circle',
+                'matching': 'fas fa-link',
+                'audio': 'fas fa-headphones'
+            };
+            return icons[type] || 'fas fa-tasks';
+        }
+        
+        function getTheoryContent(course, lesson) {
+            const theories = {
+                'beginner': {
+                    1: `<p>Английский алфавит: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</p>`,
+                    2: `<p>Основные приветствия: Hello! Hi! Good morning! Good afternoon! Good evening! How are you?</p>`,
+                    3: `<p>Члены семьи: mother, father, brother, sister, grandmother, grandfather</p>`,
+                    4: `<p>Цвета: red, blue, green, yellow, orange, purple, black, white</p>`,
+                    5: `<p>Числа: 1-one, 2-two, 3-three, 4-four, 5-five, 6-six, 7-seven, 8-eight, 9-nine, 10-ten</p>`
+                }
+            };
+            return theories[course]?.[lesson] || '';
+        }
+        
+        function generateTaskContent(taskInfo) {
+            switch(taskInfo.type) {
+                case 'text':
+                    return `
+                        <textarea id="answerInput" class="task-textarea" rows="4" 
+                                  placeholder="Введите ваш ответ здесь..."></textarea>
+                        <div id="answerFeedback" class="answer-feedback"></div>
+                    `;
+                    
+                case 'choice':
+                    return `
+                        <div class="multiple-choice">
+                            ${taskInfo.options.map((option, index) => `
+                                <div class="choice-option" onclick="selectChoice(this, ${index})" 
+                                     data-correct="${option.correct}">
+                                    ${option.text}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div id="choiceFeedback" class="answer-feedback"></div>
+                    `;
+                    
+                case 'matching':
+                    return `
+                        <div class="matching-game">
+                            <div class="matching-column">
+                                <h4>Левая колонка</h4>
+                                ${taskInfo.leftColumn.map((item, index) => `
+                                    <div class="matching-item" draggable="true" data-id="${index}"
+                                         ondragstart="dragStart(event)">
+                                        ${item}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="matching-column">
+                                <h4>Правая колонка</h4>
+                                ${taskInfo.rightColumn.map((item, index) => `
+                                    <div class="drop-zone" data-target="${index}"
+                                         ondragover="dragOver(event)"
+                                         ondrop="dropItem(event)">
+                                        ${item}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div id="matchingFeedback" class="answer-feedback"></div>
+                    `;
+                    
+                case 'audio':
+                    return `
+                        <div class="audio-player">
+                            <button class="play-btn" onclick="playAudio()">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div>
+                                <p><strong>Прослушайте:</strong> ${taskInfo.audioText}</p>
+                            </div>
+                        </div>
+                        ${taskInfo.question ? `<p><strong>Вопрос:</strong> ${taskInfo.question}</p>` : ''}
+                        ${taskInfo.options ? `
+                            <div class="multiple-choice">
+                                ${taskInfo.options.map((option, index) => `
+                                    <div class="choice-option" onclick="selectChoice(this, ${index})" 
+                                         data-correct="${option.correct}">
+                                        ${option.text}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        <div id="audioFeedback" class="answer-feedback"></div>
+                    `;
+                    
+                default:
+                    return `<p>Тип задания не поддерживается</p>`;
+            }
+        }
+        
+        function initializeTask(taskInfo) {
+            // Инициализация для конкретных типов заданий
+            if (taskInfo.type === 'matching') {
+                initializeMatching();
+            }
+        }
+        
+        let draggedItem = null;
+        
+        function dragStart(event) {
+            draggedItem = event.target;
+            event.target.classList.add('dragging');
+        }
+        
+        function dragOver(event) {
+            event.preventDefault();
+            event.target.classList.add('active');
+        }
+        
+        function dropItem(event) {
+            event.preventDefault();
+            event.target.classList.remove('active');
+            
+            if (draggedItem && event.target.classList.contains('drop-zone')) {
+                event.target.innerHTML = draggedItem.textContent + 
+                    `<span style="color: #666; font-size: 0.8rem; margin-left: 10px;">(${draggedItem.textContent})</span>`;
+                draggedItem.style.display = 'none';
+                draggedItem.classList.remove('dragging');
+                draggedItem = null;
+            }
+        }
+        
+        function initializeMatching() {
+            // Сброс состояния перетаскивания
+            draggedItem = null;
+        }
+        
+        function selectChoice(element, index) {
+            // Снимаем выделение со всех элементов
+            document.querySelectorAll('.choice-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Выделяем выбранный элемент
+            element.classList.add('selected');
+            
+            // Сохраняем выбор
+            element.dataset.selected = "true";
+        }
+        
+        function playAudio() {
+            // Имитация воспроизведения аудио
+            const button = event.target.closest('.play-btn');
+            const icon = button.querySelector('i');
+            
+            if (icon.classList.contains('fa-play')) {
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+                button.style.background = '#f44336';
+                
+                // В реальном приложении здесь будет код для воспроизведения аудио
+                console.log("Воспроизведение аудио...");
+                
+                // Имитация окончания воспроизведения через 2 секунды
+                setTimeout(() => {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                    button.style.background = '#2196F3';
+                }, 2000);
+            } else {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+                button.style.background = '#2196F3';
+            }
+        }
+        
+        function checkAnswer(course, lesson, task) {
+            const taskInfo = taskData[course][lesson][task];
+            const resultDiv = document.getElementById('resultMessage');
+            
+            let isCorrect = false;
+            let feedback = "";
+            
+            switch(taskInfo.type) {
+                case 'text':
+                    const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+                    isCorrect = checkTextAnswer(userAnswer, taskInfo);
+                    feedback = isCorrect ? 
+                        "Отлично! Ваш ответ правильный!" : 
+                        `Попробуйте еще раз. Ожидаемый ответ: ${taskInfo.correctAnswer}`;
+                    break;
+                    
+                case 'choice':
+                case 'audio':
+                    const selected = document.querySelector('.choice-option.selected');
+                    if (selected) {
+                        isCorrect = selected.dataset.correct === "true";
+                        feedback = isCorrect ? 
+                            "Правильно! Отличная работа!" : 
+                            "Неверно. Попробуйте еще раз.";
+                    } else {
+                        feedback = "Пожалуйста, выберите ответ.";
+                    }
+                    break;
+                    
+                case 'matching':
+                    // Простая проверка - считаем, что если пользователь что-то сделал, то правильно
+                    const matchedItems = document.querySelectorAll('.drop-zone[style*="display: none"]');
+                    isCorrect = matchedItems.length > 0;
+                    feedback = isCorrect ? 
+                        "Хорошо! Вы правильно сопоставили элементы!" : 
+                        "Попробуйте сопоставить элементы из двух колонок.";
+                    break;
+            }
+            
+            // Показываем результат
+            resultDiv.innerHTML = `
+                <div class="${isCorrect ? 'success' : 'error'}">
+                    <i class="fas fa-${isCorrect ? 'check-circle' : 'times-circle'}"></i>
+                    <strong>${isCorrect ? 'Верно!' : 'Неверно'}</strong> ${feedback}
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+            
+            // Если ответ правильный, показываем кнопку для перехода дальше
+            if (isCorrect) {
+                // Сохраняем прогресс
+                saveProgress(course, lesson, task);
+                
+                // Показываем кнопку для следующего задания
+                if (task < 5) {
+                    document.getElementById('nextButton').style.display = 'flex';
+                } else {
+                    document.getElementById('completeButton').style.display = 'flex';
+                }
+                
+                // Показываем правильный ответ для текстовых заданий
+                if (taskInfo.type === 'text' && taskInfo.correctAnswer) {
+                    const feedbackDiv = document.getElementById('answerFeedback');
+                    feedbackDiv.innerHTML = `<p class="correct-answer">Правильный ответ: ${taskInfo.correctAnswer}</p>`;
+                }
+            }
+            
+            // Прокручиваем к результату
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function checkTextAnswer(userAnswer, taskInfo) {
+            if (taskInfo.checkFunction) {
+                return window[taskInfo.checkFunction](userAnswer);
+            } else if (taskInfo.correctAnswer) {
+                return userAnswer === taskInfo.correctAnswer.toLowerCase();
+            }
+            return false;
+        }
+        
+        // Функции проверки для разных типов заданий
+        function checkAlphabet(answer) {
+            const cleanAnswer = answer.replace(/\s/g, '').toUpperCase();
+            return cleanAnswer === "A,B,C,D,E,F,G";
+        }
+        
+        function checkFullAlphabet(answer) {
+            const cleanAnswer = answer.replace(/\s/g, '').toUpperCase();
+            return cleanAnswer === "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+        }
+        
+        function checkSimplePhrase(answer) {
+            const cleanAnswer = answer.trim().toLowerCase();
+            return cleanAnswer === "how are you?" || cleanAnswer === "how are you";
+        }
+        
+        function checkFamilyWords(answer) {
+            const words = answer.toLowerCase().split(',');
+            const familyWords = ['mother', 'father', 'brother', 'sister', 'grandmother', 'grandfather', 'parents', 'son', 'daughter'];
+            
+            let correctCount = 0;
+            words.forEach(word => {
+                if (familyWords.includes(word.trim())) {
+                    correctCount++;
+                }
+            });
+            
+            return correctCount >= 3; // Хотя бы 3 правильных слова
+        }
+        
+        function checkFamilyDescription(answer) {
+            const cleanAnswer = answer.trim().toLowerCase();
+            // Проверяем, что ответ содержит ключевые слова
+            const hasFamilyWords = cleanAnswer.includes('family') || 
+                                  cleanAnswer.includes('mother') || 
+                                  cleanAnswer.includes('father') ||
+                                  cleanAnswer.includes('brother') ||
+                                  cleanAnswer.includes('sister');
+            return cleanAnswer.length > 10 && hasFamilyWords;
+        }
+        
+        function checkColors(answer) {
+            const words = answer.toLowerCase().split(',');
+            const colors = ['red', 'blue', 'green', 'yellow', 'black', 'white', 'orange', 'purple', 'pink', 'brown'];
+            
+            let correctCount = 0;
+            words.forEach(word => {
+                if (colors.includes(word.trim())) {
+                    correctCount++;
+                }
+            });
+            
+            return correctCount >= 3; // Хотя бы 3 правильных цвета
+        }
+        
+        function checkNumbers1to5(answer) {
+            const cleanAnswer = answer.replace(/\s/g, '').toLowerCase();
+            return cleanAnswer === "one,two,three,four,five";
+        }
+        
+        function checkAge(answer) {
+            const cleanAnswer = answer.trim().toLowerCase();
+            // Проверяем формат "I am X years old"
+            return cleanAnswer.includes('i am') && 
+                   cleanAnswer.includes('years old') &&
+                   /\d/.test(cleanAnswer);
+        }
+        
+        function navigateToTask(lesson, task, course) {
+            window.location.href = `assignments.html?course=${course}&lesson=${lesson}&task=${task}`;
+        }
+        
+        function completeLesson(course, lesson) {
+            // Сохраняем прогресс
+            saveProgress(course, lesson, 5);
+            
+            document.getElementById('assignmentContainer').innerHTML = `
+                <div class="header ${course}">
+                    <h1><i class="fas fa-trophy"></i> Поздравляем!</h1>
+                    <p>Вы успешно завершили урок ${lesson}!</p>
+                </div>
+                
+                <div class="lesson-complete">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h2>Урок пройден!</h2>
+                    <p>Вы отлично справились со всеми заданиями.</p>
+                    
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="window.location.href='course.html?level=${course}'">
+                            <i class="fas fa-graduation-cap"></i> Вернуться к урокам
+                        </button>
+                        ${lesson < 10 ? `
+                            <button class="btn btn-secondary" onclick="navigateToTask(${lesson + 1}, 1, '${course}')" style="margin-left: 10px;">
+                                <i class="fas fa-arrow-right"></i> Следующий урок
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function saveProgress(course, lesson, task) {
+            let user = JSON.parse(localStorage.getItem('currentUser')) || { username: 'Гость', progress: {} };
+            
+            if (!user.progress) user.progress = {};
+            if (!user.progress[course]) user.progress[course] = {};
+            if (!user.progress[course][lesson]) user.progress[course][lesson] = [];
+            
+            if (!user.progress[course][lesson].includes(task)) {
+                user.progress[course][lesson].push(task);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+        }
+    </script>
+</body>
+</html>
