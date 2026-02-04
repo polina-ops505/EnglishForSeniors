@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь английского - EnglishForSeniors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Шторка навигации */
+        .burger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .burger-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .burger-icon.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .burger-icon.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-icon.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .burger-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            z-index: 999;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            padding: 100px 40px 40px;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            right: 0;
+        }
+
+        .nav-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-header h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-header p {
+            color: #bbdefb;
+            font-size: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-menu a i {
+            width: 25px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-btn.login {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .nav-btn.register {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .nav-btn.logout {
+            background: linear-gradient(135deg, #f44336, #e91e63);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .motto {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Словарь */
+        .dictionary-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dictionary-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .dictionary-header h1 {
+            font-size: 2.8rem;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .dictionary-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 60px 18px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            color: white;
+        }
+
+        .stats-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .dictionary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .word-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3, #9C27B0);
+        }
+
+        .word-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .word-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .word-english {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .word-transcription {
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+            margin: 5px 0 15px;
+        }
+
+        .word-translation {
+            font-size: 1.5rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .word-details {
+            margin-bottom: 20px;
+        }
+
+        .word-category {
+            display: inline-block;
+            padding: 6px 15px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #2196F3;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .word-example {
+            font-style: italic;
+            color: #666;
+            line-height: 1.6;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .word-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .word-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #f0f0f0;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .word-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .word-btn.sound {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .word-btn.favorite {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+        }
+
+        .favorite-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 1.2rem;
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .learned-badge {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Категории цветов */
+        .category-basics {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .category-people {
+            border-left: 4px solid #2196F3;
+        }
+
+        .category-home {
+            border-left: 4px solid #FF9800;
+        }
+
+        .category-food {
+            border-left: 4px solid #9C27B0;
+        }
+
+        .category-travel {
+            border-left: 4px solid #009688;
+        }
+
+        .category-work {
+            border-left: 4px solid #795548;
+        }
+
+        .category-nature {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .category-time {
+            border-left: 4px solid #9C27B0;
+        }
+
+        .category-health {
+            border-left: 4px solid #f44336;
+        }
+
+        /* Модальное окно для добавления слова */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: modalFadeIn 0.3s ease-out;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h3 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .modal form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal input, .modal select {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .modal input:focus, .modal select:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-quote {
+            font-style: italic;
+            margin-top: 20px;
+            color: #bbdefb;
+            font-size: 1.1rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .dictionary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-overlay {
+                max-width: 100%;
+                padding: 100px 20px 20px;
+            }
+            
+            .dictionary-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .word-card {
+                padding: 25px;
+            }
+            
+            .word-english {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .word-card {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .word-card:nth-child(1) { animation-delay: 0.1s; }
+        .word-card:nth-child(2) { animation-delay: 0.2s; }
+        .word-card:nth-child(3) { animation-delay: 0.3s; }
+        .word-card:nth-child(4) { animation-delay: 0.4s; }
+        .word-card:nth-child(5) { animation-delay: 0.5s; }
+        .word-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Полоса прокрутки */
+        .nav-overlay::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .nav-overlay::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .nav-overlay::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+        }
+
+        .nav-overlay::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Шторка навигации -->
+    <div class="burger-menu" onclick="toggleNav()">
+        <div class="burger-icon" id="burgerIcon">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </div>
+
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-header">
+            <h3><i class="fas fa-book-open"></i> EnglishForSeniors</h3>
+            <p>Ваш личный словарь</p>
+        </div>
+
+        <div id="userSection">
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="index.html" onclick="handleNavClick(this)"><i class="fas fa-home"></i> Главная</a></li>
+            <li><a href="courses.html" onclick="handleNavClick(this)"><i class="fas fa-graduation-cap"></i> Курсы</a></li>
+            <li><a href="dictionary.html" onclick="handleNavClick(this)" class="active"><i class="fas fa-book"></i> Словарь</a></li>
+            <li><a href="test.html" onclick="handleNavClick(this)"><i class="fas fa-clipboard-check"></i> Тест уровня</a></li>
+            <li><a href="progress.html" onclick="handleNavClick(this)"><i class="fas fa-chart-line"></i> Прогресс</a></li>
+            <li><a href="games.html" onclick="handleNavClick(this)"><i class="fas fa-gamepad"></i> Игры</a></li>
+            <li><a href="club.html" onclick="handleNavClick(this)"><i class="fas fa-users"></i> Клуб общения</a></li>
+            <li><a href="materials.html" onclick="handleNavClick(this)"><i class="fas fa-download"></i> Материалы</a></li>
+            <li><a href="about.html" onclick="handleNavClick(this)"><i class="fas fa-info-circle"></i> О проекте</a></li>
+            <li><a href="help.html" onclick="handleNavClick(this)"><i class="fas fa-question-circle"></i> Помощь</a></li>
+        </ul>
+
+        <div class="nav-buttons" id="authButtons">
+        </div>
+
+        <div class="nav-footer">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p>"Ученье — свет!"</p>
+             <p>Проект разработан Толстенёвой Полиной</p>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления слова -->
+    <div class="modal-overlay" id="addWordModal">
+        <div class="modal">
+            <h3><i class="fas fa-plus-circle"></i> Добавить свое слово</h3>
+            <form id="addWordForm">
+                <input type="text" id="newEnglish" placeholder="Английское слово" required>
+                <input type="text" id="newTranscription" placeholder="Транскрипция [пример]">
+                <input type="text" id="newRussian" placeholder="Русский перевод" required>
+                <select id="newCategory" required>
+                    <option value="">Выберите категорию</option>
+                    <option value="basics">Основы</option>
+                    <option value="people">Люди</option>
+                    <option value="home">Дом</option>
+                    <option value="food">Еда</option>
+                    <option value="travel">Путешествия</option>
+                    <option value="work">Работа</option>
+                    <option value="nature">Природа</option>
+                    <option value="time">Время</option>
+                    <option value="health">Здоровье</option>
+                </select>
+                <input type="text" id="newExample" placeholder="Пример использования">
+                <div class="modal-buttons">
+                    <button type="button" class="modal-btn secondary" onclick="closeModal()">Отмена</button>
+                    <button type="submit" class="modal-btn primary">Добавить слово</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-book"></i> EnglishForSeniors</h1>
+                <p class="motto">Словарь на 150+ английских слов с переводом</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="dictionary-container">
+        <div class="dictionary-header">
+            <h1>Англо-русский словарь</h1>
+            <p>Изучайте английские слова с транскрипцией, переводом и примерами использования. Отмечайте выученные слова и добавляйте свои!</p>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Найти слово на английском или русском...">
+                    <button class="search-btn" onclick="searchWords()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterWords('all')">
+                    <i class="fas fa-star"></i> Все слова
+                </button>
+                <button class="filter-btn" onclick="filterWords('basics')">
+                    <i class="fas fa-language"></i> Основы
+                </button>
+                <button class="filter-btn" onclick="filterWords('people')">
+                    <i class="fas fa-users"></i> Люди
+                </button>
+                <button class="filter-btn" onclick="filterWords('home')">
+                    <i class="fas fa-home"></i> Дом
+                </button>
+                <button class="filter-btn" onclick="filterWords('food')">
+                    <i class="fas fa-utensils"></i> Еда
+                </button>
+                <button class="filter-btn" onclick="filterWords('favorites')">
+                    <i class="fas fa-heart"></i> Избранное
+                </button>
+                <button class="filter-btn" onclick="filterWords('learned')">
+                    <i class="fas fa-check-circle"></i> Выученные
+                </button>
+                <button class="filter-btn" onclick="showAddWordModal()">
+                    <i class="fas fa-plus"></i> Добавить слово
+                </button>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalWords">150</div>
+                    <div class="stat-label">Всего слов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="learnedWords">0</div>
+                    <div class="stat-label">Выучено</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="favoriteWords">0</div>
+                    <div class="stat-label">Избранное</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="todayWords">0</div>
+                    <div class="stat-label">Сегодня изучено</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dictionary-grid" id="dictionaryGrid">
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p class="footer-quote" id="footerQuote">"Словарь - это вселенная в алфавитном порядке!"</p>
+        </div>
+    </footer>
+
+    <script>
+        // База данных словаря (150+ слов)
+        const dictionaryData = [
+            // Основы (Basics) - 25 слов
+            { id: 1, english: "Hello", transcription: "[həˈləʊ]", russian: "Привет", category: "basics", example: "Hello! How are you? - Привет! Как дела?" },
+            { id: 2, english: "Goodbye", transcription: "[ɡʊdˈbaɪ]", russian: "До свидания", category: "basics", example: "Goodbye, see you tomorrow! - До свидания, увидимся завтра!" },
+            { id: 3, english: "Thank you", transcription: "[ˈθæŋk juː]", russian: "Спасибо", category: "basics", example: "Thank you for your help. - Спасибо за вашу помощь." },
+            { id: 4, english: "Please", transcription: "[pliːz]", russian: "Пожалуйста", category: "basics", example: "Please, sit down. - Пожалуйста, садитесь." },
+            { id: 5, english: "Yes", transcription: "[jes]", russian: "Да", category: "basics", example: "Yes, I understand. - Да, я понимаю." },
+            { id: 6, english: "No", transcription: "[nəʊ]", russian: "Нет", category: "basics", example: "No, thank you. - Нет, спасибо." },
+            { id: 7, english: "Sorry", transcription: "[ˈsɒri]", russian: "Извините", category: "basics", example: "Sorry, I'm late. - Извините, я опоздал." },
+            { id: 8, english: "Excuse me", transcription: "[ɪkˈskjuːs miː]", russian: "Простите", category: "basics", example: "Excuse me, can you help me? - Простите, вы можете помочь?" },
+            { id: 9, english: "Good morning", transcription: "[ɡʊd ˈmɔːnɪŋ]", russian: "Доброе утро", category: "basics", example: "Good morning, everyone! - Доброе утро всем!" },
+            { id: 10, english: "Good afternoon", transcription: "[ɡʊd ˌɑːftəˈnuːn]", russian: "Добрый день", category: "basics", example: "Good afternoon, ladies and gentlemen. - Добрый день, дамы и господа." },
+            { id: 11, english: "Good evening", transcription: "[ɡʊd ˈiːvnɪŋ]", russian: "Добрый вечер", category: "basics", example: "Good evening, how was your day? - Добрый вечер, как прошел ваш день?" },
+            { id: 12, english: "Good night", transcription: "[ɡʊd naɪt]", russian: "Спокойной ночи", category: "basics", example: "Good night, sleep well. - Спокойной ночи, спите хорошо." },
+            { id: 13, english: "Please", transcription: "[pliːz]", russian: "Пожалуйста", category: "basics", example: "Can I have coffee, please? - Мне кофе, пожалуйста." },
+            { id: 14, english: "You're welcome", transcription: "[jɔːr ˈwelkəm]", russian: "Пожалуйста (в ответ на спасибо)", category: "basics", example: "Thank you! - You're welcome! - Спасибо! - Пожалуйста!" },
+            { id: 15, english: "I", transcription: "[aɪ]", russian: "Я", category: "basics", example: "I am a student. - Я студент." },
+            { id: 16, english: "You", transcription: "[juː]", russian: "Ты, Вы", category: "basics", example: "You are my friend. - Ты мой друг." },
+            { id: 17, english: "He", transcription: "[hiː]", russian: "Он", category: "basics", example: "He is a doctor. - Он врач." },
+            { id: 18, english: "She", transcription: "[ʃiː]", russian: "Она", category: "basics", example: "She is a teacher. - Она учительница." },
+            { id: 19, english: "It", transcription: "[ɪt]", russian: "Оно", category: "basics", example: "It is a book. - Это книга." },
+            { id: 20, english: "We", transcription: "[wiː]", russian: "Мы", category: "basics", example: "We are students. - Мы студенты." },
+            { id: 21, english: "They", transcription: "[ðeɪ]", russian: "Они", category: "basics", example: "They are friends. - Они друзья." },
+            { id: 22, english: "My", transcription: "[maɪ]", russian: "Мой", category: "basics", example: "This is my book. - Это моя книга." },
+            { id: 23, english: "Your", transcription: "[jɔːr]", russian: "Твой, Ваш", category: "basics", example: "Is this your phone? - Это твой телефон?" },
+            { id: 24, english: "Our", transcription: "[ˈaʊər]", russian: "Наш", category: "basics", example: "Our house is big. - Наш дом большой." },
+            { id: 25, english: "Their", transcription: "[ðeər]", russian: "Их", category: "basics", example: "Their car is new. - Их машина новая." },
+
+            // Люди (People) - 25 слов
+            { id: 26, english: "Family", transcription: "[ˈfæməli]", russian: "Семья", category: "people", example: "My family lives in Moscow. - Моя семья живет в Москве." },
+            { id: 27, english: "Friend", transcription: "[frend]", russian: "Друг", category: "people", example: "He is my best friend. - Он мой лучший друг." },
+            { id: 28, english: "Mother", transcription: "[ˈmʌðər]", russian: "Мать", category: "people", example: "My mother is a doctor. - Моя мама врач." },
+            { id: 29, english: "Father", transcription: "[ˈfɑːðər]", russian: "Отец", category: "people", example: "My father works in a bank. - Мой отец работает в банке." },
+            { id: 30, english: "Son", transcription: "[sʌn]", russian: "Сын", category: "people", example: "Their son is five years old. - Их сыну пять лет." },
+            { id: 31, english: "Daughter", transcription: "[ˈdɔːtər]", russian: "Дочь", category: "people", example: "She has two daughters. - У нее две дочери." },
+            { id: 32, english: "Brother", transcription: "[ˈbrʌðər]", russian: "Брат", category: "people", example: "My brother is a student. - Мой брат студент." },
+            { id: 33, english: "Sister", transcription: "[ˈsɪstər]", russian: "Сестра", category: "people", example: "I have one sister. - У меня одна сестра." },
+            { id: 34, english: "Grandfather", transcription: "[ˈɡrænfɑːðər]", russian: "Дедушка", category: "people", example: "My grandfather is 80 years old. - Моему дедушке 80 лет." },
+            { id: 35, english: "Grandmother", transcription: "[ˈɡrænmʌðər]", russian: "Бабушка", category: "people", example: "My grandmother bakes pies. - Моя бабушка печет пироги." },
+            { id: 36, english: "Child", transcription: "[tʃaɪld]", russian: "Ребенок", category: "people", example: "The child is sleeping. - Ребенок спит." },
+            { id: 37, english: "Children", transcription: "[ˈtʃɪldrən]", russian: "Дети", category: "people", example: "Children are playing in the park. - Дети играют в парке." },
+            { id: 38, english: "Man", transcription: "[mæn]", russian: "Мужчина", category: "people", example: "The man is reading a newspaper. - Мужчина читает газету." },
+            { id: 39, english: "Woman", transcription: "[ˈwʊmən]", russian: "Женщина", category: "people", example: "The woman is talking on the phone. - Женщина разговаривает по телефону." },
+            { id: 40, english: "Boy", transcription: "[bɔɪ]", russian: "Мальчик", category: "people", example: "The boy is riding a bicycle. - Мальчик едет на велосипеде." },
+            { id: 41, english: "Girl", transcription: "[ɡɜːrl]", russian: "Девочка", category: "people", example: "The girl is drawing a picture. - Девочка рисует картинку." },
+            { id: 42, english: "People", transcription: "[ˈpiːpl]", russian: "Люди", category: "people", example: "Many people are in the street. - Много людей на улице." },
+            { id: 43, english: "Person", transcription: "[ˈpɜːrsn]", russian: "Человек", category: "people", example: "He is a good person. - Он хороший человек." },
+            { id: 44, english: "Teacher", transcription: "[ˈtiːtʃər]", russian: "Учитель", category: "people", example: "The teacher explains the lesson. - Учитель объясняет урок." },
+            { id: 45, english: "Student", transcription: "[ˈstuːdnt]", russian: "Студент", category: "people", example: "Students are studying English. - Студенты изучают английский." },
+            { id: 46, english: "Doctor", transcription: "[ˈdɒktər]", russian: "Врач", category: "people", example: "The doctor examines the patient. - Врач осматривает пациента." },
+            { id: 47, english: "Nurse", transcription: "[nɜːrs]", russian: "Медсестра", category: "people", example: "The nurse helps the doctor. - Медсестра помогает врачу." },
+            { id: 48, english: "Engineer", transcription: "[ˌendʒɪˈnɪər]", russian: "Инженер", category: "people", example: "My son is an engineer. - Мой сын инженер." },
+            { id: 49, english: "Driver", transcription: "[ˈdraɪvər]", russian: "Водитель", category: "people", example: "The bus driver is very experienced. - Водитель автобуса очень опытный." },
+            { id: 50, english: "Cook", transcription: "[kʊk]", russian: "Повар", category: "people", example: "The cook prepares delicious food. - Повар готовит вкусную еду." },
+
+            // Дом (Home) - 25 слов
+            { id: 51, english: "House", transcription: "[haʊs]", russian: "Дом", category: "home", example: "We live in a big house. - Мы живем в большом доме." },
+            { id: 52, english: "Apartment", transcription: "[əˈpɑːrtmənt]", russian: "Квартира", category: "home", example: "They rent an apartment in the city center. - Они снимают квартиру в центре города." },
+            { id: 53, english: "Room", transcription: "[ruːm]", russian: "Комната", category: "home", example: "My room is on the second floor. - Моя комната на втором этаже." },
+            { id: 54, english: "Kitchen", transcription: "[ˈkɪtʃɪn]", russian: "Кухня", category: "home", example: "We are having dinner in the kitchen. - Мы ужинаем на кухне." },
+            { id: 55, english: "Bedroom", transcription: "[ˈbedruːm]", russian: "Спальня", category: "home", example: "The bedroom has a large bed. - В спальне большая кровать." },
+            { id: 56, english: "Bathroom", transcription: "[ˈbæθruːm]", russian: "Ванная комната", category: "home", example: "The bathroom needs cleaning. - Ванную комнату нужно почистить." },
+            { id: 57, english: "Living room", transcription: "[ˈlɪvɪŋ ruːm]", russian: "Гостиная", category: "home", example: "We watch TV in the living room. - Мы смотрим телевизор в гостиной." },
+            { id: 58, english: "Table", transcription: "[ˈteɪbl]", russian: "Стол", category: "home", example: "The book is on the table. - Книга на столе." },
+            { id: 59, english: "Chair", transcription: "[tʃer]", russian: "Стул", category: "home", example: "Please, sit on this chair. - Пожалуйста, сядьте на этот стул." },
+            { id: 60, english: "Bed", transcription: "[bed]", russian: "Кровать", category: "home", example: "I go to bed at 11 PM. - Я ложусь спать в 11 вечера." },
+            { id: 61, english: "Window", transcription: "[ˈwɪndəʊ]", russian: "Окно", category: "home", example: "Open the window, please. - Откройте окно, пожалуйста." },
+            { id: 62, english: "Door", transcription: "[dɔːr]", russian: "Дверь", category: "home", example: "Close the door behind you. - Закройте дверь за собой." },
+            { id: 63, english: "Floor", transcription: "[flɔːr]", russian: "Пол", category: "home", example: "The floor is clean. - Пол чистый." },
+            { id: 64, english: "Wall", transcription: "[wɔːl]", russian: "Стена", category: "home", example: "There is a picture on the wall. - На стене картина." },
+            { id: 65, english: "Ceiling", transcription: "[ˈsiːlɪŋ]", russian: "Потолок", category: "home", example: "The ceiling is white. - Потолок белый." },
+            { id: 66, english: "Light", transcription: "[laɪt]", russian: "Свет", category: "home", example: "Turn on the light, please. - Включите свет, пожалуйста." },
+            { id: 67, english: "Lamp", transcription: "[læmp]", russian: "Лампа", category: "home", example: "The lamp is on the table. - Лампа на столе." },
+            { id: 68, english: "Television", transcription: "[ˈtelɪvɪʒn]", russian: "Телевизор", category: "home", example: "We watch television in the evening. - Мы смотрим телевизор вечером." },
+            { id: 69, english: "Refrigerator", transcription: "[rɪˈfrɪdʒəreɪtər]", russian: "Холодильник", category: "home", example: "The milk is in the refrigerator. - Молоко в холодильнике." },
+            { id: 70, english: "Oven", transcription: "[ˈʌvn]", russian: "Духовка", category: "home", example: "The cake is in the oven. - Торт в духовке." },
+            { id: 71, english: "Stove", transcription: "[stəʊv]", russian: "Плита", category: "home", example: "She is cooking on the stove. - Она готовит на плите." },
+            { id: 72, english: "Sink", transcription: "[sɪŋk]", russian: "Раковина", category: "home", example: "Wash your hands in the sink. - Помойте руки в раковине." },
+            { id: 73, english: "Shower", transcription: "[ˈʃaʊər]", russian: "Душ", category: "home", example: "I take a shower every morning. - Я принимаю душ каждое утро." },
+            { id: 74, english: "Toilet", transcription: "[ˈtɔɪlət]", russian: "Туалет", category: "home", example: "The toilet is next to the bathroom. - Туалет рядом с ванной." },
+            { id: 75, english: "Mirror", transcription: "[ˈmɪrər]", russian: "Зеркало", category: "home", example: "Look in the mirror. - Посмотри в зеркало." },
+
+            // Еда (Food) - 25 слов
+            { id: 76, english: "Food", transcription: "[fuːd]", russian: "Еда", category: "food", example: "Italian food is delicious. - Итальянская еда вкусная." },
+            { id: 77, english: "Water", transcription: "[ˈwɔːtər]", russian: "Вода", category: "food", example: "I drink water every day. - Я пью воду каждый день." },
+            { id: 78, english: "Bread", transcription: "[bred]", russian: "Хлеб", category: "food", example: "We need to buy bread. - Нам нужно купить хлеб." },
+            { id: 79, english: "Milk", transcription: "[mɪlk]", russian: "Молоко", category: "food", example: "Children should drink milk. - Дети должны пить молоко." },
+            { id: 80, english: "Coffee", transcription: "[ˈkɒfi]", russian: "Кофе", category: "food", example: "I drink coffee in the morning. - Я пью кофе утром." },
+            { id: 81, english: "Tea", transcription: "[tiː]", russian: "Чай", category: "food", example: "Would you like some tea? - Вы хотите чаю?" },
+            { id: 82, english: "Sugar", transcription: "[ˈʃʊɡər]", russian: "Сахар", category: "food", example: "I don't take sugar in my tea. - Я не кладу сахар в чай." },
+            { id: 83, english: "Salt", transcription: "[sɔːlt]", russian: "Соль", category: "food", example: "Add a little salt. - Добавьте немного соли." },
+            { id: 84, english: "Meat", transcription: "[miːt]", russian: "Мясо", category: "food", example: "Do you eat meat? - Вы едите мясо?" },
+            { id: 85, english: "Chicken", transcription: "[ˈtʃɪkɪn]", russian: "Курица", category: "food", example: "We're having chicken for dinner. - На ужин у нас курица." },
+            { id: 86, english: "Fish", transcription: "[fɪʃ]", russian: "Рыба", category: "food", example: "Fish is good for health. - Рыба полезна для здоровья." },
+            { id: 87, english: "Egg", transcription: "[eɡ]", russian: "Яйцо", category: "food", example: "I eat two eggs for breakfast. - Я ем два яйца на завтрак." },
+            { id: 88, english: "Cheese", transcription: "[tʃiːz]", russian: "Сыр", category: "food", example: "French cheese is famous. - Французский сыр знаменит." },
+            { id: 89, english: "Butter", transcription: "[ˈbʌtər]", russian: "Масло", category: "food", example: "Spread butter on the bread. - Намажьте масло на хлеб." },
+            { id: 90, english: "Fruit", transcription: "[fruːt]", russian: "Фрукты", category: "food", example: "Eat more fruit and vegetables. - Ешьте больше фруктов и овощей." },
+            { id: 91, english: "Apple", transcription: "[ˈæpl]", russian: "Яблоко", category: "food", example: "An apple a day keeps the doctor away. - Яблоко в день - и врач не нужен." },
+            { id: 92, english: "Banana", transcription: "[bəˈnɑːnə]", russian: "Банан", category: "food", example: "Bananas are rich in potassium. - Бананы богаты калием." },
+            { id: 93, english: "Orange", transcription: "[ˈɒrɪndʒ]", russian: "Апельсин", category: "food", example: "Orange juice is refreshing. - Апельсиновый сок освежает." },
+            { id: 94, english: "Vegetable", transcription: "[ˈvedʒtəbl]", russian: "Овощ", category: "food", example: "Fresh vegetables are healthy. - Свежие овощи полезны." },
+            { id: 95, english: "Potato", transcription: "[pəˈteɪtəʊ]", russian: "Картофель", category: "food", example: "Mashed potatoes are delicious. - Картофельное пюре вкусное." },
+            { id: 96, english: "Tomato", transcription: "[təˈmɑːtəʊ]", russian: "Помидор", category: "food", example: "Tomatoes are good for salads. - Помидоры хороши для салатов." },
+            { id: 97, english: "Carrot", transcription: "[ˈkærət]", russian: "Морковь", category: "food", example: "Carrots are good for eyesight. - Морковь полезна для зрения." },
+            { id: 98, english: "Onion", transcription: "[ˈʌnjən]", russian: "Лук", category: "food", example: "Onions make me cry. - Лук заставляет меня плакать." },
+            { id: 99, english: "Soup", transcription: "[suːp]", russian: "Суп", category: "food", example: "Chicken soup is good for a cold. - Куриный суп хорош при простуде." },
+            { id: 100, english: "Salad", transcription: "[ˈsæləd]", russian: "Салат", category: "food", example: "Greek salad is my favorite. - Греческий салат - мой любимый." },
+
+            // Путешествия (Travel) - 25 слов
+            { id: 101, english: "Travel", transcription: "[ˈtrævl]", russian: "Путешествие", category: "travel", example: "I love to travel. - Я люблю путешествовать." },
+            { id: 102, english: "Airport", transcription: "[ˈeəpɔːt]", russian: "Аэропорт", category: "travel", example: "We need to be at the airport at 6 AM. - Нам нужно быть в аэропорту в 6 утра." },
+            { id: 103, english: "Hotel", transcription: "[həʊˈtel]", russian: "Отель", category: "travel", example: "The hotel has a swimming pool. - В отеле есть бассейн." },
+            { id: 104, english: "Passport", transcription: "[ˈpɑːspɔːt]", russian: "Паспорт", category: "travel", example: "Don't forget your passport! - Не забудьте паспорт!" },
+            { id: 105, english: "Ticket", transcription: "[ˈtɪkɪt]", russian: "Билет", category: "travel", example: "I bought a ticket to London. - Я купил билет в Лондон." },
+            { id: 106, english: "Baggage", transcription: "[ˈbæɡɪdʒ]", russian: "Багаж", category: "travel", example: "Our baggage is too heavy. - Наш багаж слишком тяжелый." },
+            { id: 107, english: "Map", transcription: "[mæp]", russian: "Карта", category: "travel", example: "Can you show me on the map? - Можете показать на карте?" },
+            { id: 108, english: "City", transcription: "[ˈsɪti]", russian: "Город", category: "travel", example: "Moscow is a big city. - Москва - большой город." },
+            { id: 109, english: "Country", transcription: "[ˈkʌntri]", russian: "Страна", category: "travel", example: "I want to visit many countries. - Я хочу посетить много стран." },
+            { id: 110, english: "Beach", transcription: "[biːtʃ]", russian: "Пляж", category: "travel", example: "We're going to the beach tomorrow. - Завтра мы идем на пляж." },
+            { id: 111, english: "Mountain", transcription: "[ˈmaʊntən]", russian: "Гора", category: "travel", example: "The mountains are beautiful. - Горы красивые." },
+            { id: 112, english: "Sea", transcription: "[siː]", russian: "Море", category: "travel", example: "The sea is calm today. - Море сегодня спокойное." },
+            { id: 113, english: "River", transcription: "[ˈrɪvər]", russian: "Река", category: "travel", example: "The river flows through the city. - Река протекает через город." },
+            { id: 114, english: "Lake", transcription: "[leɪk]", russian: "Озеро", category: "travel", example: "We swim in the lake in summer. - Летом мы плаваем в озере." },
+            { id: 115, english: "Forest", transcription: "[ˈfɒrɪst]", russian: "Лес", category: "travel", example: "Let's go for a walk in the forest. - Давайте пойдем гулять в лес." },
+            { id: 116, english: "Park", transcription: "[pɑːk]", russian: "Парк", category: "travel", example: "Children are playing in the park. - Дети играют в парке." },
+            { id: 117, english: "Museum", transcription: "[mjuˈziːəm]", russian: "Музей", category: "travel", example: "The museum is closed on Monday. - Музей закрыт по понедельникам." },
+            { id: 118, english: "Theater", transcription: "[ˈθɪətər]", russian: "Театр", category: "travel", example: "We're going to the theater tonight. - Сегодня вечером мы идем в театр." },
+            { id: 119, english: "Restaurant", transcription: "[ˈrestrɒnt]", russian: "Ресторан", category: "travel", example: "This restaurant has good food. - В этом ресторане хорошая еда." },
+            { id: 120, english: "Cafe", transcription: "[ˈkæfeɪ]", russian: "Кафе", category: "travel", example: "Let's meet at the cafe. - Давайте встретимся в кафе." },
+            { id: 121, english: "Shop", transcription: "[ʃɒp]", russian: "Магазин", category: "travel", example: "The shops are open until 8 PM. - Магазины открыты до 8 вечера." },
+            { id: 122, english: "Market", transcription: "[ˈmɑːkɪt]", russian: "Рынок", category: "travel", example: "I buy fresh vegetables at the market. - Я покупаю свежие овощи на рынке." },
+            { id: 123, english: "Bank", transcription: "[bæŋk]", russian: "Банк", category: "travel", example: "I need to go to the bank. - Мне нужно сходить в банк." },
+            { id: 124, english: "Pharmacy", transcription: "[ˈfɑːrməsi]", russian: "Аптека", category: "travel", example: "Is there a pharmacy nearby? - Здесь есть аптека поблизости?" },
+            { id: 125, english: "Hospital", transcription: "[ˈhɒspɪtl]", russian: "Больница", category: "travel", example: "The hospital is on Main Street. - Больница на Главной улице." },
+
+            // Природа (Nature) - 25 слов
+            { id: 126, english: "Sun", transcription: "[sʌn]", russian: "Солнце", category: "nature", example: "The sun is shining. - Солнце светит." },
+            { id: 127, english: "Moon", transcription: "[muːn]", russian: "Луна", category: "nature", example: "The moon is full tonight. - Сегодня ночью полная луна." },
+            { id: 128, english: "Star", transcription: "[stɑːr]", russian: "Звезда", category: "nature", example: "I can see many stars. - Я вижу много звезд." },
+            { id: 129, english: "Sky", transcription: "[skaɪ]", russian: "Небо", category: "nature", example: "The sky is blue. - Небо голубое." },
+            { id: 130, english: "Cloud", transcription: "[klaʊd]", russian: "Облако", category: "nature", example: "There are white clouds in the sky. - На небе белые облака." },
+            { id: 131, english: "Rain", transcription: "[reɪn]", russian: "Дождь", category: "nature", example: "It's going to rain. - Собирается дождь." },
+            { id: 132, english: "Snow", transcription: "[snəʊ]", russian: "Снег", category: "nature", example: "Children like to play in the snow. - Дети любят играть в снегу." },
+            { id: 133, english: "Wind", transcription: "[wɪnd]", russian: "Ветер", category: "nature", example: "The wind is strong today. - Сегодня сильный ветер." },
+            { id: 134, english: "Tree", transcription: "[triː]", russian: "Дерево", category: "nature", example: "The tree is tall. - Дерево высокое." },
+            { id: 135, english: "Flower", transcription: "[ˈflaʊər]", russian: "Цветок", category: "nature", example: "These flowers smell good. - Эти цветы хорошо пахнут." },
+            { id: 136, english: "Grass", transcription: "[ɡrɑːs]", russian: "Трава", category: "nature", example: "The grass is green. - Трава зеленая." },
+            { id: 137, english: "Bird", transcription: "[bɜːrd]", russian: "Птица", category: "nature", example: "The bird is singing. - Птица поет." },
+            { id: 138, english: "Dog", transcription: "[dɒɡ]", russian: "Собака", category: "nature", example: "The dog is barking. - Собака лает." },
+            { id: 139, english: "Cat", transcription: "[kæt]", russian: "Кошка", category: "nature", example: "The cat is sleeping. - Кошка спит." },
+            { id: 140, english: "Horse", transcription: "[hɔːrs]", russian: "Лошадь", category: "nature", example: "She rides a horse. - Она катается на лошади." },
+            { id: 141, english: "Cow", transcription: "[kaʊ]", russian: "Корова", category: "nature", example: "Cows give milk. - Коровы дают молоко." },
+            { id: 142, english: "Sheep", transcription: "[ʃiːp]", russian: "Овца", category: "nature", example: "Sheep are grazing in the field. - Овцы пасутся в поле." },
+            { id: 143, english: "Pig", transcription: "[pɪɡ]", russian: "Свинья", category: "nature", example: "The pig is in the pen. - Свинья в загоне." },
+            { id: 144, english: "Chicken", transcription: "[ˈtʃɪkɪn]", russian: "Курица", category: "nature", example: "Chickens lay eggs. - Курицы несут яйца." },
+            { id: 145, english: "Fish", transcription: "[fɪʃ]", russian: "Рыба", category: "nature", example: "I caught a fish. - Я поймал рыбу." },
+            { id: 146, english: "Butterfly", transcription: "[ˈbʌtərflaɪ]", russian: "Бабочка", category: "nature", example: "A beautiful butterfly is flying. - Красивая бабочка летит." },
+            { id: 147, english: "Bee", transcription: "[biː]", russian: "Пчела", category: "nature", example: "Bees make honey. - Пчелы делают мед." },
+            { id: 148, english: "Ant", transcription: "[ænt]", russian: "Муравей", category: "nature", example: "Ants are hardworking. - Муравьи трудолюбивые." },
+            { id: 149, english: "Spider", transcription: "[ˈspaɪdər]", russian: "Паук", category: "nature", example: "There's a spider on the wall. - На стене паук." },
+            { id: 150, english: "Rabbit", transcription: "[ˈræbɪt]", russian: "Кролик", category: "nature", example: "The rabbit is eating a carrot. - Кролик ест морковку." }
+        ];
+
+        // Переменные состояния
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let favorites = JSON.parse(localStorage.getItem('dictionaryFavorites')) || [];
+        let learnedWords = JSON.parse(localStorage.getItem('dictionaryLearned')) || [];
+        let userWords = JSON.parse(localStorage.getItem('dictionaryUserWords')) || [];
+        
+        // Функции для управления шторкой
+        function toggleNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            overlay.classList.toggle('active');
+            burger.classList.toggle('active');
+            
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            overlay.classList.remove('active');
+            burger.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleNavClick(element) {
+            // Убираем активный класс у всех ссылок
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Добавляем активный класс к текущей ссылке
+            element.classList.add('active');
+            
+            // Закрываем шторку
+            closeNav();
+        }
+
+        // Функции для словаря
+        function renderDictionary() {
+            const grid = document.getElementById('dictionaryGrid');
+            let wordsToShow = [...dictionaryData, ...userWords];
+            
+            // Применяем фильтр
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'favorites') {
+                    wordsToShow = wordsToShow.filter(word => favorites.includes(word.id));
+                } else if (currentFilter === 'learned') {
+                    wordsToShow = wordsToShow.filter(word => learnedWords.includes(word.id));
+                } else {
+                    wordsToShow = wordsToShow.filter(word => word.category === currentFilter);
+                }
+            }
+            
+            // Применяем поиск
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                wordsToShow = wordsToShow.filter(word => 
+                    word.english.toLowerCase().includes(query) || 
+                    word.russian.toLowerCase().includes(query) ||
+                    (word.transcription && word.transcription.toLowerCase().includes(query))
+                );
+            }
+            
+            // Обновляем статистику
+            updateStats(wordsToShow.length);
+            
+            // Очищаем сетку
+            grid.innerHTML = '';
+            
+            // Отображаем слова
+            wordsToShow.forEach(word => {
+                const isFavorite = favorites.includes(word.id);
+                const isLearned = learnedWords.includes(word.id);
+                const categoryClass = `category-${word.category}`;
+                
+                const wordCard = document.createElement('div');
+                wordCard.className = `word-card ${categoryClass}`;
+                wordCard.innerHTML = `
+                    ${isFavorite ? '<div class="favorite-badge"><i class="fas fa-heart"></i></div>' : ''}
+                    ${isLearned ? '<div class="learned-badge"><i class="fas fa-check"></i></div>' : ''}
+                    
+                    <div class="word-header">
+                        <div>
+                            <div class="word-english">${word.english}</div>
+                            <div class="word-transcription">${word.transcription || ''}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="word-translation">${word.russian}</div>
+                    
+                    <div class="word-details">
+                        <span class="word-category">${getCategoryName(word.category)}</span>
+                    </div>
+                    
+                    ${word.example ? `<div class="word-example">${word.example}</div>` : ''}
+                    
+                    <div class="word-actions">
+                        <button class="word-btn sound" onclick="playSound('${word.english}')">
+                            <i class="fas fa-volume-up"></i> Произношение
+                        </button>
+                        <button class="word-btn favorite" onclick="toggleFavorite(${word.id})">
+                            <i class="fas fa-heart"></i> ${isFavorite ? 'Убрать' : 'В избранное'}
+                        </button>
+                        <button class="word-btn" onclick="markAsLearned(${word.id})">
+                            <i class="fas fa-check"></i> ${isLearned ? 'Повторить' : 'Выучил'}
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(wordCard);
+            });
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'basics': 'Основы',
+                'people': 'Люди',
+                'home': 'Дом',
+                'food': 'Еда',
+                'travel': 'Путешествия',
+                'nature': 'Природа'
+            };
+            return categories[category] || category;
+        }
+
+        function filterWords(category) {
+            currentFilter = category;
+            
+            // Обновляем активные кнопки фильтров
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Находим кнопку с нужным фильтром
+            const activeBtn = Array.from(document.querySelectorAll('.filter-btn'))
+                .find(btn => btn.onclick && btn.onclick.toString().includes(`'${category}'`));
+            
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            renderDictionary();
+        }
+
+        function searchWords() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            renderDictionary();
+        }
+
+        function toggleFavorite(wordId) {
+            const index = favorites.indexOf(wordId);
+            if (index === -1) {
+                favorites.push(wordId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem('dictionaryFavorites', JSON.stringify(favorites));
+            renderDictionary();
+        }
+
+        function markAsLearned(wordId) {
+            const index = learnedWords.indexOf(wordId);
+            if (index === -1) {
+                learnedWords.push(wordId);
+                // Сохраняем дату изучения
+                const today = new Date().toISOString().split('T')[0];
+                const learnedDates = JSON.parse(localStorage.getItem('dictionaryLearnedDates')) || {};
+                learnedDates[wordId] = today;
+                localStorage.setItem('dictionaryLearnedDates', JSON.stringify(learnedDates));
+            } else {
+                learnedWords.splice(index, 1);
+            }
+            
+            localStorage.setItem('dictionaryLearned', JSON.stringify(learnedWords));
+            renderDictionary();
+        }
+
+        function updateStats(totalCount) {
+            document.getElementById('totalWords').textContent = dictionaryData.length + userWords.length;
+            document.getElementById('learnedWords').textContent = learnedWords.length;
+            document.getElementById('favoriteWords').textContent = favorites.length;
+            
+            // Считаем слова, изученные сегодня
+            const today = new Date().toISOString().split('T')[0];
+            const learnedDates = JSON.parse(localStorage.getItem('dictionaryLearnedDates')) || {};
+            const todayLearned = Object.values(learnedDates).filter(date => date === today).length;
+            document.getElementById('todayWords').textContent = todayLearned;
+        }
+
+        function playSound(word) {
+            // Используем Web Speech API для произношения
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Браузер не поддерживает произношение слов');
+            }
+        }
+
+        // Модальное окно
+        function showAddWordModal() {
+            document.getElementById('addWordModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('addWordModal').classList.remove('active');
+        }
+
+        // Добавление пользовательского слова
+        document.getElementById('addWordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const english = document.getElementById('newEnglish').value.trim();
+            const transcription = document.getElementById('newTranscription').value.trim();
+            const russian = document.getElementById('newRussian').value.trim();
+            const category = document.getElementById('newCategory').value;
+            const example = document.getElementById('newExample').value.trim();
+            
+            if (!english || !russian || !category) {
+                alert('Пожалуйста, заполните обязательные поля');
+                return;
+            }
+            
+            const newWord = {
+                id: Date.now(),
+                english,
+                transcription: transcription ? `[${transcription}]` : '',
+                russian,
+                category,
+                example: example || ''
+            };
+            
+            userWords.push(newWord);
+            localStorage.setItem('dictionaryUserWords', JSON.stringify(userWords));
+            
+            // Сбрасываем форму
+            document.getElementById('addWordForm').reset();
+            
+            // Закрываем модальное окно
+            closeModal();
+            
+            // Показываем сообщение
+            alert('Слово успешно добавлено в словарь!');
+            
+            // Обновляем отображение
+            renderDictionary();
+        });
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Рендерим словарь
+            renderDictionary();
+            
+            // Настраиваем поиск по Enter
+            document.getElementById('searchInput').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchWords();
+                }
+            });
+            
+            // Закрытие модального окна при клике вне его
+            document.getElementById('addWordModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // Закрытие шторки при клике вне её
+            document.addEventListener('click', function(event) {
+                const overlay = document.getElementById('navOverlay');
+                const burger = document.getElementById('burgerIcon');
+                
+                if (!overlay.contains(event.target) && !burger.contains(event.target) && overlay.classList.contains('active')) {
+                    closeNav();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

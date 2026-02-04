@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс для начинающих - EnglishForSeniors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Шторка навигации */
+        .burger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .burger-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .burger-icon.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .burger-icon.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-icon.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .burger-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            z-index: 999;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            padding: 100px 40px 40px;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            right: 0;
+        }
+
+        .nav-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-header h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-header p {
+            color: #bbdefb;
+            font-size: 1rem;
+        }
+
+        /* Блок быстрого переключения курсов */
+        .courses-quick-nav {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .courses-quick-nav h4 {
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+
+        .course-quick-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .course-quick-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        .course-quick-item.active {
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .course-icon-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .course-icon-beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .course-icon-elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+        }
+
+        .course-icon-advanced {
+            background: linear-gradient(135deg, #9C27B0, #673AB7);
+        }
+
+        .course-quick-info h5 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .course-quick-info p {
+            margin: 5px 0 0;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Основное меню */
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-menu a i {
+            width: 25px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Информация о пользователе */
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .user-level {
+            color: #bbdefb;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* Кнопки авторизации */
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-btn.login {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .nav-btn.register {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .nav-btn.logout {
+            background: linear-gradient(135deg, #f44336, #e91e63);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Футер шторки */
+        .nav-footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        /* Основные стили страницы */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+            color: #333;
+            transition: margin-right 0.5s ease;
+        }
+
+        body.nav-open {
+            margin-right: 400px;
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: margin-right 0.5s ease;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .motto {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .course-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            transition: margin-right 0.5s ease;
+        }
+        
+        .course-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+        }
+
+        .header-beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .header-elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+        }
+
+        .header-advanced {
+            background: linear-gradient(135deg, #9C27B0, #673AB7);
+        }
+        
+        .course-progress {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .lesson-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .lesson-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .lesson-header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .lesson-header-elementary {
+            background: #2196F3;
+        }
+
+        .lesson-header-advanced {
+            background: #9C27B0;
+        }
+        
+        .lesson-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        
+        .lesson-content {
+            padding: 25px;
+        }
+        
+        .lesson-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .lesson-desc {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .lesson-features {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        
+        .lesson-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .lesson-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .lesson-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .status-locked {
+            background: #ffeb3b;
+            color: #333;
+        }
+        
+        .status-available {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .status-completed {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .theory-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .btn-start-lesson {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .btn-start-lesson:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-start-lesson:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-overlay {
+                max-width: 100%;
+                padding: 100px 20px 20px;
+                right: -100%;
+            }
+            
+            .nav-overlay.active {
+                right: 0;
+            }
+            
+            body.nav-open {
+                margin-right: 0;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Кнопки переключения курсов на странице */
+        .course-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .course-switch-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .switch-beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+        
+        .switch-elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+        
+        .switch-advanced {
+            background: linear-gradient(135deg, #9C27B0, #673AB7);
+            color: white;
+        }
+
+        .course-switch-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .course-switch-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px white, 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-card {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .lesson-card:nth-child(1) { animation-delay: 0.1s; }
+        .lesson-card:nth-child(2) { animation-delay: 0.2s; }
+        .lesson-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Бейджи для уроков */
+        .lesson-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+        }
+
+        .badge-essential {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .badge-popular {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        /* Статистика */
+        .course-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Цитаты и шутки */
+        .joke {
+            font-style: italic;
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шторка навигации -->
+    <div class="burger-menu" onclick="toggleNav()">
+        <div class="burger-icon" id="burgerIcon">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </div>
+
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-header">
+            <h3><i class="fas fa-book-open"></i> EnglishForSeniors</h3>
+            <p>Выберите курс для обучения</p>
+        </div>
+
+        <div id="userSection">
+        </div>
+        <!-- Блок быстрого переключения курсов -->
+        <div class="courses-quick-nav" id="coursesQuickNav">
+            <h4><i class="fas fa-exchange-alt"></i> Быстрое переключение курсов:</h4>
+        </div>
+
+        <!-- Основное меню навигации -->
+        <ul class="nav-menu">
+            <li><a href="index.html" onclick="handleNavClick(this)"><i class="fas fa-home"></i> Главная</a></li>
+            <li><a href="courses.html" onclick="handleNavClick(this)"><i class="fas fa-graduation-cap"></i> Все курсы</a></li>
+            <li><a href="dictionary.html" onclick="handleNavClick(this)"><i class="fas fa-book"></i> Словарь</a></li>
+            <li><a href="test.html" onclick="handleNavClick(this)"><i class="fas fa-clipboard-check"></i> Тест уровня</a></li>
+            <li><a href="progress.html" onclick="handleNavClick(this)"><i class="fas fa-chart-line"></i> Прогресс</a></li>
+            <li><a href="games.html" onclick="handleNavClick(this)"><i class="fas fa-gamepad"></i> Игры</a></li>
+            <li><a href="club.html" onclick="handleNavClick(this)"><i class="fas fa-users"></i> Клуб общения</a></li>
+            <li><a href="materials.html" onclick="handleNavClick(this)"><i class="fas fa-download"></i> Материалы</a></li>
+            <li><a href="about.html" onclick="handleNavClick(this)"><i class="fas fa-info-circle"></i> О проекте</a></li>
+            <li><a href="help.html" onclick="handleNavClick(this)"><i class="fas fa-question-circle"></i> Помощь</a></li>
+        </ul>
+
+        <!-- Кнопки авторизации -->
+        <div class="nav-buttons" id="authButtons">
+        </div>
+
+        <div class="nav-footer">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p>"Ученье — свет!"</p>
+            <p>Проект разработан Толстенёвой Полиной</p>
+        </div>
+    </div>
+
+    <header>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div class="logo">
+                <h1><i class="fas fa-book-open"></i> EnglishForSeniors</h1>
+                <p class="motto" id="courseMotto">Курс для начинающих. "Лиха беда начало!"</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="course-container">
+        <!-- Кнопки переключения курсов на странице -->
+        <div class="course-switcher">
+            <button class="course-switch-btn switch-beginner active" onclick="switchCourseFromPage('beginner')">
+                <i class="fas fa-seedling"></i> Начинающий
+            </button>
+            <button class="course-switch-btn switch-elementary" onclick="switchCourseFromPage('elementary')">
+                <i class="fas fa-tree"></i> Средний
+            </button>
+            <button class="course-switch-btn switch-advanced" onclick="switchCourseFromPage('advanced')">
+                <i class="fas fa-crown"></i> ВИП-курс
+            </button>
+        </div>
+
+        <div class="course-header" id="courseHeader">
+            <h1><i class="fas fa-seedling"></i> Курс для начинающих (Beginner)</h1>
+            <p class="joke" id="courseJoke">"Дорогу осилит идущий" - начнем с первого шага!</p>
+            <div class="course-stats" id="courseStats">
+                <div class="stat">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">уроков</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">50</div>
+                    <div class="stat-label">заданий</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">теста</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">слов</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="course-progress">
+            <h3><i class="fas fa-chart-line"></i> Ваш прогресс</h3>
+            <div class="progress-bar" style="height: 20px; margin: 15px 0; background: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                <div id="course-progress-fill" style="width: 10%; height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); transition: width 1s;"></div>
+            </div>
+            <p id="progress-text">Вы завершили 1 из 10 уроков (10%)</p>
+        </div>
+        
+        <div class="theory-section">
+            <h2><i class="fas fa-graduation-cap"></i> Что вы изучите в этом курсе:</h2>
+            <div class="course-objectives" id="courseObjectives">
+                <!-- Будет заполнено JavaScript -->
+            </div>
+        </div>
+        
+        <h2><i class="fas fa-list-ol"></i> Уроки курса</h2>
+        <p class="joke" id="lessonsJoke">"Тише едешь - дальше будешь" - проходите уроки последовательно!</p>
+        
+        <div class="lessons-grid" id="lessonsContainer">
+            <!-- Уроки будут загружены через JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p style="font-style: italic; margin-top: 20px; color: #bbdefb;" id="footerQuote">"Повторение - мать учения!" - возвращайтесь к пройденным урокам!</p>
+        </div>
+    </footer>
+
+    <script>
+        // Данные всех курсов (без блокировки уровней)
+        const coursesData = {
+            beginner: {
+                id: 'beginner',
+                title: 'Курс для начинающих (Beginner)',
+                motto: 'Курс для начинающих. "Лиха беда начало!"',
+                icon: 'fas fa-seedling',
+                iconClass: 'course-icon-beginner',
+                description: 'Идеально для тех, кто только начинает учить английский',
+                color: '#4CAF50',
+                headerClass: 'header-beginner',
+                stats: {
+                    lessons: 10,
+                    exercises: 50,
+                    tests: 3,
+                    words: 150
+                },
+                objectives: [
+                    {
+                        icon: 'fas fa-comments',
+                        title: 'Базовые фразы',
+                        items: ['Приветствия и прощания', 'Знакомство и представление', 'Простые вопросы и ответы', 'Бытовые диалоги']
+                    },
+                    {
+                        icon: 'fas fa-language',
+                        title: 'Простая грамматика',
+                        items: ['Глагол to be (am/is/are)', 'Настоящее простое время', 'Артикли a/an/the', 'Множественное число', 'Притяжательные местоимения']
+                    },
+                    {
+                        icon: 'fas fa-tasks',
+                        title: 'Практика',
+                        items: ['5 уроков с 10 заданиями каждый', '3 практических теста', 'Аудирование и произношение', 'Диалоги и разговорная практика']
+                    }
+                ],
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Приветствия и знакомство",
+                        description: "Учимся здороваться, представляться и прощаться",
+                        duration: "30 минут",
+                        exercises: 10,
+                        topics: ["Hello/Hi", "Good morning/afternoon/evening", "My name is...", "Nice to meet you"],
+                        theory: "Базовые фразы для знакомства",
+                        badge: "new",
+                        joke: '"Здравствуйте" и "до свидания" - ключи ко всем дверям!'
+                    },
+                    {
+                        id: 2,
+                        title: "Числа 1-20",
+                        description: "Учимся считать и использовать числа в речи",
+                        duration: "35 минут",
+                        exercises: 10,
+                        topics: ["Numbers 1-20", "How old are you?", "Phone numbers", "Prices"],
+                        theory: "Цифры и их применение",
+                        badge: "essential",
+                        joke: 'Считайте деньги, годы и яблоки - всё пригодится!'
+                    },
+                    {
+                        id: 3,
+                        title: "Семья и профессии",
+                        description: "Учим слова о семье и распространенные профессии",
+                        duration: "40 минут",
+                        exercises: 10,
+                        topics: ["Family members", "Jobs", "This is my...", "He/She is a..."],
+                        theory: "Лексика по теме семья",
+                        badge: "popular",
+                        joke: 'Моя семья - моя крепость, особенно на английском!'
+                    },
+                    {
+                        id: 4,
+                        title: "Еда и напитки",
+                        description: "Названия продуктов, напитков и простые заказы",
+                        duration: "35 минут",
+                        exercises: 10,
+                        topics: ["Food items", "Drinks", "I like...", "I want..."],
+                        theory: "Еда и напитки на английском",
+                        joke: 'Яблоко в день доктора прогоняет, а на английском - тем более!'
+                    },
+                    {
+                        id: 5,
+                        title: "В городе",
+                        description: "Места в городе и простые указания",
+                        duration: "40 минут",
+                        exercises: 10,
+                        topics: ["Places in town", "Where is...?", "Directions", "Prepositions"],
+                        theory: "Ориентация в городе",
+                        joke: 'Заблудиться можно и дома, но не с нашим уроком!'
+                    }
+                ],
+                lessonsJoke: '"Тише едешь - дальше будешь" - проходите уроки последовательно!',
+                footerQuote: '"Повторение - мать учения!" - возвращайтесь к пройденным урокам!'
+            },
+            elementary: {
+                id: 'elementary',
+                title: 'Курс среднего уровня (Elementary)',
+                motto: 'Курс среднего уровня. "Повторение - мать учения!"',
+                icon: 'fas fa-tree',
+                iconClass: 'course-icon-elementary',
+                description: 'Для тех, кто уже знает основы и хочет улучшить навыки',
+                color: '#2196F3',
+                headerClass: 'header-elementary',
+                stats: {
+                    lessons: 12,
+                    exercises: 60,
+                    tests: 4,
+                    words: 300
+                },
+                objectives: [
+                    {
+                        icon: 'fas fa-clock',
+                        title: 'Времена глаголов',
+                        items: ['Прошедшее простое время', 'Настоящее продолженное', 'Будущее простое время', 'Present Perfect']
+                    },
+                    {
+                        icon: 'fas fa-comments',
+                        title: 'Разговорная речь',
+                        items: ['Более сложные диалоги', 'Обсуждение планов', 'Рассказ о прошлом', 'Выражение мнения']
+                    },
+                    {
+                        icon: 'fas fa-book',
+                        title: 'Расширенная лексика',
+                        items: ['Идиомы и фразовые глаголы', 'Синонимы и антонимы', 'Формальный и неформальный язык', 'Специализированная лексика']
+                    }
+                ],
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Прошедшее простое время",
+                        description: "Учимся рассказывать о событиях в прошлом",
+                        duration: "45 минут",
+                        exercises: 12,
+                        topics: ["Past Simple", "Regular verbs", "Irregular verbs", "Time expressions"],
+                        theory: "Использование Past Simple",
+                        badge: "essential",
+                        joke: 'Что было, то было - расскажем об этом по-английски!'
+                    },
+                    {
+                        id: 2,
+                        title: "Настоящее продолженное время",
+                        description: "Говорим о действиях, происходящих сейчас",
+                        duration: "40 минут",
+                        exercises: 12,
+                        topics: ["Present Continuous", "Now/at the moment", "Future arrangements"],
+                        theory: "Present Continuous для текущих действий",
+                        badge: "popular",
+                        joke: 'Здесь и сейчас - самое время для английского!'
+                    },
+                    {
+                        id: 3,
+                        title: "Модальные глаголы",
+                        description: "Учимся выражать возможность, необходимость, разрешение",
+                        duration: "50 минут",
+                        exercises: 12,
+                        topics: ["Can/could", "Must/have to", "Should", "May/might"],
+                        theory: "Модальные глаголы и их значения",
+                        joke: 'Можно, нужно, должен - английский дает выбор!'
+                    },
+                    {
+                        id: 4,
+                        title: "Сравнительная степень",
+                        description: "Сравниваем предметы, людей и ситуации",
+                        duration: "40 минут",
+                        exercises: 12,
+                        topics: ["Comparative adjectives", "Superlative adjectives", "As... as", "Much/more"],
+                        theory: "Сравнения на английском",
+                        joke: 'Лучше поздно, чем никогда, особенно в изучении языка!'
+                    },
+                    {
+                        id: 5,
+                        title: "Будущее время",
+                        description: "Говорим о планах, намерениях и предсказаниях",
+                        duration: "45 минут",
+                        exercises: 12,
+                        topics: ["Will/won't", "Going to", "Present Continuous for future", "Time clauses"],
+                        theory: "Выражение будущего в английском",
+                        joke: 'Будущее уже здесь - давайте его обсудим!'
+                    }
+                ],
+                lessonsJoke: '"Семь раз отмерь, один раз отрежь" - изучайте внимательно!',
+                footerQuote: '"Век живи - век учись" - каждый день открывайте что-то новое!'
+            },
+            advanced: {
+                id: 'advanced',
+                title: 'ВИП-курс (Advanced)',
+                motto: 'ВИП-курс продвинутого уровня. "Век живи - век учись!"',
+                icon: 'fas fa-crown',
+                iconClass: 'course-icon-advanced',
+                description: 'Продвинутый курс для свободного общения',
+                color: '#9C27B0',
+                headerClass: 'header-advanced',
+                stats: {
+                    lessons: 15,
+                    exercises: 75,
+                    tests: 5,
+                    words: 500
+                },
+                objectives: [
+                    {
+                        icon: 'fas fa-language',
+                        title: 'Продвинутая грамматика',
+                        items: ['Условные предложения', 'Пассивный залог', 'Косвенная речь', 'Инверсия']
+                    },
+                    {
+                        icon: 'fas fa-briefcase',
+                        title: 'Деловой английский',
+                        items: ['Презентации и переговоры', 'Деловая переписка', 'Профессиональная лексика', 'Культурные особенности']
+                    },
+                    {
+                        icon: 'fas fa-theater-masks',
+                        title: 'Культура и идиомы',
+                        items: ['Британский vs. американский английский', 'Литературные выражения', 'Исторические фразы', 'Современный сленг']
+                    }
+                ],
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Английские идиомы",
+                        description: "Изучаем популярные идиомы и их использование",
+                        duration: "50 минут",
+                        exercises: 15,
+                        topics: ["Idioms about time", "Animal idioms", "Business idioms", "Everyday idioms"],
+                        theory: "Идиомы и их происхождение",
+                        badge: "new",
+                        joke: '"Break a leg!" - но только не на самом деле!'
+                    },
+                    {
+                        id: 2,
+                        title: "Деловая переписка",
+                        description: "Учимся писать профессиональные письма",
+                        duration: "55 минут",
+                        exercises: 15,
+                        topics: ["Email structure", "Formal language", "Business vocabulary", "Cultural nuances"],
+                        theory: "Особенности деловой переписки",
+                        badge: "essential",
+                        joke: 'Делу время, а письму - правильный английский!'
+                    },
+                    {
+                        id: 3,
+                        title: "Условные предложения",
+                        description: "Все типы условных предложений в английском",
+                        duration: "60 минут",
+                        exercises: 15,
+                        topics: ["Zero conditional", "First conditional", "Second conditional", "Third conditional", "Mixed conditionals"],
+                        theory: "Грамматика условных предложений",
+                        joke: 'Если бы да кабы... а мы научим выражать это по-английски!'
+                    },
+                    {
+                        id: 4,
+                        title: "Пассивный залог",
+                        description: "Учимся использовать пассивный залог правильно",
+                        duration: "50 минут",
+                        exercises: 15,
+                        topics: ["Formation of passive", "When to use passive", "Impersonal constructions", "Passive with modals"],
+                        theory: "Активный и пассивный залог",
+                        joke: 'Не мы выбираем язык, а язык выбирает нас... в пассивном залоге!'
+                    },
+                    {
+                        id: 5,
+                        title: "Косвенная речь",
+                        description: "Передаем чужие слова и мысли",
+                        duration: "55 минут",
+                        exercises: 15,
+                        topics: ["Reported statements", "Reported questions", "Reporting verbs", "Tense changes"],
+                        theory: "Прямая и косвенная речь",
+                        joke: 'Он сказал, что она сказала, что они сказали... разберемся!'
+                    }
+                ],
+                lessonsJoke: '"Умный в гору не пойдет, умный гору обойдет" - используйте продвинутые техники!',
+                footerQuote: '"Знание - сила!" - особенно знание английского языка!'
+            }
+        };
+
+        // Текущий курс
+        let currentCourse = 'beginner';
+        
+        // Функции для управления шторкой
+        let isNavOpen = false;
+
+        function toggleNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            isNavOpen = !isNavOpen;
+            overlay.classList.toggle('active');
+            burger.classList.toggle('active');
+            document.body.classList.toggle('nav-open');
+            
+            if (isNavOpen) {
+                updateQuickCourses();
+            }
+        }
+
+        function closeNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            isNavOpen = false;
+            overlay.classList.remove('active');
+            burger.classList.remove('active');
+            document.body.classList.remove('nav-open');
+        }
+
+        function handleNavClick(element) {
+            // Убираем активный класс у всех ссылок
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Добавляем активный класс к текущей ссылке
+            element.classList.add('active');
+            
+            // Закрываем шторку
+            closeNav();
+        }
+        
+        // Обновление информации о пользователе
+        function updateUserInfo() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userSection = document.getElementById('userSection');
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ${user.username ? user.username.charAt(0).toUpperCase() : 'П'}
+                        </div>
+                        <div class="user-name">${user.username || 'Пользователь'}</div>
+                        <div class="user-level">Уровень: ${user.level ? user.level.toUpperCase() : 'НЕ ОПРЕДЕЛЕН'}</div>
+                    </div>
+                `;
+                
+                authButtons.innerHTML = `
+                    <button class="nav-btn logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                `;
+            } else {
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ?
+                        </div>
+                        <div class="user-name">Гость</div>
+                        <div class="user-level">Для сохранения прогресса войдите</div>
+                    </div>
+                `;
+                
+                authButtons.innerHTML = `
+                    <a href="login.html" class="nav-btn login" onclick="closeNav()">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </a>
+                    <a href="register.html" class="nav-btn register" onclick="closeNav()">
+                        <i class="fas fa-user-plus"></i> Зарегистрироваться
+                    </a>
+                `;
+            }
+        }
+
+        // Обновление блока быстрого переключения курсов
+        function updateQuickCourses() {
+            const quickNav = document.getElementById('coursesQuickNav');
+            let html = '<h4><i class="fas fa-exchange-alt"></i> Быстрое переключение курсов:</h4>';
+            
+            for (const courseKey in coursesData) {
+                const course = coursesData[courseKey];
+                const isActive = courseKey === currentCourse;
+                
+                html += `
+                    <a href="#" class="course-quick-item ${isActive ? 'active' : ''}" onclick="switchCourseFromNav('${courseKey}')">
+                        <div class="course-icon-small ${course.iconClass}">
+                            <i class="${course.icon}"></i>
+                        </div>
+                        <div class="course-quick-info">
+                            <h5>${course.title}</h5>
+                            <p>${course.description}</p>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            quickNav.innerHTML = html;
+        }
+
+        // Функции переключения курсов
+        function switchCourseFromNav(courseKey) {
+            switchCourse(courseKey);
+            closeNav();
+        }
+
+        function switchCourseFromPage(courseKey) {
+            switchCourse(courseKey);
+            
+            // Обновляем активные кнопки на странице
+            document.querySelectorAll('.course-switch-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (courseKey === 'beginner') {
+                document.querySelector('.switch-beginner').classList.add('active');
+            } else if (courseKey === 'elementary') {
+                document.querySelector('.switch-elementary').classList.add('active');
+            } else if (courseKey === 'advanced') {
+                document.querySelector('.switch-advanced').classList.add('active');
+            }
+        }
+
+        function switchCourse(courseKey) {
+            if (!coursesData[courseKey]) return;
+            
+            currentCourse = courseKey;
+            const course = coursesData[courseKey];
+            
+            // Обновляем заголовок страницы
+            document.title = `${course.title} - EnglishForSeniors`;
+            
+            // Обновляем заголовок курса
+            document.getElementById('courseMotto').textContent = course.motto;
+            
+            // Обновляем заголовок и стиль
+            const header = document.getElementById('courseHeader');
+            header.className = `course-header ${course.headerClass}`;
+            header.innerHTML = `
+                <h1><i class="${course.icon}"></i> ${course.title}</h1>
+                <p class="joke" id="courseJoke">${course.lessons[0]?.joke || '"Дорогу осилит идущий" - начнем с первого шага!'}</p>
+                <div class="course-stats">
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.lessons}</div>
+                        <div class="stat-label">уроков</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.exercises}</div>
+                        <div class="stat-label">заданий</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.tests}</div>
+                        <div class="stat-label">теста</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.words}+</div>
+                        <div class="stat-label">слов</div>
+                    </div>
+                </div>
+            `;
+            
+            // Обновляем прогресс
+            updateProgress(courseKey);
+            
+            // Обновляем цели курса
+            updateCourseObjectives(course);
+            
+            // Обновляем уроки
+            updateLessons(course);
+            
+            // Обновляем шутку под уроками
+            if (course.lessonsJoke) {
+                document.getElementById('lessonsJoke').textContent = course.lessonsJoke;
+            }
+            
+            // Обновляем цитату в футере
+            if (course.footerQuote) {
+                document.getElementById('footerQuote').textContent = course.footerQuote;
+            }
+            
+            // Обновляем быстрые курсы в шторке
+            updateQuickCourses();
+        }
+
+        function updateProgress(courseKey) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const progress = user ? user.progress || {} : {};
+            const courseProgress = progress[courseKey] || { completedLessons: 0, totalLessons: coursesData[courseKey].lessons.length };
+            
+            const percentage = Math.round((courseProgress.completedLessons / courseProgress.totalLessons) * 100) || 0;
+            
+            document.getElementById('course-progress-fill').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = 
+                `Вы завершили ${courseProgress.completedLessons || 0} из ${courseProgress.totalLessons} уроков (${percentage}%)`;
+            
+            // Обновляем цвет прогресса в зависимости от курса
+            const progressFill = document.getElementById('course-progress-fill');
+            if (courseKey === 'beginner') {
+                progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
+            } else if (courseKey === 'elementary') {
+                progressFill.style.background = 'linear-gradient(90deg, #2196F3, #03A9F4)';
+            } else if (courseKey === 'advanced') {
+                progressFill.style.background = 'linear-gradient(90deg, #9C27B0, #673AB7)';
+            }
+        }
+
+        function updateCourseObjectives(course) {
+            const objectivesContainer = document.getElementById('courseObjectives');
+            let html = '';
+            
+            course.objectives.forEach(obj => {
+                html += `
+                    <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                        <h3><i class="${obj.icon}"></i> ${obj.title}</h3>
+                        <ul>
+                            ${obj.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            objectivesContainer.innerHTML = html;
+        }
+
+        function updateLessons(course) {
+            const lessonsContainer = document.getElementById('lessonsContainer');
+            let html = '';
+            
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const progress = user ? user.progress || {} : {};
+            const courseProgress = progress[course.id] || { completedLessons: 0 };
+            const completedLessons = courseProgress.completedLessons || 0;
+            
+            course.lessons.forEach((lesson, index) => {
+                const isCompleted = index < completedLessons;
+                const isAvailable = index <= completedLessons;
+                const isCurrent = index === completedLessons;
+                
+                let statusClass = 'status-available';
+                let statusText = 'Доступно';
+                
+                if (isCompleted) {
+                    statusClass = 'status-completed';
+                    statusText = 'Завершено';
+                } else if (!isAvailable) {
+                    statusClass = 'status-locked';
+                    statusText = 'Заблокировано';
+                }
+                
+                let badgeHtml = '';
+                if (lesson.badge) {
+                    let badgeClass = 'badge-essential';
+                    if (lesson.badge === 'new') badgeClass = 'badge-new';
+                    if (lesson.badge === 'popular') badgeClass = 'badge-popular';
+                    
+                    badgeHtml = `<div class="lesson-badge ${badgeClass}">${lesson.badge === 'new' ? 'НОВЫЙ' : lesson.badge === 'popular' ? 'ПОПУЛЯРНЫЙ' : 'ВАЖНЫЙ'}</div>`;
+                }
+                
+                html += `
+                    <div class="lesson-card" style="animation-delay: ${index * 0.1}s">
+                        <div class="lesson-header ${course.headerClass.replace('header-', 'lesson-header-')}">
+                            <h3>Урок ${lesson.id}: ${lesson.title}</h3>
+                            ${badgeHtml}
+                        </div>
+                        <div class="lesson-content">
+                            <div class="lesson-stats">
+                                <span><i class="fas fa-clock"></i> ${lesson.duration}</span>
+                                <span><i class="fas fa-tasks"></i> ${lesson.exercises} заданий</span>
+                            </div>
+                            <p class="lesson-desc">${lesson.description}</p>
+                            <h4>Темы урока:</h4>
+                            <ul class="lesson-features">
+                                ${lesson.topics.map(topic => `<li>${topic}</li>`).join('')}
+                            </ul>
+                            <div style="margin-top: 20px;">
+                                <span class="lesson-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <button class="btn-start-lesson" ${!isAvailable ? 'disabled' : ''} onclick="startLesson(${lesson.id})">
+                                ${isCompleted ? '<i class="fas fa-redo"></i> Повторить урок' : 
+                                  isCurrent ? '<i class="fas fa-play"></i> Начать урок' : 
+                                  '<i class="fas fa-lock"></i> Начать урок'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            lessonsContainer.innerHTML = html;
+        }
+
+        function startLesson(lessonId) {
+            alert(`Начинаем урок ${lessonId} курса "${currentCourse}"!`);
+            // Здесь будет переход на страницу урока
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            updateUserInfo();
+            closeNav();
+            switchCourse(currentCourse); // Перезагружаем курс для обновления прогресса
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем, есть ли сохраненный курс в localStorage
+            const savedCourse = localStorage.getItem('currentCourse');
+            if (savedCourse && coursesData[savedCourse]) {
+                currentCourse = savedCourse;
+            }
+            
+            // Загружаем курс
+            switchCourse(currentCourse);
+            
+            // Обновляем информацию о пользователе
+            updateUserInfo();
+            
+            // Обновляем кнопки на странице
+            document.querySelectorAll('.course-switch-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (currentCourse === 'beginner') {
+                document.querySelector('.switch-beginner').classList.add('active');
+            } else if (currentCourse === 'elementary') {
+                document.querySelector('.switch-elementary').classList.add('active');
+            } else if (currentCourse === 'advanced') {
+                document.querySelector('.switch-advanced').classList.add('active');
+            }
+        });
+
+        // Сохраняем выбранный курс при переключении
+        function switchCourse(courseKey) {
+            if (!coursesData[courseKey]) return;
+            
+            currentCourse = courseKey;
+            localStorage.setItem('currentCourse', courseKey);
+            
+            // Остальной код функции switchCourse из предыдущей версии...
+            const course = coursesData[courseKey];
+            
+            document.title = `${course.title} - EnglishForSeniors`;
+            document.getElementById('courseMotto').textContent = course.motto;
+            
+            const header = document.getElementById('courseHeader');
+            header.className = `course-header ${course.headerClass}`;
+            header.innerHTML = `
+                <h1><i class="${course.icon}"></i> ${course.title}</h1>
+                <p class="joke" id="courseJoke">${course.lessons[0]?.joke || '"Дорогу осилит идущий" - начнем с первого шага!'}</p>
+                <div class="course-stats">
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.lessons}</div>
+                        <div class="stat-label">уроков</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.exercises}</div>
+                        <div class="stat-label">заданий</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.tests}</div>
+                        <div class="stat-label">теста</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">${course.stats.words}+</div>
+                        <div class="stat-label">слов</div>
+                    </div>
+                </div>
+            `;
+            
+            updateProgress(courseKey);
+            updateCourseObjectives(course);
+            updateLessons(course);
+            
+            if (course.lessonsJoke) {
+                document.getElementById('lessonsJoke').textContent = course.lessonsJoke;
+            }
+            
+            if (course.footerQuote) {
+                document.getElementById('footerQuote').textContent = course.footerQuote;
+            }
+            
+            updateQuickCourses();
+        }
+    </script>
+</body>
+</html>

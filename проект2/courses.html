@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Все курсы английского - EnglishForSeniors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Стили для шторки навигации */
+        .burger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .burger-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .burger-icon.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .burger-icon.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-icon.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .burger-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            z-index: 999;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            padding: 100px 40px 40px;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            right: 0;
+        }
+
+        .nav-overlay:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            z-index: -1;
+        }
+
+        .nav-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-header h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-header p {
+            color: #bbdefb;
+            font-size: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-menu a i {
+            width: 25px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .user-level {
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-btn.login {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .nav-btn.register {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .nav-btn.logout {
+            background: linear-gradient(135deg, #f44336, #e91e63);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: #bbdefb;
+            font-size: 0.9rem;
+        }
+
+        /* Основные глобальные стили */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf5);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logo .motto {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-top: 10px;
+            font-style: italic;
+            color: #bbdefb;
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        /* Стили для страницы всех курсов */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            color: #1a237e;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-header h1:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            border-radius: 2px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* Карточки курсов */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 3px solid transparent;
+        }
+
+        .course-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .course-card.beginner {
+            border-color: #4CAF50;
+        }
+
+        .course-card.elementary {
+            border-color: #2196F3;
+        }
+
+        .course-card.advanced {
+            border-color: #9C27B0;
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 2;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .badge-beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .badge-elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .badge-advanced {
+            background: linear-gradient(135deg, #9C27B0, #673AB7);
+            color: white;
+        }
+
+        .vip-badge {
+            background: linear-gradient(135deg, #FFD700, #FF9800);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .course-card-header {
+            padding: 35px 30px;
+            color: white;
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .course-card-header.beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .course-card-header.elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+        }
+
+        .course-card-header.advanced {
+            background: linear-gradient(135deg, #9C27B0, #673AB7);
+        }
+
+        .course-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .course-title {
+            font-size: 1.6rem;
+            margin: 0 0 10px 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .course-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .course-content {
+            padding: 30px;
+        }
+
+        .course-description {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .course-stats {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .beginner .stat-number {
+            color: #4CAF50;
+        }
+
+        .elementary .stat-number {
+            color: #2196F3;
+        }
+
+        .advanced .stat-number {
+            color: #9C27B0;
+        }
+
+        .course-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+
+        .course-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .course-features.beginner li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .course-features.elementary li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2196F3;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .course-features.advanced li:before {
+            content: "⭐";
+            position: absolute;
+            left: 0;
+            color: #9C27B0;
+            font-size: 1.1rem;
+        }
+
+        .course-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .btn-elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+
+        .btn-advanced {
+            background: linear-gradient(135deg, #9C27B0, #673AB7);
+            color: white;
+        }
+
+        .course-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Блок тестирования */
+        .level-test-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 60px 0;
+            text-align: center;
+            border-left: 5px solid #FF9800;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .level-test-section h2 {
+            color: #f57c00;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .level-test-section p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .test-button {
+            display: inline-block;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .test-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 152, 0, 0.4);
+        }
+
+        /* Инфо блок */
+        .info-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .info-section h2 {
+            color: #1a237e;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2.2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .info-card i {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .info-card.beginner i {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #4CAF50;
+        }
+
+        .info-card.elementary i {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #2196F3;
+        }
+
+        .info-card.advanced i {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            color: #9C27B0;
+        }
+
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        footer p {
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+
+        .footer-quote {
+            font-style: italic;
+            margin-top: 20px;
+            color: #bbdefb;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .nav-overlay {
+                max-width: 100%;
+                padding: 100px 20px 20px;
+            }
+            
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .course-card-header {
+                padding: 25px 20px;
+                min-height: 160px;
+            }
+            
+            .level-test-section {
+                padding: 30px 20px;
+            }
+            
+            .info-section {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Анимация загрузки */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .course-card {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .course-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .course-card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Стили для модального окна выбора курса */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal h3 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .modal p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Шторка навигации -->
+    <div class="burger-menu" onclick="toggleNav()">
+        <div class="burger-icon" id="burgerIcon">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </div>
+
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-header">
+            <h3><i class="fas fa-book-open"></i> EnglishForSeniors</h3>
+            <p>Выбирайте курс по душе!</p>
+        </div>
+
+        <div id="userSection">
+        </div>
+        <!-- ПРОСТЫЕ ССЫЛКИ -->
+        <ul class="nav-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+            <li><a href="courses.html" class="active"><i class="fas fa-graduation-cap"></i> Все курсы</a></li>
+            <li><a href="course.html?level=beginner"><i class="fas fa-seedling"></i> Для начинающих</a></li>
+            <li><a href="course.html?level=elementary"><i class="fas fa-tree"></i> Средний уровень</a></li>
+            <li><a href="course.html?level=advanced"><i class="fas fa-crown"></i> ВИП-курс</a></li>
+            <li><a href="test.html"><i class="fas fa-clipboard-check"></i> Тест уровня</a></li>
+            <li><a href="dictionary.html" onclick="setActive(this)"><i class="fas fa-book"></i> Словарь</a></li>
+            <li><a href="progress.html"><i class="fas fa-chart-line"></i> Мой прогресс</a></li>
+            <li><a href="club.html"><i class="fas fa-users"></i> Клуб общения</a></li>
+            <li><a href="materials.html"><i class="fas fa-book"></i> Материалы</a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i> О проекте</a></li>
+            <li><a href="help.html"><i class="fas fa-question-circle"></i> Помощь</a></li>
+        </ul>
+
+        <div class="nav-buttons" id="authButtons">
+        </div>
+
+        <div class="nav-footer">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p>"Ученье — свет!"</p>
+             <p>Проект разработан Толстенёвой Полиной</p>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal-overlay" id="courseModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h3 id="modalTitle">Вход в систему</h3>
+            <p id="modalMessage">Для доступа к курсу необходимо войти в систему. У вас уже есть аккаунт?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="goToLogin()">Войти</button>
+                <button class="modal-btn secondary" onclick="goToRegister()">Регистрация</button>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-book-open"></i> EnglishForSeniors</h1>
+                <p class="motto">Три курса - для каждого уровня подготовки!</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Выберите свой курс английского</h1>
+                <p>Мы подготовили три программы разного уровня сложности. Каждая программа учитывает особенности обучения в зрелом возрасте и построена по принципу "от простого к сложному".</p>
+                <p style="color: #4CAF50; font-weight: bold; font-size: 1.1rem;"><i class="fas fa-lightbulb"></i> Не уверены в своем уровне? Пройдите <a href="test.html" style="color: #2196F3; text-decoration: none; border-bottom: 1px dashed #2196F3;">бесплатный тест</a>!</p>
+            </div>
+
+            <div class="courses-grid">
+                <!-- Курс для начинающих -->
+                <div class="course-card beginner">
+                    <div class="course-badge badge-beginner">Новичок</div>
+                    <div class="course-card-header beginner">
+                        <div class="course-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3 class="course-title">Для начинающих</h3>
+                        <p class="course-subtitle">"Лиха беда начало!"</p>
+                    </div>
+                    <div class="course-content">
+                        <p class="course-description">
+                            Идеальный курс для тех, кто только начинает учить английский или хочет восстановить забытые знания. Пошаговое изучение с самых основ.
+                        </p>
+                        
+                        <div class="course-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">10</div>
+                                <div class="stat-label">уроков</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">150+</div>
+                                <div class="stat-label">заданий</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">300+</div>
+                                <div class="stat-label">слов</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="color: #4CAF50; margin-bottom: 15px;"><i class="fas fa-check-circle"></i> Что вы получите:</h4>
+                        <ul class="course-features beginner">
+                            <li>Базовые фразы для общения</li>
+                            <li>Простейшая грамматика</li>
+                            <li>Аудирование с медленной речью</li>
+                            <li>Практика произношения</li>
+                            <li>Бытовые диалоги</li>
+                        </ul>
+                        
+                        <a href="#" class="course-button btn-beginner" id="beginnerBtn">
+                            <i class="fas fa-play-circle"></i> Начать обучение
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Курс среднего уровня -->
+                <div class="course-card elementary">
+                    <div class="course-badge badge-elementary">Средний</div>
+                    <div class="course-card-header elementary">
+                        <div class="course-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3 class="course-title">Средний уровень</h3>
+                        <p class="course-subtitle">"Повторение - мать учения!"</p>
+                    </div>
+                    <div class="course-content">
+                        <p class="course-description">
+                            Для тех, кто уже имеет базовые знания и хочет говорить более свободно. Углубляем грамматику и расширяем словарный запас.
+                        </p>
+                        
+                        <div class="course-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">10</div>
+                                <div class="stat-label">уроков</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">150+</div>
+                                <div class="stat-label">заданий</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">400+</div>
+                                <div class="stat-label">слов</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="color: #2196F3; margin-bottom: 15px;"><i class="fas fa-check-circle"></i> Что вы получите:</h4>
+                        <ul class="course-features elementary">
+                            <li>Все основные времена</li>
+                            <li>Разговорная практика</li>
+                            <li>Чтение адаптированных текстов</li>
+                            <li>Телефонные разговоры</li>
+                            <li>Написание писем и сообщений</li>
+                        </ul>
+                        
+                        <a href="#" class="course-button btn-elementary" id="elementaryBtn">
+                            <i class="fas fa-play-circle"></i> Начать обучение
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ВИП-курс -->
+                <div class="course-card advanced">
+                    <div class="course-badge badge-advanced vip-badge">ВИП</div>
+                    <div class="course-card-header advanced">
+                        <div class="course-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 class="course-title">ВИП-курс</h3>
+                        <p class="course-subtitle">"Век живи - век учись!"</p>
+                    </div>
+                    <div class="course-content">
+                        <p class="course-description">
+                            Продвинутый курс для тех, кто хочет свободно общаться, понимать фильмы и читать книги в оригинале. Идиомы, сленг, бизнес-английский.
+                        </p>
+                        
+                        <div class="course-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">10</div>
+                                <div class="stat-label">уроков</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">150+</div>
+                                <div class="stat-label">заданий</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">500+</div>
+                                <div class="stat-label">идиом</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="color: #9C27B0; margin-bottom: 15px;"><i class="fas fa-check-circle"></i> Что вы получите:</h4>
+                        <ul class="course-features advanced">
+                            <li>Английские идиомы и сленг</li>
+                            <li>Публичные выступления</li>
+                            <li>Деловая переписка</li>
+                            <li>Анализ фильмов и литературы</li>
+                            <li>Закрытый клуб общения</li>
+                        </ul>
+                        
+                        <a href="#" class="course-button btn-advanced" id="advancedBtn">
+                            <i class="fas fa-crown"></i> Начать ВИП-обучение
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок тестирования -->
+            <div class="level-test-section">
+                <h2><i class="fas fa-clipboard-check"></i> Не знаете, какой курс выбрать?</h2>
+                <p>
+                    Пройдите наш бесплатный тест на определение уровня английского. Всего 15 вопросов помогут определить, 
+                    какой курс подходит именно вам. Тест учитывает грамматику, словарный запас и понимание речи.
+                </p>
+                <a href="test.html" class="test-button">
+                    <i class="fas fa-play"></i> Пройти тест уровня
+                </a>
+            </div>
+
+            <!-- Информационный блок -->
+            <div class="info-section">
+                <h2>Какой курс подойдет именно вам?</h2>
+                <div class="info-grid">
+                    <div class="info-card beginner">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Для начинающих</h3>
+                        <p>Если вы никогда не изучали английский или учили очень давно. Начните с азов: алфавит, базовые фразы, простые диалоги.</p>
+                    </div>
+                    
+                    <div class="info-card elementary">
+                        <i class="fas fa-tree"></i>
+                        <h3>Средний уровень</h3>
+                        <p>Если вы понимаете простые тексты и можете рассказать о себе. Углубим знания грамматики и расширим словарный запас.</p>
+                    </div>
+                    
+                    <div class="info-card advanced">
+                        <i class="fas fa-crown"></i>
+                        <h3>ВИП-курс</h3>
+                        <p>Если вы свободно говорите на бытовые темы. Научимся понимать носителей, использовать идиомы и вести деловую переписку.</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px;">
+                    <h3 style="color: #1a237e; margin-bottom: 15px;"><i class="fas fa-users"></i> Особенности обучения в EnglishForSeniors</h3>
+                    <p style="color: #666; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                        Все наши курсы разработаны с учетом особенностей обучения в зрелом возрасте. Мы используем специальные методики, 
+                        которые помогают лучше запоминать материал. Уроки проходят в комфортном темпе с повторением ключевых моментов. 
+                        Каждый курс включает практические задания, аудирование и разговорную практику.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p class="footer-quote" id="footerQuote">"Ученье — свет, а неученье — тьма!"</p>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #bbdefb;">
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // ПРОСТАЯ ЛОГИКА - Кнопки работают всегда
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обновляем информацию о пользователе
+            updateNavUserInfo();
+            
+            // Генерация цитаты
+            generateMotivationalQuote();
+            
+            // НАСТРАИВАЕМ КНОПКИ ПРОСТО
+            document.getElementById('beginnerBtn').onclick = function(e) {
+                e.preventDefault();
+                checkAndGoToCourse('beginner');
+            };
+            
+            document.getElementById('elementaryBtn').onclick = function(e) {
+                e.preventDefault();
+                checkAndGoToCourse('elementary');
+            };
+            
+            document.getElementById('advancedBtn').onclick = function(e) {
+                e.preventDefault();
+                checkAndGoToCourse('advanced');
+            };
+            
+            // Отладочная информация
+            console.log('Страница загружена, кнопки настроены');
+        });
+        
+        // Простая функция для перехода к курсу
+        function checkAndGoToCourse(level) {
+            console.log('Нажата кнопка для курса:', level);
+            
+            // Проверяем авторизацию
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!user) {
+                console.log('Пользователь не авторизован, показываем модальное окно');
+                showModal(
+                    'Вход в систему', 
+                    'Для доступа к курсу необходимо войти в систему. У вас уже есть аккаунт?'
+                );
+                return;
+            }
+            
+            console.log('Пользователь авторизован, переход к курсу:', level);
+            // Переходим к курсу
+            window.location.href = `course.html?level=${level}`;
+        }
+        
+        // Функции для управления шторкой
+        function toggleNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            overlay.classList.toggle('active');
+            burger.classList.toggle('active');
+            
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeNav() {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            overlay.classList.remove('active');
+            burger.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Обновление информации о пользователе
+        function updateNavUserInfo() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userSection = document.getElementById('userSection');
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ${user.username ? user.username.charAt(0).toUpperCase() : 'П'}
+                        </div>
+                        <div class="user-name">${user.username || 'Пользователь'}</div>
+                        <div class="user-level">Уровень: ${user.level ? user.level.toUpperCase() : 'НЕ ОПРЕДЕЛЕН'}</div>
+                    </div>
+                `;
+                
+                authButtons.innerHTML = `
+                    <button class="nav-btn logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                `;
+            } else {
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ?
+                        </div>
+                        <div class="user-name">Гость</div>
+                        <div class="user-level">Для доступа к курсам войдите в систему</div>
+                    </div>
+                `;
+                
+                authButtons.innerHTML = `
+                    <a href="login.html" class="nav-btn login" onclick="closeNav()">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </a>
+                    <a href="register.html" class="nav-btn register" onclick="closeNav()">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </a>
+                `;
+            }
+        }
+
+        // Выход из системы
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('currentUser');
+                updateNavUserInfo();
+                closeNav();
+                window.location.reload();
+            }
+        }
+        
+        // Функции для модального окна
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('courseModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('courseModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function goToLogin() {
+            closeModal();
+            window.location.href = 'login.html';
+        }
+
+        function goToRegister() {
+            closeModal();
+            window.location.href = 'register.html';
+        }
+        
+        // Генерация мотивационной цитаты
+        function generateMotivationalQuote() {
+            const quotes = [
+                '"Ученье — свет, а неученье — тьма!"',
+                '"Повторение — мать учения!"',
+                '"Век живи — век учись!"',
+                '"Терпение и труд всё перетрут!"',
+                '"Грамоте учиться — всегда пригодится!"',
+                '"Не стыдно не знать, стыдно не учиться!"'
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('footerQuote').textContent = randomQuote;
+        }
+        
+        // Закрытие шторки при клике вне её
+        document.addEventListener('click', function(event) {
+            const overlay = document.getElementById('navOverlay');
+            const burger = document.getElementById('burgerIcon');
+            
+            if (!overlay.contains(event.target) && !burger.contains(event.target) && overlay.classList.contains('active')) {
+                closeNav();
+            }
+        });
+        
+        // Обработка клавиши Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+                closeNav();
+            }
+        });
+    </script>
+</body>
+</html>
