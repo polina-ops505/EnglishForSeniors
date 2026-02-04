@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест на определение уровня - EnglishForSeniors</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .test-progress {
+            margin: 30px 0;
+        }
+        
+        .progress-bar {
+            height: 15px;
+            background: #e0e0e0;
+            border-radius: 7.5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 7.5px;
+            transition: width 0.5s ease;
+        }
+        
+        .question-counter {
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .question-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .question-hint {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .options-container {
+            margin: 25px 0;
+        }
+        
+        .option {
+            padding: 20px;
+            margin: 15px 0;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #4a6491;
+        }
+        
+        .option.selected {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .test-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+        }
+        
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .level-beginner {
+            background: #ffeb3b;
+            color: #333;
+        }
+        
+        .level-elementary {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .level-intermediate {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .level-upper-intermediate {
+            background: #9C27B0;
+            color: white;
+        }
+        
+        .level-advanced {
+            background: #f44336;
+            color: white;
+        }
+        
+        .result-details {
+            margin: 30px 0;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .result-details p {
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+        
+        .test-timer {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .test-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn-large {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-book-open"></i> EnglishForSeniors</h1>
+                <p class="motto">Тест на определение уровня. "Знание - сила" - узнай свой уровень!</p>
+            </div>
+            <!-- Навигация теперь в шторке -->
+            <nav style="display: none;"></nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="test-container">
+            <div class="test-header">
+                <h1><i class="fas fa-graduation-cap"></i> Тест на определение уровня английского</h1>
+                <p class="joke">"Семь раз отмерь, один раз ответь" - тест поможет выбрать правильный курс!</p>
+                <div class="quick-tip">
+                    <i class="fas fa-lightbulb"></i> 
+                    <strong>Подсказка:</strong> Не торопитесь, у вас нет ограничения по времени. Как говорится, "тише едешь - дальше будешь"!
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <div class="instruction-card">
+                    <h3><i class="fas fa-info-circle"></i> Инструкция к тесту:</h3>
+                    <ul>
+                        <li>Тест состоит из 30 вопросов разного уровня сложности</li>
+                        <li>Выберите один правильный ответ из предложенных вариантов</li>
+                        <li>Не торопитесь, у вас нет ограничения по времени</li>
+                        <li>Если не знаете ответ - пропустите вопрос, но старайтесь отвечать на все</li>
+                        <li>По результатам теста вы получите рекомендацию по курсу</li>
+                    </ul>
+                    <p class="joke" style="margin-top: 15px;">
+                        <i class="fas fa-lightbulb"></i> Помните: "Честность - лучшая политика" - отвечайте как есть!
+                    </p>
+                </div>
+            </div>
+            
+            <div class="test-timer">
+                <i class="fas fa-clock"></i> Время не ограничено
+            </div>
+            
+            <div class="test-progress">
+                <div class="question-counter">
+                    Вопрос <span id="current-question">1</span> из <span id="total-questions">30</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 3.33%"></div>
+                </div>
+            </div>
+            
+            <!-- Вопросы теста будут здесь -->
+            <div id="questions-container">
+            </div>
+            
+            <!-- Кнопки навигации -->
+            <div class="test-navigation">
+                <button id="prev-btn" class="btn-secondary" onclick="prevQuestion()" disabled>
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button id="skip-btn" class="btn-secondary" onclick="skipQuestion()">
+                    Пропустить <i class="fas fa-forward"></i>
+                </button>
+                <button id="next-btn" class="btn-primary" onclick="nextQuestion()">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="finish-btn" class="btn-primary" onclick="finishTest()" style="display: none;">
+                    Завершить тест <i class="fas fa-check"></i>
+                </button>
+            </div>
+            
+            <!-- Результаты теста -->
+            <div id="results-container" class="results-container">
+                <h2><i class="fas fa-chart-line"></i> Результаты теста</h2>
+                <div class="joke">
+                    <p><i class="fas fa-smile"></i> "Дорогу осилит идущий" - а вы уже сделали первый шаг!</p>
+                </div>
+                
+                <div id="result-level" class="level-badge level-beginner">Начинающий</div>
+                
+                <div class="result-details">
+                    <p><strong>Ваш результат:</strong> <span id="result-score">0</span> из 60 баллов</p>
+                    <p><strong>Правильных ответов:</strong> <span id="correct-answers">0</span></p>
+                    <p><strong>Неправильных ответов:</strong> <span id="incorrect-answers">0</span></p>
+                    <p><strong>Пропущено вопросов:</strong> <span id="skipped-answers">0</span></p>
+                </div>
+                
+                <div id="result-description">
+                    <h3>Описание уровня:</h3>
+                    <p id="level-description">Загрузка описания...</p>
+                </div>
+                
+                <div class="recommendations">
+                    <h3><i class="fas fa-lightbulb"></i> Рекомендации:</h3>
+                    <p id="course-recommendation">Загрузка рекомендаций...</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button onclick="saveResults()" class="btn-primary btn-large">
+                        <i class="fas fa-save"></i> Сохранить результаты
+                    </button>
+                    <button onclick="restartTest()" class="btn-secondary btn-large">
+                        <i class="fas fa-redo"></i> Пройти тест заново
+                    </button>
+                    <a href="courses.html" class="btn-primary btn-large">
+                        <i class="fas fa-graduation-cap"></i> Перейти к курсам
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
+            <p>"Знание - сила" - узнайте свой уровень и двигайтесь дальше!</p>
+            <p>Проект разработан Толстенёвой Полиной</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Вопросы теста (30 вопросов разных уровней)
+        const testQuestions = [
+            // Уровень Beginner (вопросы 1-10)
+            {
+                id: 1,
+                question: "Как сказать 'Привет' по-английски?",
+                options: ["Hello", "Goodbye", "Thank you", "Please"],
+                correct: 0,
+                level: "beginner",
+                hint: "Самое простое приветствие"
+            },
+            {
+                id: 2,
+                question: "Выберите правильный перевод: 'Я читаю книгу'",
+                options: ["I reading book", "I am reading a book", "I read book", "I is reading book"],
+                correct: 1,
+                level: "beginner",
+                hint: "Обратите внимание на временную форму"
+            },
+            {
+                id: 3,
+                question: "Как спросить 'Как тебя зовут?'",
+                options: ["What your name?", "What is your name?", "How name you?", "Your name what?"],
+                correct: 1,
+                level: "beginner"
+            },
+            {
+                id: 4,
+                question: "Выберите правильную форму множественного числа: 'cat'",
+                options: ["cat", "cats", "cates", "cat's"],
+                correct: 1,
+                level: "beginner",
+                hint: "Просто добавьте -s в конце"
+            },
+            {
+                id: 5,
+                question: "Как сказать 'спасибо' по-английски?",
+                options: ["Hello", "Please", "Thank you", "Sorry"],
+                correct: 2,
+                level: "beginner"
+            },
+            {
+                id: 6,
+                question: "Выберите правильный артикль: '___ apple'",
+                options: ["a", "an", "the", "-"],
+                correct: 1,
+                level: "beginner",
+                hint: "Зависит от первой буквы слова"
+            },
+            {
+                id: 7,
+                question: "Как будет 'стол' по-английски?",
+                options: ["Chair", "Table", "Desk", "Bed"],
+                correct: 1,
+                level: "beginner"
+            },
+            {
+                id: 8,
+                question: "Выберите правильный порядок слов: 'speak / English / I / can'",
+                options: ["I can speak English", "I speak can English", "English I can speak", "Can I speak English"],
+                correct: 0,
+                level: "beginner",
+                hint: "Вспомните порядок слов в утвердительном предложении"
+            },
+            {
+                id: 9,
+                question: "Как сказать 'извините' по-английски?",
+                options: ["Please", "Thank you", "Excuse me", "Goodbye"],
+                correct: 2,
+                level: "beginner"
+            },
+            {
+                id: 10,
+                question: "Выберите правильную форму глагола 'to be' для 'He ___ a doctor'",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                level: "beginner",
+                hint: "Согласуйте с местоимением 'he'"
+            },
+            
+            // Уровень Elementary (вопросы 11-20)
+            {
+                id: 11,
+                question: "Выберите правильную форму прошедшего времени: 'She ___ to the store yesterday'",
+                options: ["go", "goed", "went", "gone"],
+                correct: 2,
+                level: "elementary",
+                hint: "Неправильный глагол"
+            },
+            {
+                id: 12,
+                question: "Какой предлог нужен: 'I'm good ___ English'",
+                options: ["in", "at", "on", "for"],
+                correct: 1,
+                level: "elementary"
+            },
+            {
+                id: 13,
+                question: "Выберите правильную сравнительную степень: 'This book is ___ than that one'",
+                options: ["interesting", "more interesting", "interestinger", "most interesting"],
+                correct: 1,
+                level: "elementary",
+                hint: "Длинные прилагательные"
+            },
+            {
+                id: 14,
+                question: "Заполните пропуск: 'How ___ water do you drink every day?'",
+                options: ["much", "many", "some", "any"],
+                correct: 0,
+                level: "elementary",
+                hint: "Исчисляемое или неисчисляемое?"
+            },
+            {
+                id: 15,
+                question: "Выберите правильную форму: 'If it rains, we ___ at home'",
+                options: ["stay", "stayed", "will stay", "would stay"],
+                correct: 2,
+                level: "elementary",
+                hint: "Условное предложение первого типа"
+            },
+            {
+                id: 16,
+                question: "Какой артикль нужен: '___ Moon is beautiful tonight'",
+                options: ["a", "an", "the", "-"],
+                correct: 2,
+                level: "elementary",
+                hint: "Уникальные объекты"
+            },
+            {
+                id: 17,
+                question: "Выберите правильный модальный глагол: 'You ___ smoke here'",
+                options: ["can", "must", "should", "mustn't"],
+                correct: 3,
+                level: "elementary",
+                hint: "Запрет"
+            },
+            {
+                id: 18,
+                question: "Заполните пропуск: 'I've lived here ___ 5 years'",
+                options: ["since", "for", "during", "in"],
+                correct: 1,
+                level: "elementary"
+            },
+            {
+                id: 19,
+                question: "Выберите правильную форму: 'This is ___ book'",
+                options: ["my", "mine", "me", "I"],
+                correct: 0,
+                level: "elementary",
+                hint: "Притяжательное местоимение перед существительным"
+            },
+            {
+                id: 20,
+                question: "Как задать вопрос к предложению: 'She can speak French'",
+                options: ["Can she speak French?", "Does she can speak French?", "She can speak French?", "Can speaks she French?"],
+                correct: 0,
+                level: "elementary",
+                hint: "Вопрос с модальным глаголом"
+            },
+            
+            // Уровень Intermediate (вопросы 21-30)
+            {
+                id: 21,
+                question: "Заполните пропуск: 'If I ___ you, I would study more'",
+                options: ["am", "was", "were", "be"],
+                correct: 2,
+                level: "intermediate",
+                hint: "Условное предложение второго типа"
+            },
+            {
+                id: 22,
+                question: "Выберите правильную форму: 'By next year, I ___ English for 3 years'",
+                options: ["will study", "will be studying", "will have studied", "will have been studying"],
+                correct: 3,
+                level: "intermediate",
+                hint: "Future Perfect Continuous"
+            },
+            {
+                id: 23,
+                question: "Какой предлог нужен: 'I'm looking forward ___ seeing you'",
+                options: ["to", "at", "for", "on"],
+                correct: 0,
+                level: "intermediate"
+            },
+            {
+                id: 24,
+                question: "Выберите правильный инфинитив: 'She made me ___ it'",
+                options: ["to do", "do", "doing", "did"],
+                correct: 1,
+                level: "intermediate",
+                hint: "Глагол make + bare infinitive"
+            },
+            {
+                id: 25,
+                question: "Заполните пропуск: 'Had I known, I ___ differently'",
+                options: ["would act", "would have acted", "acted", "had acted"],
+                correct: 1,
+                level: "intermediate",
+                hint: "Conditional 3 (inversion)"
+            },
+            {
+                id: 26,
+                question: "Выберите правильную форму: 'The report ___ by the manager now'",
+                options: ["is being written", "is written", "has been written", "was written"],
+                correct: 0,
+                level: "intermediate",
+                hint: "Passive voice, present continuous"
+            },
+            {
+                id: 27,
+                question: "Какой союз нужен: '___ it was raining, we went for a walk'",
+                options: ["Although", "Because", "Despite", "However"],
+                correct: 0,
+                level: "intermediate"
+            },
+            {
+                id: 28,
+                question: "Выберите правильную форму: 'I wish I ___ to the party yesterday'",
+                options: ["went", "had gone", "would go", "go"],
+                correct: 1,
+                level: "intermediate",
+                hint: "Wish + past perfect"
+            },
+            {
+                id: 29,
+                question: "Заполните пропуск: 'Not only ___ speak French, but he also speaks Spanish'",
+                options: ["he does", "does he", "he can", "can he"],
+                correct: 3,
+                level: "intermediate",
+                hint: "Inversion after 'not only'"
+            },
+            {
+                id: 30,
+                question: "Выберите правильную идиому: 'It's raining cats and dogs' means:",
+                options: ["Animals are falling from the sky", "It's raining very heavily", "Cats and dogs are playing", "The weather is nice"],
+                correct: 1,
+                level: "intermediate"
+            }
+        ];
+
+        // Переменные теста
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(testQuestions.length).fill(null);
+        let testStarted = false;
+        
+        // Инициализация теста
+        function initTest() {
+            const questionsContainer = document.getElementById('questions-container');
+            questionsContainer.innerHTML = '';
+            
+            testQuestions.forEach((question, index) => {
+                const questionHTML = `
+                    <div class="question-card" id="question-${index}">
+                        <div class="question-header">
+                            <div class="question-text">${question.id}. ${question.question}</div>
+                            ${question.hint ? `<div class="question-hint"><i class="fas fa-lightbulb"></i> Подсказка: ${question.hint}</div>` : ''}
+                        </div>
+                        
+                        <div class="options-container">
+                            ${question.options.map((option, optionIndex) => `
+                                <div class="option" 
+                                     data-question="${index}" 
+                                     data-option="${optionIndex}"
+                                     onclick="selectOption(${index}, ${optionIndex})">
+                                    ${String.fromCharCode(65 + optionIndex)}. ${option}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                questionsContainer.innerHTML += questionHTML;
+            });
+            
+            // Показываем первый вопрос
+            document.getElementById('question-0').classList.add('active');
+            
+            updateProgress();
+            updateNavigationButtons();
+            testStarted = true;
+        }
+        
+        // Выбор варианта ответа
+        function selectOption(questionIndex, optionIndex) {
+            // Убираем выделение у всех вариантов этого вопроса
+            const options = document.querySelectorAll(`.option[data-question="${questionIndex}"]`);
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Выделяем выбранный вариант
+            const selectedOption = document.querySelector(`.option[data-question="${questionIndex}"][data-option="${optionIndex}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Сохраняем ответ
+            userAnswers[questionIndex] = optionIndex;
+            
+            // Показываем кнопку "Далее" если это первый ответ
+            if (questionIndex === currentQuestionIndex) {
+                document.getElementById('next-btn').disabled = false;
+            }
+        }
+        
+        // Следующий вопрос
+        function nextQuestion() {
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                // Скрываем текущий вопрос
+                document.getElementById(`question-${currentQuestionIndex}`).classList.remove('active');
+                
+                // Показываем следующий
+                currentQuestionIndex++;
+                document.getElementById(`question-${currentQuestionIndex}`).classList.add('active');
+                
+                updateProgress();
+                updateNavigationButtons();
+                
+                // Автопрокрутка вверх
+                window.scrollTo({ top: document.querySelector('.test-progress').offsetTop - 100, behavior: 'smooth' });
+            }
+        }
+        
+        // Предыдущий вопрос
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                // Скрываем текущий вопрос
+                document.getElementById(`question-${currentQuestionIndex}`).classList.remove('active');
+                
+                // Показываем предыдущий
+                currentQuestionIndex--;
+                document.getElementById(`question-${currentQuestionIndex}`).classList.add('active');
+                
+                updateProgress();
+                updateNavigationButtons();
+            }
+        }
+        
+        // Пропустить вопрос
+        function skipQuestion() {
+            userAnswers[currentQuestionIndex] = null;
+            
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                nextQuestion();
+            } else {
+                // Если это последний вопрос, показываем кнопку завершения
+                document.getElementById('finish-btn').style.display = 'inline-block';
+                document.getElementById('next-btn').style.display = 'none';
+            }
+        }
+        
+        // Обновление прогресса
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / testQuestions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+            document.getElementById('total-questions').textContent = testQuestions.length;
+        }
+        
+        // Обновление кнопок навигации
+        function updateNavigationButtons() {
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').disabled = currentQuestionIndex === testQuestions.length - 1;
+            
+            // Показываем кнопку завершения на последнем вопросе
+            if (currentQuestionIndex === testQuestions.length - 1) {
+                document.getElementById('finish-btn').style.display = 'inline-block';
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('skip-btn').style.display = 'none';
+            } else {
+                document.getElementById('finish-btn').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'inline-block';
+                document.getElementById('skip-btn').style.display = 'inline-block';
+            }
+        }
+        
+        // Завершение теста
+        function finishTest() {
+            // Проверяем, все ли вопросы отвечены
+            const unanswered = userAnswers.filter(answer => answer === null).length;
+            
+            if (unanswered > 0 && !confirm(`Вы ответили не на все вопросы. ${unanswered} вопросов остались без ответа. Завершить тест?`)) {
+                return;
+            }
+            
+            calculateResults();
+            showResults();
+        }
+        
+        // Расчет результатов
+        function calculateResults() {
+            let score = 0;
+            let correct = 0;
+            let incorrect = 0;
+            let skipped = 0;
+            
+            userAnswers.forEach((answer, index) => {
+                if (answer === null) {
+                    skipped++;
+                } else if (answer === testQuestions[index].correct) {
+                    correct++;
+                    score += getPointsForLevel(testQuestions[index].level);
+                } else {
+                    incorrect++;
+                }
+            });
+            
+            return {
+                score: score,
+                correct: correct,
+                incorrect: incorrect,
+                skipped: skipped,
+                total: testQuestions.length,
+                level: determineLevel(score)
+            };
+        }
+        
+        // Баллы за уровень сложности
+        function getPointsForLevel(level) {
+            const points = {
+                'beginner': 1,
+                'elementary': 2,
+                'intermediate': 3
+            };
+            return points[level] || 1;
+        }
+        
+        // Определение уровня по баллам
+        function determineLevel(score) {
+            if (score <= 15) return 'beginner';
+            if (score <= 35) return 'elementary';
+            if (score <= 60) return 'intermediate';
+            if (score <= 80) return 'upper-intermediate';
+            return 'advanced';
+        }
+        
+        // Показ результатов
+        function showResults() {
+            const results = calculateResults();
+            
+            // Скрываем вопросы и навигацию
+            document.querySelector('.instructions').style.display = 'none';
+            document.querySelector('.test-timer').style.display = 'none';
+            document.querySelector('.test-progress').style.display = 'none';
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.style.display = 'none';
+            });
+            document.querySelector('.test-navigation').style.display = 'none';
+            
+            // Показываем результаты
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.style.display = 'block';
+            
+            // Заполняем результаты
+            document.getElementById('result-score').textContent = results.score;
+            document.getElementById('correct-answers').textContent = results.correct;
+            document.getElementById('incorrect-answers').textContent = results.incorrect;
+            document.getElementById('skipped-answers').textContent = results.skipped;
+            
+            // Устанавливаем уровень
+            const levelBadge = document.getElementById('result-level');
+            levelBadge.textContent = getLevelName(results.level);
+            levelBadge.className = `level-badge level-${results.level}`;
+            
+            // Описание уровня
+            document.getElementById('level-description').textContent = getLevelDescription(results.level);
+            
+            // Рекомендации
+            document.getElementById('course-recommendation').textContent = getCourseRecommendation(results.level);
+            
+            // Автопрокрутка к результатам
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Название уровня
+        function getLevelName(level) {
+            const names = {
+                'beginner': 'Начинающий (Beginner)',
+                'elementary': 'Элементарный (Elementary)',
+                'intermediate': 'Средний (Intermediate)',
+                'upper-intermediate': 'Выше среднего (Upper-Intermediate)',
+                'advanced': 'Продвинутый (Advanced)'
+            };
+            return names[level] || 'Не определен';
+        }
+        
+        // Описание уровня
+        function getLevelDescription(level) {
+            const descriptions = {
+                'beginner': 'Вы только начинаете изучение английского. Знаете базовые слова и простые фразы. Можете представиться и задать простые вопросы.',
+                'elementary': 'У вас есть базовые знания грамматики и словарный запас для простого общения на бытовые темы. Понимаете медленную речь на знакомые темы.',
+                'intermediate': 'Вы можете общаться на большинство повседневных тем, понимаете основные идеи сложных текстов. Владеете основными грамматическими структурами.',
+                'upper-intermediate': 'Вы свободно общаетесь на английском, понимаете сложные тексты, можете выражать свои мысли ясно и подробно.',
+                'advanced': 'Вы владеете английским на уровне, близком к носителю. Понимаете сложные тексты и речь, выражаете мысли бегло и точно.'
+            };
+            return descriptions[level] || 'Уровень не определен';
+        }
+        
+        // Рекомендации по курсу
+        function getCourseRecommendation(level) {
+            const recommendations = {
+                'beginner': 'Рекомендуем начать с курса "Английский для начинающих". Идеально подходит для старта!',
+                'elementary': 'Вам подойдет курс "Elementary". Он поможет закрепить основы и расширить словарный запас.',
+                'intermediate': 'Курс "Intermediate" поможет улучшить разговорные навыки и понимание сложных текстов.',
+                'upper-intermediate': 'Рекомендуем курс "Upper-Intermediate" для совершенствования языка и подготовки к свободному общению.',
+                'advanced': 'Вам подойдут продвинутые курсы и практика с носителями языка для поддержания уровня.'
+            };
+            return recommendations[level] || 'Пройдите консультацию с преподавателем';
+        }
+        
+        // Сохранение результатов
+        function saveResults() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                alert('Пожалуйста, войдите в систему для сохранения результатов');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const results = calculateResults();
+            
+            // Сохраняем результаты в профиль пользователя
+            user.level = results.level;
+            user.testResults = {
+                date: new Date().toISOString(),
+                score: results.score,
+                correct: results.correct,
+                incorrect: results.incorrect,
+                skipped: results.skipped,
+                total: results.total
+            };
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Обновляем в массиве пользователей
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const index = users.findIndex(u => u.id === user.id);
+            if (index !== -1) {
+                users[index] = user;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            // Показываем уведомление
+            alert(`Результаты сохранены! Ваш уровень: ${getLevelName(results.level)}`);
+            
+            // Перенаправляем в личный кабинет
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 1500);
+        }
+        
+        // Перезапуск теста
+        function restartTest() {
+            if (confirm('Вы уверены, что хотите начать тест заново? Текущие ответы будут потеряны.')) {
+                currentQuestionIndex = 0;
+                userAnswers = new Array(testQuestions.length).fill(null);
+                
+                // Сбрасываем все выделения
+                document.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Показываем первый вопрос
+                document.querySelectorAll('.question-card').forEach((card, index) => {
+                    card.style.display = 'none';
+                    card.classList.remove('active');
+                });
+                document.getElementById('question-0').classList.add('active');
+                
+                // Восстанавливаем отображение
+                document.querySelector('.instructions').style.display = 'block';
+                document.querySelector('.test-timer').style.display = 'block';
+                document.querySelector('.test-progress').style.display = 'block';
+                document.querySelector('.test-navigation').style.display = 'flex';
+                document.getElementById('results-container').style.display = 'none';
+                
+                updateProgress();
+                updateNavigationButtons();
+                
+                // Автопрокрутка в начало
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем авторизацию
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                alert('Пожалуйста, войдите или зарегистрируйтесь для прохождения теста');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Если уже есть уровень, предлагаем перейти к курсам
+            if (user.level) {
+                if (confirm(`У вас уже определен уровень: ${user.level.toUpperCase()}. Хотите пройти тест заново?`)) {
+                    initTest();
+                } else {
+                    window.location.href = 'courses.html';
+                }
+            } else {
+                initTest();
+            }
+        });
+    </script>
+</body>
+</html>
