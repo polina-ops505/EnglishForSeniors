@@ -87,7 +87,6 @@ const testQuestions = [
         correct: 2,
         level: "intermediate"
     }
-    // Добавьте еще 12 вопросов...
 ];
 
 function submitTest() {
@@ -129,14 +128,12 @@ function submitTest() {
     window.location.href = 'courses.html';
 }
 
-// Словарь из 150 слов (сокращенный пример)
 const dictionary = [
     { english: "Hello", russian: "Привет", transcription: "[həˈləʊ]", category: "Приветствия" },
     { english: "Goodbye", russian: "До свидания", transcription: "[ɡʊdˈbaɪ]", category: "Приветствия" },
     { english: "Thank you", russian: "Спасибо", transcription: "[ˈθæŋk juː]", category: "Вежливость" },
     { english: "Please", russian: "Пожалуйста", transcription: "[pliːz]", category: "Вежливость" },
     { english: "Family", russian: "Семья", transcription: "[ˈfæməli]", category: "Семья" },
-    // ... добавьте остальные 145 слов
 ];
 
 function displayDictionary() {
@@ -494,9 +491,6 @@ function checkSpeechSupport() {
     }
     return false;
 }
-
-// Обновляем функцию showAssignment, чтобы добавить кнопку озвучивания
-// В функции showAssignment, после заголовка задания, добавляем:
 function showAssignment(course, lesson, task) {
     const taskInfo = taskData[course]?.[lesson]?.[task];
     
@@ -687,4 +681,422 @@ function generateTaskContent(taskInfo) {
                 <div id="answerFeedback" class="answer-feedback"></div>
             `;
     }
+}
+// Данные для произношения
+const pronunciationWords = [
+    { id: 1, word: "Hello", translation: "Привет", phonetic: "/həˈləʊ/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/hello--_gb_1.mp3" },
+    { id: 2, word: "Goodbye", translation: "До свидания", phonetic: "/ɡʊdˈbaɪ/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/goodbye--_gb_1.mp3" },
+    { id: 3, word: "Thank you", translation: "Спасибо", phonetic: "/ˈθæŋk juː/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/thank_you--_gb_1.mp3" },
+    { id: 4, word: "Please", translation: "Пожалуйста", phonetic: "/pliːz/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/please--_gb_1.mp3" },
+    { id: 5, word: "Family", translation: "Семья", phonetic: "/ˈfæməli/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/family--_gb_1.mp3" },
+    { id: 6, word: "House", translation: "Дом", phonetic: "/haʊs/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/house--_gb_1.mp3" },
+    { id: 7, word: "Food", translation: "Еда", phonetic: "/fuːd/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/food--_gb_1.mp3" },
+    { id: 8, word: "Water", translation: "Вода", phonetic: "/ˈwɔːtə(r)/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/water--_gb_1.mp3" },
+    { id: 9, word: "Cat", translation: "Кошка", phonetic: "/kæt/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/cat--_gb_1.mp3" },
+    { id: 10, word: "Dog", translation: "Собака", phonetic: "/dɒɡ/", audio: "https://ssl.gstatic.com/dictionary/static/sounds/20200429/dog--_gb_1.mp3" }
+];
+
+// Переменные для записи аудио
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
+
+// Функция для воспроизведения аудио
+function playAudio(audioUrl) {
+    if (!audioUrl) return;
+    
+    const audio = new Audio(audioUrl);
+    audio.play().catch(e => {
+        console.error('Ошибка воспроизведения:', e);
+        alert('Не удалось воспроизвести аудио. Проверьте ссылку на аудиофайл.');
+    });
+}
+
+// Функция для начала записи
+async function startRecording() {
+    try {
+        // Проверяем поддержку MediaRecorder
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert('Ваш браузер не поддерживает запись аудио. Попробуйте использовать Chrome, Firefox или Edge.');
+            return;
+        }
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                sampleRate: 44100
+            } 
+        });
+        
+        mediaRecorder = new MediaRecorder(stream, {
+            mimeType: 'audio/webm;codecs=opus'
+        });
+        
+        audioChunks = [];
+        
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                audioChunks.push(event.data);
+            }
+        };
+        
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { 
+                type: 'audio/webm' 
+            });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            
+            // Показать запись
+            const recordingPlayer = document.getElementById('recordingPlayer');
+            if (recordingPlayer) {
+                recordingPlayer.src = audioUrl;
+                recordingPlayer.style.display = 'block';
+            }
+            
+            // Сохраняем запись в localStorage
+            saveRecordingToLocalStorage(audioBlob);
+            
+            // Останавливаем все треки
+            stream.getTracks().forEach(track => track.stop());
+        };
+        
+        mediaRecorder.onerror = (event) => {
+            console.error('Ошибка записи:', event.error);
+            alert('Произошла ошибка при записи. Попробуйте еще раз.');
+        };
+        
+        mediaRecorder.start(100); // Записываем каждые 100ms
+        isRecording = true;
+        updateRecordingUI(true);
+        
+        // Таймер для автоматической остановки через 30 секунд
+        setTimeout(() => {
+            if (isRecording) {
+                stopRecording();
+                alert('Запись автоматически остановлена через 30 секунд.');
+            }
+        }, 30000);
+        
+    } catch (error) {
+        console.error('Ошибка доступа к микрофону:', error);
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            alert('Доступ к микрофону запрещен. Разрешите доступ к микрофону в настройках браузера.');
+        } else if (error.name === 'NotFoundError') {
+            alert('Микрофон не найден. Убедитесь, что микрофон подключен.');
+        } else {
+            alert('Не удалось получить доступ к микрофону. Проверьте разрешения и подключение.');
+        }
+    }
+}
+
+// Функция для остановки записи
+function stopRecording() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        updateRecordingUI(false);
+    }
+}
+
+// Обновление UI записи
+function updateRecordingUI(recording) {
+    const recordBtn = document.getElementById('recordBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const recordingPlayer = document.getElementById('recordingPlayer');
+    
+    if (recording) {
+        recordBtn.style.display = 'none';
+        stopBtn.style.display = 'flex';
+        if (recordingPlayer) {
+            recordingPlayer.style.display = 'none';
+        }
+    } else {
+        recordBtn.style.display = 'flex';
+        stopBtn.style.display = 'none';
+    }
+}
+
+// Сохранение записи в localStorage
+function saveRecordingToLocalStorage(audioBlob) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) return;
+    
+    // Преобразуем Blob в base64 для хранения
+    const reader = new FileReader();
+    reader.onloadend = function() {
+        const base64data = reader.result;
+        
+        if (!user.recordings) {
+            user.recordings = [];
+        }
+        
+        // Сохраняем только последние 10 записей
+        user.recordings.unshift({
+            data: base64data,
+            date: new Date().toISOString(),
+            type: 'audio/webm'
+        });
+        
+        if (user.recordings.length > 10) {
+            user.recordings = user.recordings.slice(0, 10);
+        }
+        
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        alert('Запись сохранена! Вы можете прослушать ее в разделе "Мои записи".');
+    };
+    reader.readAsDataURL(audioBlob);
+}
+
+// Функция для оценки произношения
+function ratePronunciation(wordId, score) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) {
+        alert('Для оценки произношения необходимо войти в систему');
+        return;
+    }
+    
+    // Инициализируем прогресс произношения, если его нет
+    if (!user.pronunciationProgress) {
+        user.pronunciationProgress = {};
+    }
+    
+    if (!user.pronunciationProgress[wordId]) {
+        user.pronunciationProgress[wordId] = {
+            practiced: 0,
+            totalScore: 0,
+            averageScore: 0,
+            lastPracticed: null
+        };
+    }
+    
+    const progress = user.pronunciationProgress[wordId];
+    progress.practiced++;
+    progress.totalScore += score;
+    progress.averageScore = Math.round(progress.totalScore / progress.practiced);
+    progress.lastPracticed = new Date().toISOString();
+    
+    // Сохраняем обратно в localStorage
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    // Обновляем отображение
+    updateWordCard(wordId, progress);
+    
+    // Показываем сообщение
+    const word = pronunciationWords.find(w => w.id === wordId);
+    const messages = [
+        "Отлично! Вы прекрасно произносите это слово!",
+        "Хорошая работа! Практика делает мастера.",
+        "Неплохо! Продолжайте практиковаться.",
+        "Попробуйте еще раз, у вас получится лучше!",
+        "Не расстраивайтесь! С каждым разом будет лучше."
+    ];
+    
+    alert(`Вы оценили произношение слова "${word?.word}" на ${score}/5\n${messages[5 - score] || 'Спасибо за оценку!'}`);
+    
+    // Обновляем общую статистику
+    updatePronunciationStats();
+}
+
+// Обновление карточки слова
+function updateWordCard(wordId, progress) {
+    const wordCard = document.querySelector(`.word-card[data-word-id="${wordId}"]`);
+    if (!wordCard) return;
+    
+    const scoreValue = wordCard.querySelector('.score-value');
+    const practicedValue = wordCard.querySelector('.practiced-value');
+    
+    if (scoreValue) {
+        scoreValue.textContent = progress.averageScore || 0;
+    }
+    
+    if (practicedValue) {
+        practicedValue.textContent = progress.practiced || 0;
+    }
+}
+
+// Обновление статистики произношения
+function updatePronunciationStats() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user || !user.pronunciationProgress) return;
+    
+    const stats = calculatePronunciationStats(user.pronunciationProgress);
+    
+    // Обновляем карточку в общей статистике
+    const pronunciationCount = document.getElementById('pronunciationCount');
+    if (pronunciationCount) {
+        pronunciationCount.textContent = stats.totalWordsPracticed;
+    }
+    
+    // Обновляем статистику в секции произношения
+    const statsContainer = document.getElementById('pronunciationStats');
+    if (statsContainer) {
+        statsContainer.innerHTML = `
+            <div class="pronunciation-stats">
+                <div class="score-item">
+                    <div class="score-value">${stats.totalWordsPracticed}</div>
+                    <div class="score-label">Слов изучено</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value">${stats.totalPractices}</div>
+                    <div class="score-label">Всего попыток</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value">${stats.averageScore}</div>
+                    <div class="score-label">Средний балл</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value">${stats.wordsToday}</div>
+                    <div class="score-label">Сегодня</div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Расчет статистики произношения
+function calculatePronunciationStats(progress) {
+    let totalWordsPracticed = 0;
+    let totalPractices = 0;
+    let totalScore = 0;
+    let wordsToday = 0;
+    
+    const today = new Date().toDateString();
+    
+    Object.values(progress).forEach(wordProgress => {
+        if (wordProgress.practiced > 0) {
+            totalWordsPracticed++;
+            totalPractices += wordProgress.practiced;
+            totalScore += wordProgress.totalScore;
+            
+            // Проверяем, практиковалось ли слово сегодня
+            if (wordProgress.lastPracticed) {
+                const lastPracticedDate = new Date(wordProgress.lastPracticed).toDateString();
+                if (lastPracticedDate === today) {
+                    wordsToday++;
+                }
+            }
+        }
+    });
+    
+    const averageScore = totalPractices > 0 ? Math.round(totalScore / totalPractices) : 0;
+    
+    return {
+        totalWordsPracticed,
+        totalPractices,
+        averageScore,
+        wordsToday
+    };
+}
+
+// Загрузка и отображение слов для произношения
+function loadPronunciationWords() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userProgress = user?.pronunciationProgress || {};
+    
+    const wordsContainer = document.getElementById('wordsContainer');
+    if (!wordsContainer) return;
+    
+    // Группируем слова по уровню сложности
+    const wordsByLevel = {
+        easy: pronunciationWords.filter(w => w.id <= 5),
+        medium: pronunciationWords.filter(w => w.id > 5 && w.id <= 8),
+        hard: pronunciationWords.filter(w => w.id > 8)
+    };
+    
+    let html = '';
+    
+    // Отображаем слова по уровням сложности
+    Object.entries(wordsByLevel).forEach(([level, words]) => {
+        if (words.length === 0) return;
+        
+        const levelNames = {
+            easy: 'Легкие слова',
+            medium: 'Средние слова',
+            hard: 'Сложные слова'
+        };
+        
+        html += `
+            <h3 style="margin: 25px 0 15px 0; color: #666; border-bottom: 2px solid #4CAF50; padding-bottom: 5px;">
+                <i class="fas fa-${level === 'easy' ? 'seedling' : level === 'medium' ? 'tree' : 'mountain'}"></i>
+                ${levelNames[level]}
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                ${words.map(word => {
+                    const progress = userProgress[word.id] || { practiced: 0, averageScore: 0 };
+                    
+                    return `
+                        <div class="word-card" data-word-id="${word.id}">
+                            <div class="word-header">
+                                <div>
+                                    <span class="word-text">${word.word}</span>
+                                    <span class="phonetic">${word.phonetic}</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="playAudio('${word.audio}')" style="padding: 8px 15px;">
+                                    <i class="fas fa-play"></i> Слушать
+                                </button>
+                            </div>
+                            
+                            <div class="translation">
+                                <i class="fas fa-language"></i> ${word.translation}
+                            </div>
+                            
+                            <div class="recording-section">
+                                <h4 style="margin-bottom: 10px;"><i class="fas fa-user-voice"></i> Ваше произношение</h4>
+                                <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
+                                    ${[5, 4, 3, 2, 1].map(score => `
+                                        <button class="btn" onclick="ratePronunciation(${word.id}, ${score})" style="padding: 5px 10px; font-size: 0.9rem;">
+                                            <i class="fas fa-star"></i> ${score}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="score-display">
+                                <div class="score-item">
+                                    <div class="score-value practiced-value">${progress.practiced || 0}</div>
+                                    <div class="score-label">Попыток</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">${progress.averageScore || 0}</div>
+                                    <div class="score-label">Средний балл</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-value">${progress.lastPracticed ? new Date(progress.lastPracticed).toLocaleDateString() : 'Никогда'}</div>
+                                    <div class="score-label">Последняя практика</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    });
+    
+    wordsContainer.innerHTML = html;
+    
+    // Добавляем статистику в начало
+    const stats = calculatePronunciationStats(userProgress);
+    const statsHTML = `
+        <div class="pronunciation-stats" id="pronunciationStats">
+            <div class="score-item">
+                <div class="score-value">${stats.totalWordsPracticed}</div>
+                <div class="score-label">Слов изучено</div>
+            </div>
+            <div class="score-item">
+                <div class="score-value">${stats.totalPractices}</div>
+                <div class="score-label">Всего попыток</div>
+            </div>
+            <div class="score-item">
+                <div class="score-value">${stats.averageScore}</div>
+                <div class="score-label">Средний балл</div>
+            </div>
+            <div class="score-item">
+                <div class="score-value">${stats.wordsToday}</div>
+                <div class="score-label">Сегодня</div>
+            </div>
+        </div>
+    `;
+    
+    wordsContainer.insertAdjacentHTML('afterbegin', statsHTML);
 }
