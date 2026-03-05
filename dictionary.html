@@ -357,6 +357,18 @@
             font-size: 0.9rem;
         }
 
+        .stat-item.clickable {
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+
+        .stat-item.clickable:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
         .dictionary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -448,35 +460,47 @@
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .word-btn {
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 25px;
-            background: #f0f0f0;
-            color: #333;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: bold;
+            font-size: 0.95rem;
+            flex: 1 1 auto;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
         .word-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
         }
 
         .word-btn.sound {
-            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: white;
         }
 
         .word-btn.favorite {
-            background: linear-gradient(135deg, #FF9800, #FF5722);
+            background: linear-gradient(135deg, #FF9800, #F57C00);
             color: white;
+        }
+
+        .word-btn.learned {
+            background: linear-gradient(135deg, #2196F3, #1565C0);
+            color: white;
+        }
+
+        .word-btn.learned.active {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
         }
 
         .favorite-badge {
@@ -694,6 +718,14 @@
             .word-english {
                 font-size: 1.8rem;
             }
+            
+            .word-actions {
+                flex-direction: column;
+            }
+            
+            .word-btn {
+                width: 100%;
+            }
         }
 
         /* Анимации */
@@ -755,12 +787,12 @@
 
         <ul class="nav-menu">
             <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
-            <li><a href="courses.html" class="active"><i class="fas fa-graduation-cap"></i> Все курсы</a></li>
+            <li><a href="courses.html"><i class="fas fa-graduation-cap"></i> Все курсы</a></li>
             <li><a href="course.html?level=beginner"><i class="fas fa-seedling"></i> Для начинающих</a></li>
             <li><a href="course.html?level=elementary"><i class="fas fa-tree"></i> Средний уровень</a></li>
             <li><a href="course.html?level=advanced"><i class="fas fa-crown"></i> ВИП-курс</a></li>
             <li><a href="test.html"><i class="fas fa-clipboard-check"></i> Тест уровня</a></li>
-            <li><a href="test2.html" onclick="setActive(this)"><i class="fas fa-book"></i> Тест выученных слов</a></li>
+            <li><a href="test2.html"><i class="fas fa-book"></i> Тест выученных слов</a></li>
             <li><a href="progress.html"><i class="fas fa-chart-line"></i> Мой прогресс</a></li>
             <li><a href="club.html"><i class="fas fa-users"></i> Клуб общения</a></li>
             <li><a href="materials.html"><i class="fas fa-book"></i> Материалы</a></li>
@@ -774,7 +806,7 @@
         <div class="nav-footer">
             <p>Проект "Московское Долголетие" <i class="fas fa-heart"></i> 2025</p>
             <p>"Ученье — свет!"</p>
-             <p>Проект разработан Толстенёвой Полиной</p>
+            <p>Проект разработан Толстенёвой Полиной</p>
         </div>
     </div>
 
@@ -873,13 +905,12 @@
                 <div class="stat-item">
                     <div class="stat-number" id="todayWords">0</div>
                     <div class="stat-label">Сегодня изучено</div>
-                <div class="stat-item" style="cursor: pointer;" onclick="goToLearnedTest()">
-    <div class="stat-number">
-        <i class="fas fa-clipboard-check"></i>
-    </div>
-            <li><a href="test2.html" onclick="setActive(this)"><i class="fas fa-book"></i> Тест выученных слов</a></li>
-
-</div>
+                </div>
+                <div class="stat-item clickable" onclick="goToLearnedTest()">
+                    <div class="stat-number">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="stat-label">Тест выученных слов</div>
                 </div>
             </div>
         </div>
@@ -1167,8 +1198,8 @@
                         <button class="word-btn favorite" onclick="toggleFavorite(${word.id})">
                             <i class="fas fa-heart"></i> ${isFavorite ? 'Убрать' : 'В избранное'}
                         </button>
-                        <button class="word-btn" onclick="markAsLearned(${word.id})">
-                            <i class="fas fa-check"></i> ${isLearned ? 'Повторить' : 'Выучил'}
+                        <button class="word-btn ${isLearned ? 'learned active' : 'learned'}" onclick="markAsLearned(${word.id})">
+                            <i class="fas fa-${isLearned ? 'refresh' : 'check'}"></i> ${isLearned ? 'Повторить' : 'Выучил'}
                         </button>
                     </div>
                 `;
@@ -1264,6 +1295,10 @@
             } else {
                 alert('Браузер не поддерживает произношение слов');
             }
+        }
+
+        function goToLearnedTest() {
+            window.location.href = 'test2.html';
         }
 
         // Модальное окно
